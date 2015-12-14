@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'phone-number'
+
+    publishedGroupId = 'org.xdty.phone.number'
+    libraryName = 'PhoneNumber'
+    artifact = 'phone-number'
+
+    libraryDescription = 'A library to get phone number location and other info from baidu api.'
+
+    siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
+    gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
+
+    libraryVersion = '0.0.2'
+
+    developerId = 'xdtianyu'
+    developerName = 'xdtianyu'
+    developerEmail = 'xdtianyu@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 2
+        versionName "0.0.2"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.squareup.okhttp:okhttp:2.7.0'
+    compile 'com.google.code.gson:gson:2.5'
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
