@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import org.xdty.phone.number.PhoneNumber;
+import org.xdty.phone.number.model.NumberInfo;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,23 +18,13 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.text);
 
-        new Thread(new Runnable() {
+        new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
-            public void run() {
-                PhoneNumber number = PhoneNumber.key("YOUR_API_KEY");
-                String s = number.get("10086", "PHONE_NUMBER");
-                updateText(s);
+            public void onResponse(NumberInfo numberInfo) {
+                // Do your jobs here
+                textView.setText(numberInfo.toString());
             }
-        }).start();
-
+        }).fetch("10086", "PHONE_NUMBER");
     }
 
-    void updateText(final String text) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                textView.setText(text);
-            }
-        });
-    }
 }

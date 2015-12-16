@@ -17,6 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="org.xdty.phone.number.API_KEY"
+            android:value="YOUR_API_KEY"/>
     </application>
 
 </manifest>

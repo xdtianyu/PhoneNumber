@@ -27,7 +27,22 @@ or maven
 
 ## Usage
 
+1\. Add `meta-data` to `AndroidManifest`
+
 ```
-PhoneNumber number = PhoneNumber.key("YOUR_API_KEY");
-String s = number.get("10086", "PHONE_NUMBER");
+<meta-data
+    android:name="org.xdty.phone.number.API_KEY"
+    android:value="YOUR_API_KEY"/>
+```
+
+2\. Add these lines to `MainActivity`, For more details, see [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example)
+
+```
+new PhoneNumber(this, new PhoneNumber.Callback() {
+    @Override
+    public void onResponse(NumberInfo numberInfo) {
+        // Do your jobs here
+        textView.setText(numberInfo.toString());
+    }
+}).fetch("10086", "PHONE_NUMBER");
 ```
