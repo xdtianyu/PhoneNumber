@@ -1,7 +1,7 @@
 # PhoneNumber
 A library to get phone number location and other info from baidu api.
 
-[![JAR](https://img.shields.io/maven-central/v/org.xdty.phone.number/phone-number.svg)](http://repo1.maven.org/maven2/org/xdty/phone/number/phone-number/0.0.3/phone-number-0.0.3.aar)
+[![JAR](https://img.shields.io/maven-central/v/org.xdty.phone.number/phone-number.svg)](http://central.maven.org/maven2/org/xdty/phone/number/phone-number/)
 [ ![Download](https://api.bintray.com/packages/xdtianyu/maven/phone-number/images/download.svg) ](https://bintray.com/xdtianyu/maven/phone-number/_latestVersion)
 
 ## Download
@@ -24,6 +24,8 @@ or maven
   <type>aar</type>
 </dependency>
 ```
+
+or JAR from [maven central](http://central.maven.org/maven2/org/xdty/phone/number/phone-number/)
 
 ## Usage
 
