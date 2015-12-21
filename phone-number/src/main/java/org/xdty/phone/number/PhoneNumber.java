@@ -54,7 +54,12 @@ public class PhoneNumber {
                     mMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mCallback.onResponse(numberInfo);
+                            if (numberInfo.getResponse() != null &&
+                                    numberInfo.getResponseHeader() != null) {
+                                mCallback.onResponse(numberInfo);
+                            } else {
+                                mCallback.onResponseFailed(numberInfo);
+                            }
                         }
                     });
                 }
@@ -95,5 +100,6 @@ public class PhoneNumber {
 
     public interface Callback {
         void onResponse(NumberInfo numberInfo);
+        void onResponseFailed(NumberInfo numberInfo);
     }
 }
