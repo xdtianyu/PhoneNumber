@@ -51,10 +51,6 @@ new PhoneNumber(this, new PhoneNumber.Callback() {
 
     @Override
     public void onResponseFailed(NumberInfo numberInfo) {
-        ResponseHeader responseHeader = numberInfo.getResponseHeader();
-        if (responseHeader != null) {
-            textView.setText(responseHeader.getStatus());
-        }
     }
 }).fetch("10086", "10000, 10001", "OTHER_PHONE_NUMBER");
 ```
