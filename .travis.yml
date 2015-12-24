@@ -20,5 +20,8 @@ jdk: oraclejdk7
 notifications:
   email: false
 
+before_install:
+   - touch local.properties
+
 script:
   - ./gradlew install
