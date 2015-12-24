@@ -20,5 +20,4 @@ notifications:
   email: false
 
 script:
-  - gradle clean assembleDebug
-  - gradle clean assembleRelease
+  - ./gradlew install
