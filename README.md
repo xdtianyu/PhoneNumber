@@ -47,17 +47,6 @@ new PhoneNumber(this, new PhoneNumber.Callback() {
     public void onResponse(NumberInfo numberInfo) {
         // Do your jobs here
         textView.setText(numberInfo.toString());
-
-        List<Number> numbers = numberInfo.getNumbers();
-        for (Number number : numbers) {
-            Log.d(TAG, number.getNumber() +
-                       ": " +
-                       number.getType().getText() +
-                       ", " +
-                       number.getName() +
-                       ", " +
-                       number.getCount());
-        }
     }
 
     @Override
