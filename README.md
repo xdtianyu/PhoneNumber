@@ -10,7 +10,7 @@ Grab via gradle
 
 ```
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.0.4'
+    compile 'org.xdty.phone.number:phone-number:0.0.5'
 }
 ```
 
@@ -20,7 +20,7 @@ or maven
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <type>aar</type>
 </dependency>
 ```
@@ -45,8 +45,19 @@ new PhoneNumber(this, new PhoneNumber.Callback() {
     public void onResponse(NumberInfo numberInfo) {
         // Do your jobs here
         textView.setText(numberInfo.toString());
+
+        List<Number> numbers = numberInfo.getNumbers();
+        for (Number number : numbers) {
+            Log.d(TAG, number.getNumber() +
+                       ": " +
+                       number.getType().getText() +
+                       ", " +
+                       number.getName() +
+                       ", " +
+                       number.getCount());
+        }
     }
-    
+
     @Override
     public void onResponseFailed(NumberInfo numberInfo) {
         ResponseHeader responseHeader = numberInfo.getResponseHeader();
@@ -54,5 +65,5 @@ new PhoneNumber(this, new PhoneNumber.Callback() {
             textView.setText(responseHeader.getStatus());
         }
     }
-}).fetch("10086", "PHONE_NUMBER");
+}).fetch("10086", "10000, 10001", "OTHER_PHONE_NUMBER");
 ```
