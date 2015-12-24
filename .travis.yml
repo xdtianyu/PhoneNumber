@@ -1,0 +1,27 @@
+language: android
+
+addons:
+    apt:
+        packages:
+        - libgd2-xpm
+        - ia32-libs
+        - ia32-libs-multiarch
+
+android:
+   components:
+   - platform-tools
+   - android-23
+   - build-tools-23.0.1
+   - extra
+
+jdk: oraclejdk7
+
+notifications:
+  email: false
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_f68dd41565b2_key -iv $encrypted_f68dd41565b2_iv -in release.jks.enc -out release.jks -d
+
+script:
+  - gradle clean assembleDebug
+  - gradle clean assembleRelease
