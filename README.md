@@ -39,6 +39,8 @@ or JAR from [maven central](http://central.maven.org/maven2/org/xdty/phone/numbe
     android:value="YOUR_API_KEY"/>
 ```
 
+You can get `YOUR_API_KEY` from [Baidu apistore's usercenter](http://apistore.baidu.com/astore/usercenter)
+
 2\. Add these lines to `MainActivity`, For more details, see [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example)
 
 ```
