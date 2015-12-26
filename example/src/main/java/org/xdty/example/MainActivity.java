@@ -34,20 +34,24 @@ public class MainActivity extends AppCompatActivity {
                 List<Number> numbers = numberInfo.getNumbers();
                 for (Number number : numbers) {
                     Log.d(TAG, number.getNumber() +
-                               ": " +
-                               number.getType().getText() +
-                               ", " +
-                               number.getName() +
-                               ", " +
-                               number.getCount());
+                            ": " +
+                            number.getType().getText() +
+                            ", " +
+                            number.getName() +
+                            ", " +
+                            number.getCount());
                 }
             }
 
             @Override
             public void onResponseFailed(NumberInfo numberInfo) {
-                ResponseHeader responseHeader = numberInfo.getResponseHeader();
-                if (responseHeader != null) {
-                    textView.setText(responseHeader.getStatus());
+                if (numberInfo != null) {
+                    ResponseHeader responseHeader = numberInfo.getResponseHeader();
+                    if (responseHeader != null) {
+                        textView.setText(responseHeader.getStatus());
+                    }
+                } else {
+                    Log.e(TAG, "numberInfo is null");
                 }
             }
         }).fetch("10086", "10000, 10001", "OTHER_PHONE_NUMBER");
