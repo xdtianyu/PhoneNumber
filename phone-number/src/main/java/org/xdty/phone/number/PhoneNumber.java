@@ -12,7 +12,6 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.NumberInfo;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class PhoneNumber {
@@ -50,19 +49,20 @@ public class PhoneNumber {
             @Override
             public void run() {
                 final NumberInfo numberInfo = getNumberInfo(numbers);
-                if (mCallback != null) {
-                    mMainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (numberInfo.getResponse() != null &&
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCallback != null) {
+                            if (numberInfo != null &&
+                                    numberInfo.getResponse() != null &&
                                     numberInfo.getResponseHeader() != null) {
                                 mCallback.onResponse(numberInfo);
                             } else {
                                 mCallback.onResponseFailed(numberInfo);
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
@@ -78,7 +78,7 @@ public class PhoneNumber {
             String s = response.body().string();
             Gson gson = new Gson();
             numberInfo = gson.fromJson(s, NumberInfo.class);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return numberInfo;
