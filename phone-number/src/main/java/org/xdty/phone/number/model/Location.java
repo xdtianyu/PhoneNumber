@@ -9,11 +9,23 @@ public class Location {
         return province;
     }
 
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public String getCity() {
         return city;
     }
 
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public String getOperators() {
         return operators;
+    }
+
+    public void setOperators(String operators) {
+        this.operators = operators;
     }
 }
