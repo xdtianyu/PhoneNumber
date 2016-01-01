@@ -21,14 +21,12 @@ public class PhoneNumber {
             "phone_information_query?location=true&tel=";
     private final static String META_DATA_KEY_URI = "org.xdty.phone.number.API_KEY";
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
-
     private String mApiKey;
     private OkHttpClient mOkHttpClient;
     private Callback mCallback;
     private Context mContext;
     private Handler mMainHandler;
     private Handler mHandler;
-
     public PhoneNumber(Context context, Callback callback) {
         mOkHttpClient = new OkHttpClient();
         mContext = context;
@@ -38,6 +36,10 @@ public class PhoneNumber {
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
+    }
+
+    public void setApiKey(String mApiKey) {
+        this.mApiKey = mApiKey;
     }
 
     public String get(String... numbers) {
@@ -100,6 +102,7 @@ public class PhoneNumber {
 
     public interface Callback {
         void onResponse(NumberInfo numberInfo);
+
         void onResponseFailed(NumberInfo numberInfo);
     }
 }
