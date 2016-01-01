@@ -1,10 +1,12 @@
 package org.xdty.phone.number;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
@@ -20,6 +22,7 @@ public class PhoneNumber {
             "baidu_mobile_security/phone_number_service/" +
             "phone_information_query?location=true&tel=";
     private final static String META_DATA_KEY_URI = "org.xdty.phone.number.API_KEY";
+    private final static String API_KEY = "baidu_api_key";
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
     private String mApiKey;
     private OkHttpClient mOkHttpClient;
@@ -27,19 +30,16 @@ public class PhoneNumber {
     private Context mContext;
     private Handler mMainHandler;
     private Handler mHandler;
+
     public PhoneNumber(Context context, Callback callback) {
         mOkHttpClient = new OkHttpClient();
         mContext = context;
-        mApiKey = getMetadata(META_DATA_KEY_URI);
+        mApiKey = getApiKey();
         mCallback = callback;
         mMainHandler = new Handler(context.getMainLooper());
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
-    }
-
-    public void setApiKey(String mApiKey) {
-        this.mApiKey = mApiKey;
     }
 
     public String get(String... numbers) {
@@ -98,6 +98,15 @@ public class PhoneNumber {
         }
 
         return null;
+    }
+
+    private String getApiKey() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return preferences.getString(API_KEY, getMetadata(META_DATA_KEY_URI));
+    }
+
+    public void setApiKey(String mApiKey) {
+        this.mApiKey = mApiKey;
     }
 
     public interface Callback {
