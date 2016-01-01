@@ -102,7 +102,11 @@ public class PhoneNumber {
 
     private String getApiKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getString(API_KEY, getMetadata(META_DATA_KEY_URI));
+        String apiKey = preferences.getString(API_KEY, "");
+        if (apiKey.isEmpty()) {
+            apiKey = getMetadata(META_DATA_KEY_URI);
+        }
+        return apiKey;
     }
 
     public void setApiKey(String mApiKey) {
