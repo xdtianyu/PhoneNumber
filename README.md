@@ -1,5 +1,5 @@
 # PhoneNumber
-A library to get phone number location and other info from baidu api.
+A library to get phone number location and other info from baidu and juhe api.
 
 
 [![Build Status](https://travis-ci.org/xdtianyu/PhoneNumber.svg?branch=master)](https://travis-ci.org/xdtianyu/PhoneNumber)
@@ -12,7 +12,7 @@ Grab via gradle
 
 ```
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.0.9'
+    compile 'org.xdty.phone.number:phone-number:0.1.0'
 }
 ```
 
@@ -22,7 +22,7 @@ or maven
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.0.9</version>
+  <version>0.1.0</version>
   <type>aar</type>
 </dependency>
 ```
