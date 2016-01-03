@@ -23,6 +23,10 @@ import java.util.Map;
 
 public class PhoneNumber {
 
+    public final static String API_TYPE = "api_type";
+    public final static int API_TYPE_BD = 0;
+    public final static int API_TYPE_JH = 1;
+
     private final static String API_URL = "http://apis.baidu.com/" +
             "baidu_mobile_security/phone_number_service/" +
             "phone_information_query?location=true&tel=";
@@ -87,8 +91,20 @@ public class PhoneNumber {
 
     public NumberInfo getNumberInfo(String... numbers) {
         NumberInfo numberInfo;
-//        numberInfo = getBDNumberInfo(numbers);
-        numberInfo = getJHNumberInfo(numbers);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int apiType = preferences.getInt(API_TYPE, API_TYPE_BD);
+        switch (apiType) {
+            case API_TYPE_BD:
+                numberInfo = getBDNumberInfo(numbers);
+                break;
+            case API_TYPE_JH:
+                numberInfo = getJHNumberInfo(numbers);
+                break;
+            default:
+                numberInfo = getBDNumberInfo(numbers);
+                break;
+        }
         return numberInfo;
     }
 
