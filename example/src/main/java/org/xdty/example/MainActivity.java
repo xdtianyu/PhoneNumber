@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "numberInfo is null");
                 }
             }
-        }).fetch("10086", "10000, 10001", "OTHER_PHONE_NUMBER");
+        }).fetch("10086", "10000","10001", "02151860253", "4001001673");
     }
 
 }
