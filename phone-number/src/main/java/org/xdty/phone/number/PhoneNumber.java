@@ -181,8 +181,21 @@ public class PhoneNumber {
         return apiKey;
     }
 
-    public void setBDApiKey(String apiKey) {
+    public void setApiKey(String apiKey) {
         this.mBDApiKey = apiKey;
+    }
+
+    public void setApiKey(String apiKey, int type) {
+        switch (type) {
+            case API_TYPE_BD:
+                this.mBDApiKey = apiKey;
+                break;
+            case API_TYPE_JH:
+                this.mJHApiKey = apiKey;
+                break;
+            default:
+                this.mBDApiKey = apiKey;
+        }
     }
 
     private String getJHApiKey() {
@@ -192,10 +205,6 @@ public class PhoneNumber {
             apiKey = getMetadata(META_DATA_JUHE_KEY_URI);
         }
         return apiKey;
-    }
-
-    public void setJHApiKey(String apiKey) {
-        this.mJHApiKey = apiKey;
     }
 
     public interface Callback {
