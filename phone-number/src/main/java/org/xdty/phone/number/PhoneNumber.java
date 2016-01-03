@@ -12,19 +12,34 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
+import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
+import org.xdty.phone.number.model.ResponseHeader;
+import org.xdty.phone.number.model.juhe.JuHeNumber;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhoneNumber {
 
     private final static String API_URL = "http://apis.baidu.com/" +
             "baidu_mobile_security/phone_number_service/" +
             "phone_information_query?location=true&tel=";
+
+    private final static String JUHE_API_URL = "https://op.juhe.cn/" +
+            "onebox/phone/" +
+            "query?tel=";
+
     private final static String META_DATA_KEY_URI = "org.xdty.phone.number.API_KEY";
+    private final static String META_DATA_JUHE_KEY_URI = "org.xdty.phone.number.JUHE_API_KEY";
+
     private final static String API_KEY = "baidu_api_key";
+    private final static String JUHE_API_KEY = "juhe_api_key";
+
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
-    private String mApiKey;
+    private String mBDApiKey;
+    private String mJHApiKey;
     private OkHttpClient mOkHttpClient;
     private Callback mCallback;
     private Context mContext;
@@ -34,7 +49,8 @@ public class PhoneNumber {
     public PhoneNumber(Context context, Callback callback) {
         mOkHttpClient = new OkHttpClient();
         mContext = context;
-        mApiKey = getApiKey();
+        mBDApiKey = getBDApiKey();
+        mJHApiKey = getJHApiKey();
         mCallback = callback;
         mMainHandler = new Handler(context.getMainLooper());
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
@@ -70,10 +86,17 @@ public class PhoneNumber {
     }
 
     public NumberInfo getNumberInfo(String... numbers) {
+        NumberInfo numberInfo;
+//        numberInfo = getBDNumberInfo(numbers);
+        numberInfo = getJHNumberInfo(numbers);
+        return numberInfo;
+    }
+
+    private NumberInfo getBDNumberInfo(String... numbers) {
         String url = API_URL + Arrays.toString(numbers).replaceAll(" |\\[|\\]", "");
         NumberInfo numberInfo = null;
         Request.Builder request = new Request.Builder().url(url);
-        request.header("apikey", mApiKey);
+        request.header("apikey", mBDApiKey);
         try {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
@@ -83,6 +106,39 @@ public class PhoneNumber {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return numberInfo;
+    }
+
+    private NumberInfo getJHNumberInfo(String... numbers) {
+        NumberInfo numberInfo = new NumberInfo();
+        Map<String, Number> r = new HashMap<>();
+        ResponseHeader header = null;
+
+        for (String number : numbers) {
+            String url = JUHE_API_URL + number + "&key=" + mJHApiKey;
+            Request.Builder request = new Request.Builder().url(url);
+            try {
+                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                        request.build()).execute();
+                String s = response.body().string();
+                Gson gson = new Gson();
+                JuHeNumber juHeNumber = gson.fromJson(s, JuHeNumber.class);
+                Number n = juHeNumber.toNumber();
+                if (n != null) {
+                    r.put(number, n);
+
+                    if (header == null) {
+                        header = new ResponseHeader();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        numberInfo.setResponse(r);
+        numberInfo.setResponseHeader(header);
+
         return numberInfo;
     }
 
@@ -100,7 +156,7 @@ public class PhoneNumber {
         return null;
     }
 
-    private String getApiKey() {
+    private String getBDApiKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = preferences.getString(API_KEY, "");
         if (apiKey.isEmpty()) {
@@ -109,8 +165,21 @@ public class PhoneNumber {
         return apiKey;
     }
 
-    public void setApiKey(String mApiKey) {
-        this.mApiKey = mApiKey;
+    public void setBDApiKey(String apiKey) {
+        this.mBDApiKey = apiKey;
+    }
+
+    private String getJHApiKey() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String apiKey = preferences.getString(JUHE_API_KEY, "");
+        if (apiKey.isEmpty()) {
+            apiKey = getMetadata(META_DATA_JUHE_KEY_URI);
+        }
+        return apiKey;
+    }
+
+    public void setJHApiKey(String apiKey) {
+        this.mJHApiKey = apiKey;
     }
 
     public interface Callback {

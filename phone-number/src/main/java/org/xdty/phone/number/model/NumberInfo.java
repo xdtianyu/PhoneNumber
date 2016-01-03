@@ -12,8 +12,17 @@ public class NumberInfo {
         return response;
     }
 
+    public void setResponse(
+            Map<String, Number> response) {
+        this.response = response;
+    }
+
     public ResponseHeader getResponseHeader() {
         return responseHeader;
+    }
+
+    public void setResponseHeader(ResponseHeader responseHeader) {
+        this.responseHeader = responseHeader;
     }
 
     public List<Number> getNumbers() {
