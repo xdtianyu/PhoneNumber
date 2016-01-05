@@ -7,6 +7,7 @@ import java.util.Map;
 public class NumberInfo {
     Map<String, Number> response;
     ResponseHeader responseHeader;
+    boolean isOffline = false;
 
     public Map<String, Number> getResponse() {
         return response;
@@ -64,5 +65,13 @@ public class NumberInfo {
             }
         }
         return s;
+    }
+
+    public boolean isOffline() {
+        return isOffline;
+    }
+
+    public void setOffline(boolean isOffline) {
+        this.isOffline = isOffline;
     }
 }

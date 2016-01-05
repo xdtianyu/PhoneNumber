@@ -16,6 +16,7 @@ import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
 import org.xdty.phone.number.model.ResponseHeader;
 import org.xdty.phone.number.model.juhe.JuHeNumber;
+import org.xdty.phone.number.model.offline.OfflineRecord;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,6 +106,12 @@ public class PhoneNumber {
                 numberInfo = getBDNumberInfo(numbers);
                 break;
         }
+
+        if (numberInfo == null || numberInfo.getResponse() == null ||
+                numberInfo.getNumbers().size() == 0) {
+            numberInfo = getOfflineNumberInfo(numbers);
+        }
+
         return numberInfo;
     }
 
@@ -156,6 +163,23 @@ public class PhoneNumber {
         numberInfo.setResponseHeader(header);
 
         return numberInfo;
+    }
+
+
+    private NumberInfo getOfflineNumberInfo(String... numbers) {
+        NumberInfo numberInfo = new NumberInfo();
+        Map<String, Number> r = new HashMap<>();
+        ResponseHeader header = new ResponseHeader();
+        OfflineRecord offlineRecord = new OfflineRecord(mContext);
+        for (String n : numbers) {
+            OfflineRecord.Record record = offlineRecord.find(n);
+            if (record != null) {
+                r.put(n, record.toNumber());
+            }
+        }
+        numberInfo.setResponse(r);
+        numberInfo.setResponseHeader(header);
+        return  numberInfo;
     }
 
     private String getMetadata(String name) {
