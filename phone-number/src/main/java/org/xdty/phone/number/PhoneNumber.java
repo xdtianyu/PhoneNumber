@@ -183,6 +183,7 @@ public class PhoneNumber {
                 }
             }
         }
+        numberInfo.setOffline(true);
         numberInfo.setResponse(r);
         numberInfo.setResponseHeader(header);
         return numberInfo;
