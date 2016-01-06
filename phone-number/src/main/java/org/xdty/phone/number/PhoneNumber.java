@@ -110,6 +110,15 @@ public class PhoneNumber {
 
         if (numberInfo == null || numberInfo.getResponse() == null ||
                 numberInfo.getNumbers().size() == 0) {
+            if (apiType == API_TYPE_BD) {
+                numberInfo = getJHNumberInfo(numbers);
+            } else {
+                numberInfo = getBDNumberInfo(numbers);
+            }
+        }
+
+        if (numberInfo == null || numberInfo.getResponse() == null ||
+                numberInfo.getNumbers().size() == 0) {
             numberInfo = getOfflineNumberInfo(numbers);
         }
 
