@@ -15,6 +15,7 @@ import com.squareup.okhttp.Request;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
 import org.xdty.phone.number.model.ResponseHeader;
+import org.xdty.phone.number.model.google.GooglePhoneNumber;
 import org.xdty.phone.number.model.juhe.JuHeNumber;
 import org.xdty.phone.number.model.offline.OfflineRecord;
 
@@ -175,11 +176,16 @@ public class PhoneNumber {
             OfflineRecord.Record record = offlineRecord.find(n);
             if (record != null) {
                 r.put(n, record.toNumber());
+            } else {
+                Number number = GooglePhoneNumber.getNumber(n);
+                if (number != null) {
+                    r.put(n, number);
+                }
             }
         }
         numberInfo.setResponse(r);
         numberInfo.setResponseHeader(header);
-        return  numberInfo;
+        return numberInfo;
     }
 
     private String getMetadata(String name) {

@@ -8,13 +8,13 @@ ext {
     libraryName = 'PhoneNumber'
     artifact = 'phone-number'
 
-    libraryDescription = 'A library to get phone number location and other info from baidu api.'
+    libraryDescription = 'A library to get phone number location and other info.'
 
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 11
-    libraryVersion = '0.1.1'
+    libraryVersionCode = 12
+    libraryVersion = '0.1.2'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
@@ -48,6 +48,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.google.code.gson:gson:2.5'
+    compile 'com.googlecode.libphonenumber:libphonenumber:7.2.2'
+    compile 'com.googlecode.libphonenumber:geocoder:2.32'
+    compile 'com.googlecode.libphonenumber:carrier:1.22'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
