@@ -18,10 +18,12 @@ import org.xdty.phone.number.model.ResponseHeader;
 import org.xdty.phone.number.model.google.GooglePhoneNumber;
 import org.xdty.phone.number.model.juhe.JuHeNumber;
 import org.xdty.phone.number.model.offline.OfflineRecord;
+import org.xdty.phone.number.model.special.SpecialNumber;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class PhoneNumber {
 
@@ -54,6 +56,7 @@ public class PhoneNumber {
 
     public PhoneNumber(Context context, Callback callback) {
         mOkHttpClient = new OkHttpClient();
+        mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
         mContext = context;
         mBDApiKey = getBDApiKey();
         mJHApiKey = getJHApiKey();
@@ -77,9 +80,7 @@ public class PhoneNumber {
                     @Override
                     public void run() {
                         if (mCallback != null) {
-                            if (numberInfo != null &&
-                                    numberInfo.getResponse() != null &&
-                                    numberInfo.getResponseHeader() != null) {
+                            if (isValid(numberInfo)) {
                                 mCallback.onResponse(numberInfo);
                             } else {
                                 mCallback.onResponseFailed(numberInfo);
@@ -92,24 +93,27 @@ public class PhoneNumber {
     }
 
     public NumberInfo getNumberInfo(String... numbers) {
-        NumberInfo numberInfo;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         int apiType = preferences.getInt(API_TYPE, API_TYPE_BD);
-        switch (apiType) {
-            case API_TYPE_BD:
-                numberInfo = getBDNumberInfo(numbers);
-                break;
-            case API_TYPE_JH:
-                numberInfo = getJHNumberInfo(numbers);
-                break;
-            default:
-                numberInfo = getBDNumberInfo(numbers);
-                break;
+
+        NumberInfo numberInfo = getSpecialNumberInfo(numbers);
+        if (!isValid(numberInfo)) {
+
+            switch (apiType) {
+                case API_TYPE_BD:
+                    numberInfo = getBDNumberInfo(numbers);
+                    break;
+                case API_TYPE_JH:
+                    numberInfo = getJHNumberInfo(numbers);
+                    break;
+                default:
+                    numberInfo = getBDNumberInfo(numbers);
+                    break;
+            }
         }
 
-        if (numberInfo == null || numberInfo.getResponse() == null ||
-                numberInfo.getNumbers().size() == 0) {
+        if (!isValid(numberInfo)) {
             if (apiType == API_TYPE_BD) {
                 numberInfo = getJHNumberInfo(numbers);
             } else {
@@ -117,11 +121,30 @@ public class PhoneNumber {
             }
         }
 
-        if (numberInfo == null || numberInfo.getResponse() == null ||
-                numberInfo.getNumbers().size() == 0) {
+        if (!isValid(numberInfo)) {
             numberInfo = getOfflineNumberInfo(numbers);
         }
 
+        return numberInfo;
+    }
+
+    private NumberInfo getSpecialNumberInfo(String... numbers) {
+        NumberInfo numberInfo = new NumberInfo();
+        Map<String, Number> r = new HashMap<>();
+        ResponseHeader header = new ResponseHeader();
+        SpecialNumber specialNumber = new SpecialNumber(mContext);
+        for (String n : numbers) {
+            SpecialNumber.Zone zone = specialNumber.find(n);
+            if (zone != null) {
+                Number number = zone.toNumber();
+                if (number != null) {
+                    r.put(n, number);
+                }
+            }
+        }
+
+        numberInfo.setResponse(r);
+        numberInfo.setResponseHeader(header);
         return numberInfo;
     }
 
@@ -174,7 +197,6 @@ public class PhoneNumber {
 
         return numberInfo;
     }
-
 
     private NumberInfo getOfflineNumberInfo(String... numbers) {
         NumberInfo numberInfo = new NumberInfo();
@@ -245,6 +267,13 @@ public class PhoneNumber {
             apiKey = getMetadata(META_DATA_JUHE_KEY_URI);
         }
         return apiKey;
+    }
+
+    public boolean isValid(NumberInfo numberInfo) {
+        return numberInfo != null &&
+                numberInfo.getResponse() != null &&
+                numberInfo.getResponseHeader() != null &&
+                numberInfo.getNumbers().size() > 0;
     }
 
     public interface Callback {

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "numberInfo is null");
                 }
             }
-        }).fetch("10086", "10000", "10001", "02151860253", "4001001673");
+        }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551", "559", "569");
     }
 
 }

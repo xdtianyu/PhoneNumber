@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhoneNumber</string>
+    <string name="private_number">Private Number</string>
+    <string name="family_number">Family Number</string>
 </resources>

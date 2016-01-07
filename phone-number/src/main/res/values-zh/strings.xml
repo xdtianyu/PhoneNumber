@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PhoneNumber</string>
+    <string name="family_number">中国移动家庭短号码</string>
+    <string name="private_number">私密号码</string>
+</resources>
