@@ -75,6 +75,18 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                final NumberInfo offlineNumberInfo = getOfflineOrSpecialInfo(numbers);
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCallback != null) {
+                            if (isValid(offlineNumberInfo)) {
+                                mCallback.onResponseOffline(offlineNumberInfo);
+                            }
+                        }
+                    }
+                });
+
                 final NumberInfo numberInfo = getNumberInfo(numbers);
                 mMainHandler.post(new Runnable() {
                     @Override
@@ -198,6 +210,14 @@ public class PhoneNumber {
         return numberInfo;
     }
 
+    private NumberInfo getOfflineOrSpecialInfo(String... numbers) {
+        NumberInfo numberInfo = getSpecialNumberInfo(numbers);
+        if (!isValid(numberInfo)) {
+            numberInfo = getOfflineNumberInfo(numbers);
+        }
+        return numberInfo;
+    }
+
     private NumberInfo getOfflineNumberInfo(String... numbers) {
         NumberInfo numberInfo = new NumberInfo();
         Map<String, Number> r = new HashMap<>();
@@ -277,6 +297,8 @@ public class PhoneNumber {
     }
 
     public interface Callback {
+        void onResponseOffline(NumberInfo numberInfo);
+
         void onResponse(NumberInfo numberInfo);
 
         void onResponseFailed(NumberInfo numberInfo);

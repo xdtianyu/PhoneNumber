@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
+            public void onResponseOffline(NumberInfo numberInfo) {
+            }
+
+            @Override
             public void onResponse(NumberInfo numberInfo) {
                 // Do your jobs here
                 textView.setText(numberInfo.toString());
