@@ -47,11 +47,16 @@ public class SpecialNumber {
         }
 
         public boolean inZone(String number) {
-            long n = Long.parseLong(number);
-            if (n >= min && n <= max) {
-                this.number = number;
-                return true;
+            try {
+                long n = Long.parseLong(number);
+                if (n >= min && n <= max) {
+                    this.number = number;
+                    return true;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
+
             return false;
         }
 
