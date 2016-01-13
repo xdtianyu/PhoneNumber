@@ -70,20 +70,24 @@ public class GooglePhoneNumber {
 
     public static Number getNumber(String phone) {
         Number number = null;
-        String geo = getGeo(phone, "86");
-        String carrier = getCarrier(phone, "86");
+        try {
+            String geo = getGeo(phone, "86");
+            String carrier = getCarrier(phone, "86");
 
-        if (!geo.isEmpty() || !carrier.isEmpty()) {
-            number = new Number();
-            number.setNumber(phone);
-            number.setName("");
-            number.setCount(0);
-            number.setType(Type.NORMAL);
-            Location location = new Location();
-            location.setOperators(carrier);
-            location.setProvince(geo);
-            location.setCity("");
-            number.setLocation(location);
+            if (!geo.isEmpty() || !carrier.isEmpty()) {
+                number = new Number();
+                number.setNumber(phone);
+                number.setName("");
+                number.setCount(0);
+                number.setType(Type.NORMAL);
+                Location location = new Location();
+                location.setOperators(carrier);
+                location.setProvince(geo);
+                location.setCity("");
+                number.setLocation(location);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return number;

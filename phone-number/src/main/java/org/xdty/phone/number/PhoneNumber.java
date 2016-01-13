@@ -224,6 +224,7 @@ public class PhoneNumber {
         ResponseHeader header = new ResponseHeader();
         OfflineRecord offlineRecord = new OfflineRecord(mContext);
         for (String n : numbers) {
+            n = n.replaceAll("\\+", "");
             OfflineRecord.Record record = offlineRecord.find(n);
             if (record != null) {
                 r.put(n, record.toNumber());

@@ -62,9 +62,9 @@ public class OfflineRecord {
         if (number.length() < 7 || number.length() > 11) {
             return null;
         }
-        int phone = Integer.parseInt(number.substring(0, 7));
 
         try {
+            int phone = Integer.parseInt(number.substring(0, 7));
             File file = createCacheFile(context, "phone.dat", R.raw.phone);
             long length = file.length();
             RandomAccessFile raf = new RandomAccessFile(file, "r");
