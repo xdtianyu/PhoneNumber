@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
@@ -125,7 +126,7 @@ public class PhoneNumber {
             }
         }
 
-        if (!isValid(numberInfo)) {
+        if (!isValid(numberInfo) || TextUtils.isEmpty(numberInfo.getNumbers().get(0).getName())) {
             if (apiType == API_TYPE_BD) {
                 numberInfo = getJHNumberInfo(numbers);
             } else {
