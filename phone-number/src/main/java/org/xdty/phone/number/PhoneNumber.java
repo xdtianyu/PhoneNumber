@@ -16,6 +16,7 @@ import com.squareup.okhttp.Request;
 import org.xdty.phone.number.model.Number;
 import org.xdty.phone.number.model.NumberInfo;
 import org.xdty.phone.number.model.ResponseHeader;
+import org.xdty.phone.number.model.custom.CustomNumber;
 import org.xdty.phone.number.model.google.GooglePhoneNumber;
 import org.xdty.phone.number.model.juhe.JuHeNumber;
 import org.xdty.phone.number.model.offline.OfflineRecord;
@@ -29,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class PhoneNumber {
 
     public final static String API_TYPE = "api_type";
+    public final static String CUSTOM_API_URL = "custom_api_url";
+    public final static String CUSTOM_API_KEY = "custom_api_key";
     public final static int API_TYPE_BD = 0;
     public final static int API_TYPE_JH = 1;
 
@@ -54,11 +57,15 @@ public class PhoneNumber {
     private Context mContext;
     private Handler mMainHandler;
     private Handler mHandler;
+    private SharedPreferences mPref;
+    private String mCustomUri;
+    private String mCustomKey;
 
     public PhoneNumber(Context context, Callback callback) {
         mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
         mContext = context;
+        mPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         mBDApiKey = getBDApiKey();
         mJHApiKey = getJHApiKey();
         mCallback = callback;
@@ -66,6 +73,8 @@ public class PhoneNumber {
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
+        mCustomUri = mPref.getString(CUSTOM_API_URL, "");
+        mCustomKey = mPref.getString(CUSTOM_API_KEY, "");
     }
 
     public String get(String... numbers) {
@@ -107,10 +116,14 @@ public class PhoneNumber {
 
     public NumberInfo getNumberInfo(String... numbers) {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        int apiType = preferences.getInt(API_TYPE, API_TYPE_BD);
+        int apiType = mPref.getInt(API_TYPE, API_TYPE_BD);
 
         NumberInfo numberInfo = getSpecialNumberInfo(numbers);
+
+        if (!isValid(numberInfo) && mCustomUri.isEmpty()) {
+            numberInfo = getCustomNumberInfo(numbers);
+        }
+
         if (!isValid(numberInfo)) {
 
             switch (apiType) {
@@ -158,6 +171,39 @@ public class PhoneNumber {
 
         numberInfo.setResponse(r);
         numberInfo.setResponseHeader(header);
+        return numberInfo;
+    }
+
+    private NumberInfo getCustomNumberInfo(String... numbers) {
+        NumberInfo numberInfo = new NumberInfo();
+        Map<String, Number> r = new HashMap<>();
+        ResponseHeader header = null;
+
+        for (String number : numbers) {
+            String url = mCustomUri + number + "&key=" + mCustomKey;
+            Request.Builder request = new Request.Builder().url(url);
+            try {
+                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                        request.build()).execute();
+                String s = response.body().string();
+                Gson gson = new Gson();
+                CustomNumber customNumber = gson.fromJson(s, CustomNumber.class);
+                Number n = customNumber.toNumber();
+                if (n != null) {
+                    r.put(number, n);
+
+                    if (header == null) {
+                        header = new ResponseHeader();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        numberInfo.setResponse(r);
+        numberInfo.setResponseHeader(header);
+
         return numberInfo;
     }
 
@@ -257,8 +303,7 @@ public class PhoneNumber {
     }
 
     private String getBDApiKey() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String apiKey = preferences.getString(API_KEY, "");
+        String apiKey = mPref.getString(API_KEY, "");
         if (apiKey.isEmpty()) {
             apiKey = getMetadata(META_DATA_KEY_URI);
         }
@@ -283,8 +328,7 @@ public class PhoneNumber {
     }
 
     private String getJHApiKey() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String apiKey = preferences.getString(JUHE_API_KEY, "");
+        String apiKey = mPref.getString(JUHE_API_KEY, "");
         if (apiKey.isEmpty()) {
             apiKey = getMetadata(META_DATA_JUHE_KEY_URI);
         }

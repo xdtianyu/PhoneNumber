@@ -13,8 +13,8 @@ ext {
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 19
-    libraryVersion = '0.1.9'
+    libraryVersionCode = 20
+    libraryVersion = '0.2.0'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
