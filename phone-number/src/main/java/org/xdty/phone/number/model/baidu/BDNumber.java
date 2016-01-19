@@ -29,6 +29,12 @@ public class BDNumber implements INumber<BDNumber> {
         mOkHttpClient = okHttpClient;
     }
 
+    private BDNumber(BDResponse bdResponse, String number) {
+        mBDResponse = bdResponse;
+        mBDLocation = mBDResponse.getLocation();
+        mBDResponse.setNumber(number);
+    }
+
     @Override
     public String getName() {
         return mBDResponse.getName();
@@ -87,10 +93,7 @@ public class BDNumber implements INumber<BDNumber> {
             Gson gson = new Gson();
             BDNumberInfo numberInfo = gson.fromJson(s, BDNumberInfo.class);
             if (numberInfo.getNumbers().size() > 0) {
-                mBDResponse = numberInfo.getNumbers().get(0);
-                mBDLocation = mBDResponse.getLocation();
-                mBDResponse.setNumber(number);
-                return this;
+                return new BDNumber(numberInfo.getNumbers().get(0), number);
             }
         } catch (Exception e) {
             e.printStackTrace();

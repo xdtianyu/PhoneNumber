@@ -22,6 +22,16 @@ public class GooglePhoneNumber implements INumber<GooglePhoneNumber> {
     private String mOperator;
     private String mProvince;
 
+    public GooglePhoneNumber() {
+        
+    }
+
+    private GooglePhoneNumber(String number, String operator, String province) {
+        mNumber = number;
+        mOperator = operator;
+        mProvince = province;
+    }
+
     public static boolean checkPhoneNumber(String phoneNumber, String countryCode) {
 
         int cCode = Integer.parseInt(countryCode);
@@ -120,10 +130,7 @@ public class GooglePhoneNumber implements INumber<GooglePhoneNumber> {
             String carrier = getCarrier(number, "86");
 
             if (!geo.isEmpty() || !carrier.isEmpty()) {
-                mNumber = number;
-                mOperator = carrier;
-                mProvince = geo;
-                return this;
+                return new GooglePhoneNumber(number, carrier, geo);
             }
         } catch (Exception e) {
             e.printStackTrace();

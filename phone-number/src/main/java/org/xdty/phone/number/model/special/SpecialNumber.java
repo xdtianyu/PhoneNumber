@@ -25,11 +25,15 @@ public class SpecialNumber implements INumber<SpecialNumber> {
         mContext = context;
     }
 
+    private SpecialNumber(Context context, Zone zone) {
+        mContext = context;
+        mZone = zone;
+    }
+
     public SpecialNumber find(String number) {
         for (Zone z : specialList) {
             if (z.inZone(number)) {
-                mZone = z;
-                return this;
+                return new SpecialNumber(mContext, z.copy(number));
             }
         }
         return null;
@@ -121,6 +125,12 @@ public class SpecialNumber implements INumber<SpecialNumber> {
             }
 
             return false;
+        }
+
+        public Zone copy(String number) {
+            Zone zone = new Zone(max, min, desId, isWarning);
+            zone.number = number;
+            return zone;
         }
     }
 

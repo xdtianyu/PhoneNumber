@@ -74,37 +74,43 @@ public class PhoneNumber {
         mSupportHandlerList.add(number);
     }
 
-    public void fetch(final String number) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                final INumber offlineNumber = getOfflineNumber(number);
-                mMainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mCallback != null) {
-                            if (offlineNumber != null && offlineNumber.isValid()) {
-                                mCallback.onResponseOffline(offlineNumber);
+    public void fetch(String... numbers) {
+        for (final String number : numbers) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    final INumber offlineNumber = getOfflineNumber(number);
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mCallback != null) {
+                                if (offlineNumber != null && offlineNumber.isValid()) {
+                                    mCallback.onResponseOffline(offlineNumber);
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                final INumber onlineNumber = getNumber(number);
-                mMainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mCallback != null) {
-                            if (onlineNumber != null && onlineNumber.isValid()) {
-                                mCallback.onResponse(onlineNumber);
-                            } else {
-                                mCallback.onResponseFailed(onlineNumber);
+                    if (offlineNumber instanceof SpecialNumber) {
+                        return;
+                    }
+
+                    final INumber onlineNumber = getNumber(number);
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mCallback != null) {
+                                if (onlineNumber != null && onlineNumber.isValid()) {
+                                    mCallback.onResponse(onlineNumber);
+                                } else {
+                                    mCallback.onResponseFailed(onlineNumber);
+                                }
                             }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     private INumber getNumber(String number) {

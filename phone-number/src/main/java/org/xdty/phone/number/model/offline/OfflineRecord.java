@@ -22,6 +22,10 @@ public class OfflineRecord implements INumber<OfflineRecord> {
     private Context context;
     private Record mRecord;
 
+    private OfflineRecord(Record record) {
+        mRecord = record;
+    }
+
     public OfflineRecord(Context context) {
         this.context = context;
     }
@@ -163,7 +167,7 @@ public class OfflineRecord implements INumber<OfflineRecord> {
             }
 
             if (mRecord != null) {
-                return this;
+                return new OfflineRecord(mRecord);
             }
         } catch (Exception e) {
             e.printStackTrace();
