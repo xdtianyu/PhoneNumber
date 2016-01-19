@@ -22,8 +22,19 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
 
         new PhoneNumber(this, new PhoneNumber.Callback() {
+
+            String result = "";
+
             @Override
             public void onResponseOffline(INumber number) {
+                String s = number.getNumber() +
+                        ": " +
+                        number.getType().getText() +
+                        ", " +
+                        number.getName() +
+                        " : " +
+                        number.getProvince() + " " + number.getCity() + " " + number.getProvider();
+                Log.d(TAG, s);
             }
 
             @Override
@@ -38,15 +49,16 @@ public class MainActivity extends AppCompatActivity {
                         number.getCount() +
                         " : " +
                         number.getProvince() + " " + number.getCity() + " " + number.getProvider();
-                textView.setText(s);
+                result += s + "\n";
+                textView.setText(result);
                 Log.d(TAG, s);
             }
 
             @Override
             public void onResponseFailed(INumber number) {
             }
-        }).fetch("10086");
-        // "10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551", "559", "569"
+        }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551",
+                "559", "569");
     }
 
 }
