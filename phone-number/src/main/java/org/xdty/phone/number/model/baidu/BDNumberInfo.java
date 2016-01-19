@@ -31,10 +31,12 @@ public class BDNumberInfo {
     public List<BDResponse> getNumbers() {
         List<BDResponse> numbers = new ArrayList<>();
 
-        for (String s : response.keySet()) {
-            BDResponse number = response.get(s);
-            number.setNumber(s);
-            numbers.add(number);
+        if (response != null) {
+            for (String s : response.keySet()) {
+                BDResponse number = response.get(s);
+                number.setNumber(s);
+                numbers.add(number);
+            }
         }
 
         return numbers;
