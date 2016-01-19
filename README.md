@@ -46,13 +46,13 @@ You can get `YOUR_API_KEY` from [Baidu apistore's usercenter](http://apistore.ba
 ```
 new PhoneNumber(this, new PhoneNumber.Callback() {
     @Override
-    public void onResponse(NumberInfo numberInfo) {
+    public void onResponse(INumber number) {
         // Do your jobs here
-        textView.setText(numberInfo.toString());
+        textView.setText(number.getName());
     }
 
     @Override
-    public void onResponseFailed(NumberInfo numberInfo) {
+    public void onResponseFailed(INumber number) {
     }
-}).fetch("10086", "10000, 10001", "OTHER_PHONE_NUMBER");
+}).fetch("10086", "10000", "10001", "OTHER_PHONE_NUMBER");
 ```
