@@ -1,4 +1,4 @@
-package org.xdty.phone.number.model.juhe;
+package org.xdty.phone.number.model.baidu;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,57 +12,57 @@ import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
-public class JuHeNumber implements INumber<JuHeNumber> {
+public class BDNumber implements INumber<BDNumber> {
 
     public transient final static String META_DATA_KEY_URI =
-            "org.xdty.phone.number.JUHE_API_KEY";
-    public transient final static String API_KEY = "juhe_api_key";
+            "org.xdty.phone.number.API_KEY";
+    public transient final static String API_KEY = "baidu_api_key";
 
-    String reason;
-    Result result;
-    int error_code;
+    private BDResponse mBDResponse;
+    private BDLocation mBDLocation;
 
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
 
-    public JuHeNumber(Context context, OkHttpClient okHttpClient) {
+    public BDNumber(Context context, OkHttpClient okHttpClient) {
         mContext = context;
         mOkHttpClient = okHttpClient;
     }
 
     @Override
     public String getName() {
-        return result.hy == null ? result.rpt_type : result.hy.name;
+        return mBDResponse.getName();
     }
 
     @Override
     public String getProvince() {
-        return result.province;
+        return mBDLocation == null ? "" : mBDLocation.province;
     }
 
     @Override
     public Type getType() {
-        return result.iszhapian == 0 ? Type.NORMAL : Type.REPORT;
+        return mBDResponse.getType();
     }
 
     @Override
     public String getCity() {
-        return result.city;
+        return mBDLocation == null ? "" : mBDLocation.city;
     }
 
     @Override
     public String getNumber() {
-        return result.phone;
+        return mBDResponse.getNumber();
     }
 
     @Override
     public String getProvider() {
-        return result.sp;
+        return mBDLocation == null ? "" : mBDLocation.operators;
     }
 
     @Override
     public String url() {
-        return "https://op.juhe.cn/onebox/phone/query?tel=";
+        return "http://apis.baidu.com/baidu_mobile_security/phone_number_service/" +
+                "phone_information_query?location=true&tel=";
     }
 
     @Override
@@ -76,15 +76,22 @@ public class JuHeNumber implements INumber<JuHeNumber> {
     }
 
     @Override
-    public JuHeNumber find(String number) {
-        String url = url() + number + "&key=" + key();
+    public BDNumber find(String number) {
+        String url = url() + number;
         Request.Builder request = new Request.Builder().url(url);
+        request.header("apikey", key());
         try {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
             Gson gson = new Gson();
-            return gson.fromJson(s, JuHeNumber.class);
+            BDNumberInfo numberInfo = gson.fromJson(s, BDNumberInfo.class);
+            if (numberInfo.getNumbers().size() > 0) {
+                mBDResponse = numberInfo.getNumbers().get(0);
+                mBDLocation = mBDResponse.getLocation();
+                mBDResponse.setNumber(number);
+                return this;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,7 +100,7 @@ public class JuHeNumber implements INumber<JuHeNumber> {
 
     @Override
     public int getCount() {
-        return result.rpt_cnt;
+        return mBDResponse.getCount();
     }
 
     @Override
@@ -103,36 +110,11 @@ public class JuHeNumber implements INumber<JuHeNumber> {
 
     @Override
     public boolean isValid() {
-        return result != null && error_code == 0;
+        return mBDResponse != null;
     }
 
     @Override
     public int getApiId() {
-        return INumber.API_ID_JH;
+        return INumber.API_ID_BD;
     }
-
-
-    class Result {
-        int iszhapian;
-        String province;
-        String city;
-        String sp;
-        String phone;
-        String rpt_type;
-        String rpt_comment;
-        int rpt_cnt;
-        Hy hy;
-        String countDesc;
-
-    }
-
-    class Hy {
-        String city;
-        String lng;
-        String lat;
-        String name;
-        String addr;
-        String tel;
-    }
-
 }

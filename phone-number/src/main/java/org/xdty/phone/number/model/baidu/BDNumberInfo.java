@@ -1,36 +1,38 @@
-package org.xdty.phone.number.model;
+package org.xdty.phone.number.model.baidu;
+
+import org.xdty.phone.number.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NumberInfo {
-    Map<String, Number> response;
-    ResponseHeader responseHeader;
+public class BDNumberInfo {
+    Map<String, BDResponse> response;
+    BDResponseHeader responseHeader;
     boolean isOffline = false;
 
-    public Map<String, Number> getResponse() {
+    public Map<String, BDResponse> getResponse() {
         return response;
     }
 
     public void setResponse(
-            Map<String, Number> response) {
+            Map<String, BDResponse> response) {
         this.response = response;
     }
 
-    public ResponseHeader getResponseHeader() {
+    public BDResponseHeader getResponseHeader() {
         return responseHeader;
     }
 
-    public void setResponseHeader(ResponseHeader responseHeader) {
+    public void setResponseHeader(BDResponseHeader responseHeader) {
         this.responseHeader = responseHeader;
     }
 
-    public List<Number> getNumbers() {
-        List<Number> numbers = new ArrayList<>();
+    public List<BDResponse> getNumbers() {
+        List<BDResponse> numbers = new ArrayList<>();
 
         for (String s : response.keySet()) {
-            Number number = response.get(s);
+            BDResponse number = response.get(s);
             number.setNumber(s);
             numbers.add(number);
         }
@@ -45,8 +47,8 @@ public class NumberInfo {
                 s += "\n";
             }
             s += k;
-            Number r = response.get(k);
-            Location l = r.getLocation();
+            BDResponse r = response.get(k);
+            BDLocation l = r.getLocation();
             Type type = r.getType();
 
             switch (type) {

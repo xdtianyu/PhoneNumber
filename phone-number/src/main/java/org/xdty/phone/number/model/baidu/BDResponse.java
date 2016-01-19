@@ -1,17 +1,19 @@
-package org.xdty.phone.number.model;
+package org.xdty.phone.number.model.baidu;
 
-public class Number {
-    Location location;
+import org.xdty.phone.number.model.Type;
+
+public class BDResponse {
+    BDLocation location;
     String name;
     String type;
     double count;
     String number;
 
-    public Location getLocation() {
+    public BDLocation getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(BDLocation location) {
         this.location = location;
     }
 

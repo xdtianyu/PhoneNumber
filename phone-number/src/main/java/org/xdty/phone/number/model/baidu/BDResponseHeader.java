@@ -1,6 +1,6 @@
-package org.xdty.phone.number.model;
+package org.xdty.phone.number.model.baidu;
 
-public class ResponseHeader {
+public class BDResponseHeader {
     int status;
     long time;
     String version;

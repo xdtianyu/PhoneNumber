@@ -1,22 +1,26 @@
 package org.xdty.phone.number.model.google;
 
+import android.text.TextUtils;
+
 import com.google.i18n.phonenumbers.PhoneNumberToCarrierMapper;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder;
 
-import org.xdty.phone.number.model.Location;
-import org.xdty.phone.number.model.Number;
+import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
 import java.util.Locale;
 
-public class GooglePhoneNumber {
+public class GooglePhoneNumber implements INumber<GooglePhoneNumber> {
     private static PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     private static PhoneNumberToCarrierMapper carrierMapper =
             PhoneNumberToCarrierMapper.getInstance();
 
     private static PhoneNumberOfflineGeocoder geoCoder = PhoneNumberOfflineGeocoder.getInstance();
+    private String mNumber;
+    private String mOperator;
+    private String mProvince;
 
     public static boolean checkPhoneNumber(String phoneNumber, String countryCode) {
 
@@ -68,28 +72,82 @@ public class GooglePhoneNumber {
         return geoCoder.getDescriptionForNumber(pn, Locale.CHINESE);
     }
 
-    public static Number getNumber(String phone) {
-        Number number = null;
+    @Override
+    public String getName() {
+        return "";
+    }
+
+    @Override
+    public String getProvince() {
+        return mProvince;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.NORMAL;
+    }
+
+    @Override
+    public String getCity() {
+        return "";
+    }
+
+    @Override
+    public String getNumber() {
+        return mNumber;
+    }
+
+    @Override
+    public String getProvider() {
+        return mOperator;
+    }
+
+    @Override
+    public String url() {
+        return null;
+    }
+
+    @Override
+    public String key() {
+        return null;
+    }
+
+    @Override
+    public GooglePhoneNumber find(String number) {
         try {
-            String geo = getGeo(phone, "86");
-            String carrier = getCarrier(phone, "86");
+            number = number.replaceAll("\\+", "");
+            String geo = getGeo(number, "86");
+            String carrier = getCarrier(number, "86");
 
             if (!geo.isEmpty() || !carrier.isEmpty()) {
-                number = new Number();
-                number.setNumber(phone);
-                number.setName("");
-                number.setCount(0);
-                number.setType(Type.NORMAL);
-                Location location = new Location();
-                location.setOperators(carrier);
-                location.setProvince(geo);
-                location.setCity("");
-                number.setLocation(location);
+                mNumber = number;
+                mOperator = carrier;
+                mProvince = geo;
+                return this;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
 
-        return number;
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return !TextUtils.isEmpty(mNumber);
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_GOOGLE;
     }
 }

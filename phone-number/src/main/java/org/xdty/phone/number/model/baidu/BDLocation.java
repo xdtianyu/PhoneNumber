@@ -1,6 +1,6 @@
-package org.xdty.phone.number.model;
+package org.xdty.phone.number.model.baidu;
 
-public class Location {
+public class BDLocation {
     String province;
     String operators;
     String city;

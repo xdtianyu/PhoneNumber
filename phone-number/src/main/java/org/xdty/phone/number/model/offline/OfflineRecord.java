@@ -1,10 +1,11 @@
 package org.xdty.phone.number.model.offline;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import org.xdty.phone.number.R;
-import org.xdty.phone.number.model.*;
-import org.xdty.phone.number.model.Number;
+import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,9 +17,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-public class OfflineRecord {
+public class OfflineRecord implements INumber<OfflineRecord> {
     private final static int PHONE_FMT_LENGTH = 9;
     private Context context;
+    private Record mRecord;
 
     public OfflineRecord(Context context) {
         this.context = context;
@@ -56,14 +58,56 @@ public class OfflineRecord {
         }
     }
 
-    public Record find(String number) {
-        Record record = null;
+    @Override
+    public String getName() {
+        return "";
+    }
 
+    @Override
+    public String getProvince() {
+        return mRecord.province;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.NORMAL;
+    }
+
+    @Override
+    public String getCity() {
+        return mRecord.city;
+    }
+
+    @Override
+    public String getNumber() {
+        return mRecord.number;
+    }
+
+    @Override
+    public String getProvider() {
+        return mRecord.operators;
+    }
+
+    @Override
+    public String url() {
+        return null;
+    }
+
+    @Override
+    public String key() {
+        return null;
+    }
+
+    @Override
+    public OfflineRecord find(String number) {
+        number = number.replaceAll("\\+", "");
         if (number.length() < 7 || number.length() > 11) {
             return null;
         }
 
         try {
+            mRecord = null;
+
             int phone = Integer.parseInt(number.substring(0, 7));
             File file = createCacheFile(context, "phone.dat", R.raw.phone);
             long length = file.length();
@@ -112,17 +156,40 @@ public class OfflineRecord {
                             b.write(nextByte);
                         }
                     }
-                    record = new Record(new String(b.toByteArray()), number, index.type);
+                    mRecord = new Record(new String(b.toByteArray()), number, index.type);
                     b.close();
                     break;
                 }
             }
 
+            if (mRecord != null) {
+                return this;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return record;
+        return null;
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return !TextUtils.isEmpty(getNumber());
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_OFFLINE;
     }
 
     private File createCacheFile(Context context, String filename, int raw) throws IOException {
@@ -177,19 +244,6 @@ public class OfflineRecord {
 
         public String toString() {
             return province + ", " + city + ", " + zip + ", " + area;
-        }
-
-        public Number toNumber() {
-            Number n = new Number();
-            n.setNumber(number);
-            n.setType(Type.NORMAL);
-            n.setCount(0);
-            Location location = new Location();
-            location.setProvince(province);
-            location.setCity(city);
-            location.setOperators(operators);
-            n.setLocation(location);
-            return n;
         }
     }
 
