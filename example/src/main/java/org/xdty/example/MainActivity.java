@@ -6,11 +6,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import org.xdty.phone.number.PhoneNumber;
-import org.xdty.phone.number.model.Number;
-import org.xdty.phone.number.model.NumberInfo;
-import org.xdty.phone.number.model.ResponseHeader;
-
-import java.util.List;
+import org.xdty.phone.number.model.INumber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,38 +23,30 @@ public class MainActivity extends AppCompatActivity {
 
         new PhoneNumber(this, new PhoneNumber.Callback() {
             @Override
-            public void onResponseOffline(NumberInfo numberInfo) {
+            public void onResponseOffline(INumber number) {
             }
 
             @Override
-            public void onResponse(NumberInfo numberInfo) {
+            public void onResponse(INumber number) {
                 // Do your jobs here
-                textView.setText(numberInfo.toString());
-
-                List<Number> numbers = numberInfo.getNumbers();
-                for (Number number : numbers) {
-                    Log.d(TAG, number.getNumber() +
-                            ": " +
-                            number.getType().getText() +
-                            ", " +
-                            number.getName() +
-                            ", " +
-                            number.getCount());
-                }
+                String s = number.getNumber() +
+                        ": " +
+                        number.getType().getText() +
+                        ", " +
+                        number.getName() +
+                        ", " +
+                        number.getCount() +
+                        " : " +
+                        number.getProvince() + " " + number.getCity() + " " + number.getProvider();
+                textView.setText(s);
+                Log.d(TAG, s);
             }
 
             @Override
-            public void onResponseFailed(NumberInfo numberInfo) {
-                if (numberInfo != null) {
-                    ResponseHeader responseHeader = numberInfo.getResponseHeader();
-                    if (responseHeader != null) {
-                        textView.setText(responseHeader.getStatus());
-                    }
-                } else {
-                    Log.e(TAG, "numberInfo is null");
-                }
+            public void onResponseFailed(INumber number) {
             }
-        }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551", "559", "569");
+        }).fetch("10086");
+        // "10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551", "559", "569"
     }
 
 }
