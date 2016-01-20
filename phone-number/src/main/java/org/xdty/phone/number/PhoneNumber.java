@@ -119,11 +119,23 @@ public class PhoneNumber {
         int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
 
         INumber result = null;
+
         for (NumberHandler handler : mSupportHandlerList) {
-            if (handler.isOnline() && handler.getApiId() == apiType) {
+            if (handler.isOnline() && handler.getApiId() == INumber.API_ID_CUSTOM) {
                 INumber i = handler.find(number);
                 if (i != null && i.isValid()) {
                     result = i;
+                }
+            }
+        }
+
+        if (result == null || !result.isValid()) {
+            for (NumberHandler handler : mSupportHandlerList) {
+                if (handler.isOnline() && handler.getApiId() == apiType) {
+                    INumber i = handler.find(number);
+                    if (i != null && i.isValid()) {
+                        result = i;
+                    }
                 }
             }
         }
