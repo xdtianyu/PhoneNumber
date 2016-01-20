@@ -10,9 +10,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.Type;
 
-public class CustomNumber implements INumber<CustomNumber> {
+public class CustomNumber implements INumber, NumberHandler<CustomNumber> {
     String reason;
     int error_code;
     Result result;

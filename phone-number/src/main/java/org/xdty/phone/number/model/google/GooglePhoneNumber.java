@@ -8,11 +8,12 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder;
 
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.Type;
 
 import java.util.Locale;
 
-public class GooglePhoneNumber implements INumber<GooglePhoneNumber> {
+public class GooglePhoneNumber implements INumber, NumberHandler<GooglePhoneNumber> {
     private static PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     private static PhoneNumberToCarrierMapper carrierMapper =
             PhoneNumberToCarrierMapper.getInstance();

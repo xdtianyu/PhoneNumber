@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumber;
 import org.xdty.phone.number.model.custom.CustomNumber;
 import org.xdty.phone.number.model.google.GooglePhoneNumber;
@@ -33,7 +34,7 @@ public class PhoneNumber {
     private Handler mHandler;
     private SharedPreferences mPref;
 
-    private List<INumber> mSupportHandlerList;
+    private List<NumberHandler> mSupportHandlerList;
 
     public PhoneNumber(Context context, Callback callback) {
         OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -67,11 +68,11 @@ public class PhoneNumber {
         return null;
     }
 
-    public void addNumberHandler(INumber number) {
+    public void addNumberHandler(NumberHandler handler) {
         if (mSupportHandlerList == null) {
             mSupportHandlerList = new ArrayList<>();
         }
-        mSupportHandlerList.add(number);
+        mSupportHandlerList.add(handler);
     }
 
     public void fetch(String... numbers) {
@@ -118,9 +119,9 @@ public class PhoneNumber {
         int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
 
         INumber result = null;
-        for (INumber iNumber : mSupportHandlerList) {
-            if (iNumber.isOnline() && iNumber.getApiId() == apiType) {
-                INumber i = iNumber.find(number);
+        for (NumberHandler handler : mSupportHandlerList) {
+            if (handler.isOnline() && handler.getApiId() == apiType) {
+                INumber i = handler.find(number);
                 if (i != null && i.isValid()) {
                     result = i;
                 }
@@ -128,9 +129,9 @@ public class PhoneNumber {
         }
 
         if (result == null || !result.isValid()) {
-            for (INumber iNumber : mSupportHandlerList) {
-                if (iNumber.isOnline() && iNumber.getApiId() != apiType) {
-                    INumber i = iNumber.find(number);
+            for (NumberHandler handler : mSupportHandlerList) {
+                if (handler.isOnline() && handler.getApiId() != apiType) {
+                    INumber i = handler.find(number);
                     if (i != null && i.isValid()) {
                         result = i;
                     }
@@ -143,9 +144,9 @@ public class PhoneNumber {
 
     private INumber getOfflineNumber(String number) {
 
-        for (INumber iNumber : mSupportHandlerList) {
-            if (!iNumber.isOnline()) {
-                INumber i = iNumber.find(number);
+        for (NumberHandler handler : mSupportHandlerList) {
+            if (!handler.isOnline()) {
+                INumber i = handler.find(number);
                 if (i != null && i.isValid()) {
                     return i;
                 }

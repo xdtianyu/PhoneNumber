@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.Type;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-public class OfflineRecord implements INumber<OfflineRecord> {
+public class OfflineRecord implements INumber, NumberHandler<OfflineRecord> {
     private final static int PHONE_FMT_LENGTH = 9;
     private Context context;
     private Record mRecord;

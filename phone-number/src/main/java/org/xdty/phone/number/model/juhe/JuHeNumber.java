@@ -10,9 +10,10 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.Type;
 
-public class JuHeNumber implements INumber<JuHeNumber> {
+public class JuHeNumber implements INumber, NumberHandler<JuHeNumber> {
 
     public transient final static String META_DATA_KEY_URI =
             "org.xdty.phone.number.JUHE_API_KEY";

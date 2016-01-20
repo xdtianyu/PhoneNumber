@@ -5,12 +5,13 @@ import android.text.TextUtils;
 
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpecialNumber implements INumber<SpecialNumber> {
+public class SpecialNumber implements INumber, NumberHandler<SpecialNumber> {
 
     private final List<Zone> specialList = new ArrayList<Zone>() {
         {

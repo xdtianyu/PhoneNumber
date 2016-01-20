@@ -1,6 +1,6 @@
 package org.xdty.phone.number.model;
 
-public interface INumber<T extends INumber> {
+public interface INumber {
 
     int API_ID_SPECIAL = -1000;
     int API_ID_OFFLINE = -2;
@@ -20,12 +20,6 @@ public interface INumber<T extends INumber> {
     String getNumber();
 
     String getProvider();
-
-    String url();
-
-    String key();
-
-    T find(String number);
 
     int getCount();
 
