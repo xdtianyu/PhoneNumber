@@ -2,4 +2,5 @@
     <string name="app_name">PhoneNumber</string>
     <string name="private_number">Private Number</string>
     <string name="family_number">Family Number</string>
+    <string name="only_offline_key">only_offline_key</string>
 </resources>
