@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponseFailed(INumber number) {
+            public void onResponseFailed(INumber number, boolean isOnline) {
             }
         }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551",
                 "559", "569");
