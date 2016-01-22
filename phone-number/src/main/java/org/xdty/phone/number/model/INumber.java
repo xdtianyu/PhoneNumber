@@ -23,9 +23,5 @@ public interface INumber {
 
     int getCount();
 
-    boolean isOnline();
-
     boolean isValid();
-
-    int getApiId();
 }

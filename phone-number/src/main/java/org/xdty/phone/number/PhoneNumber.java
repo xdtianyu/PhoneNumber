@@ -12,12 +12,13 @@ import com.squareup.okhttp.OkHttpClient;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
-import org.xdty.phone.number.model.baidu.BDNumber;
-import org.xdty.phone.number.model.custom.CustomNumber;
-import org.xdty.phone.number.model.google.GooglePhoneNumber;
-import org.xdty.phone.number.model.juhe.JuHeNumber;
-import org.xdty.phone.number.model.offline.OfflineRecord;
+import org.xdty.phone.number.model.baidu.BDNumberHandler;
+import org.xdty.phone.number.model.custom.CustomNumberHandler;
+import org.xdty.phone.number.model.google.GoogleNumberHandler;
+import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
+import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
+import org.xdty.phone.number.model.special.SpecialNumberHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +50,12 @@ public class PhoneNumber {
         mHandler = new Handler(handlerThread.getLooper());
         mContext = context;
 
-        addNumberHandler(new SpecialNumber(context));
-        addNumberHandler(new OfflineRecord(context));
-        addNumberHandler(new GooglePhoneNumber());
-        addNumberHandler(new CustomNumber(context, mOkHttpClient));
-        addNumberHandler(new BDNumber(context, mOkHttpClient));
-        addNumberHandler(new JuHeNumber(context, mOkHttpClient));
+        addNumberHandler(new SpecialNumberHandler(context));
+        addNumberHandler(new OfflineHandler(context));
+        addNumberHandler(new GoogleNumberHandler());
+        addNumberHandler(new CustomNumberHandler(context, mOkHttpClient));
+        addNumberHandler(new BDNumberHandler(context, mOkHttpClient));
+        addNumberHandler(new JuHeNumberHandler(context, mOkHttpClient));
     }
 
     public static String getMetadata(Context context, String name) {
