@@ -97,6 +97,8 @@ public class PhoneNumber {
                             if (mCallback != null) {
                                 if (offlineNumber != null && offlineNumber.isValid()) {
                                     mCallback.onResponseOffline(offlineNumber);
+                                } else {
+                                    mCallback.onResponseFailed(offlineNumber, false);
                                 }
                             }
                         }
@@ -118,7 +120,7 @@ public class PhoneNumber {
                                 if (onlineNumber != null && onlineNumber.isValid()) {
                                     mCallback.onResponse(onlineNumber);
                                 } else {
-                                    mCallback.onResponseFailed(onlineNumber);
+                                    mCallback.onResponseFailed(onlineNumber, true);
                                 }
                             }
                         }
@@ -186,6 +188,6 @@ public class PhoneNumber {
 
         void onResponse(INumber number);
 
-        void onResponseFailed(INumber number);
+        void onResponseFailed(INumber number, boolean isOnline);
     }
 }
