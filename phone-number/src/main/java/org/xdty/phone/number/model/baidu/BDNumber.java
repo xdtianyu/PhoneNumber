@@ -49,10 +49,19 @@ public class BDNumber implements INumber {
         return mBDResponse.getCount();
     }
 
-
     @Override
     public boolean isValid() {
         return mBDResponse != null;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_BD;
     }
 
 }

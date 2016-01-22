@@ -60,4 +60,14 @@ public class GooglePhoneNumber implements INumber {
     public boolean isValid() {
         return !TextUtils.isEmpty(mNumber);
     }
+
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_GOOGLE;
+    }
 }

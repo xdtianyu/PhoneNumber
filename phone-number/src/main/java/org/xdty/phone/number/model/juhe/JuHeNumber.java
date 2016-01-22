@@ -53,6 +53,16 @@ public class JuHeNumber implements INumber {
         return result != null && error_code == 0;
     }
 
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_JH;
+    }
+
     class Result {
         int iszhapian;
         String province;

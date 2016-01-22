@@ -85,4 +85,14 @@ public class OfflineNumber implements INumber {
     public boolean isValid() {
         return !TextUtils.isEmpty(getNumber());
     }
+
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_OFFLINE;
+    }
 }

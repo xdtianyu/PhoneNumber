@@ -56,4 +56,14 @@ public class SpecialNumber implements INumber {
         return !TextUtils.isEmpty(mZone.number);
     }
 
+    @Override
+    public boolean isOnline() {
+        return false;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_SPECIAL;
+    }
+
 }
