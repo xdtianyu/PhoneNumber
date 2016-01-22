@@ -38,8 +38,15 @@ public class PhoneNumber {
     private List<NumberHandler> mSupportHandlerList;
 
     private Context mContext;
+    private boolean mOffline = false;
 
     public PhoneNumber(Context context, Callback callback) {
+        this(context, false, callback);
+    }
+
+    public PhoneNumber(Context context, boolean offline, Callback callback) {
+        mContext = context;
+        mOffline = offline;
         OkHttpClient mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
         mPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -48,7 +55,6 @@ public class PhoneNumber {
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
-        mContext = context;
 
         addNumberHandler(new SpecialNumberHandler(context));
         addNumberHandler(new OfflineHandler(context));
@@ -100,7 +106,7 @@ public class PhoneNumber {
                         return;
                     }
 
-                    if (mPref.getBoolean(mContext.getString(R.string.only_offline_key), false)) {
+                    if (mPref.getBoolean(mContext.getString(R.string.only_offline_key), false) || mOffline) {
                         return;
                     }
 
