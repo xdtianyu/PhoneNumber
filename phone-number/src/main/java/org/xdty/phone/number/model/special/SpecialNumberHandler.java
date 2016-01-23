@@ -15,6 +15,8 @@ public class SpecialNumberHandler implements NumberHandler<SpecialNumber> {
         {
             add(new Zone(-9999, 0, R.string.private_number, true));
             add(new Zone(550, 570, R.string.family_number, false));
+            add(new Zone(661, 669, R.string.family_number, false));
+            add(new Zone(680, 689, R.string.family_number, false));
         }
     };
 
