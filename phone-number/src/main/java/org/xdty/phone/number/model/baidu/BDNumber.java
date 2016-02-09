@@ -12,6 +12,12 @@ public class BDNumber implements INumber {
         mBDResponse = bdResponse;
         mBDLocation = mBDResponse.getLocation();
         mBDResponse.setNumber(number);
+
+        if (mBDResponse != null && mBDResponse.getName() != null &&
+                mBDResponse.getName().contains("百度糯米")) {
+            mBDResponse.setName("");
+            mBDResponse.setCount(0);
+        }
     }
 
     @Override
