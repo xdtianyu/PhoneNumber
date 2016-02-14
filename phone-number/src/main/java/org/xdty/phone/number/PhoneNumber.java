@@ -108,7 +108,8 @@ public class PhoneNumber {
                         return;
                     }
 
-                    if (mPref.getBoolean(mContext.getString(R.string.only_offline_key), false) || mOffline) {
+                    if (mPref.getBoolean(mContext.getString(R.string.only_offline_key),
+                            false) || mOffline) {
                         return;
                     }
 
@@ -181,6 +182,13 @@ public class PhoneNumber {
             }
         }
         return null;
+    }
+
+    public void clear() {
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler.getLooper().quit();
+        mCallback = null;
+        mSupportHandlerList.clear();
     }
 
     public interface Callback {
