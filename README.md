@@ -12,7 +12,7 @@ Grab via gradle
 
 ```
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.3.7'
+    compile 'org.xdty.phone.number:phone-number:0.3.8'
 }
 ```
 
@@ -22,7 +22,7 @@ or maven
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.3.7</version>
+  <version>0.3.8</version>
   <type>aar</type>
 </dependency>
 ```
@@ -41,7 +41,7 @@ or JAR from [maven central](http://central.maven.org/maven2/org/xdty/phone/numbe
 
 You can get `YOUR_API_KEY` from [Baidu apistore's usercenter](http://apistore.baidu.com/astore/usercenter)
 
-2\. Add these lines to `MainActivity`, For more details, see [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example)
+2\. Add these lines to `MainActivity`, For more details, see [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example) and [CallerInfo](https://github.com/xdtianyu/CallerInfo)
 
 ```
 new PhoneNumber(this, new PhoneNumber.Callback() {
