@@ -163,6 +163,7 @@ public class PhoneNumber {
                     INumber i = handler.find(number);
                     if (i != null && i.isValid()) {
                         result = i;
+                        break;
                     }
                 }
             }
@@ -188,7 +189,6 @@ public class PhoneNumber {
         mHandler.removeCallbacksAndMessages(null);
         mHandler.getLooper().quit();
         mCallback = null;
-        mSupportHandlerList.clear();
     }
 
     public interface Callback {
