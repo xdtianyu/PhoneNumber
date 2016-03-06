@@ -3,6 +3,7 @@ package org.xdty.phone.number.model.juhe;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
@@ -44,6 +45,13 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
 
     @Override
     public JuHeNumber find(String number) {
+        if (TextUtils.isEmpty(number)) {
+            return null;
+        }
+
+        if (number.startsWith("+") && !number.startsWith("+86")) {
+            return null;
+        }
         String url = url() + number + "&key=" + key();
         Request.Builder request = new Request.Builder().url(url);
         try {
