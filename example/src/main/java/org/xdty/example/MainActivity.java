@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponseFailed(INumber number, boolean isOnline) {
             }
         }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551",
-                "559", "569", "+16505551212", "+8615829812345");
+                "559", "569", "+16505551212", "+8615829812345", "+18057518222");
     }
 
 }

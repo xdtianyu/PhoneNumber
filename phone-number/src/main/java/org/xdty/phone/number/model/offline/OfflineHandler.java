@@ -34,8 +34,8 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
 
     @Override
     public OfflineNumber find(String number) {
-        number = number.replaceAll("\\+", "");
-        if (number.length() < 7 || number.length() > 11) {
+        number = number.replaceAll("\\+86", "");
+        if (number.length() < 7 || number.length() > 11 || number.contains("+")) {
             return null;
         }
 
