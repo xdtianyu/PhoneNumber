@@ -1,6 +1,9 @@
 package org.xdty.phone.number.model.special;
 
+import android.util.Log;
+
 public class Zone {
+    private static final String TAG = Zone.class.getSimpleName();
     public int max;
     public int min;
     public int desId;
@@ -22,7 +25,7 @@ public class Zone {
                 return true;
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            Log.d(TAG, "NumberFormatException: " + number);
         }
 
         return false;

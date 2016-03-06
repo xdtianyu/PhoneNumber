@@ -62,6 +62,7 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
                 carrierZh += "电信";
                 break;
             default:
+                carrierZh = carrierEn;
                 break;
         }
         return carrierZh;

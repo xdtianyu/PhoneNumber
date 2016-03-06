@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 
