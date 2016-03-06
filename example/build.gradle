@@ -23,6 +23,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'org.xdty.phone.number:phone-number:0.3.12'
+    compile 'org.xdty.phone.number:phone-number:0.3.13'
 //    compile project(':phone-number')
 }
