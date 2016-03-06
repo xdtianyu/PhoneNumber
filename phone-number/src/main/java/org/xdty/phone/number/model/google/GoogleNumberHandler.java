@@ -1,5 +1,11 @@
 package org.xdty.phone.number.model.google;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberToCarrierMapper;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -11,11 +17,17 @@ import org.xdty.phone.number.model.NumberHandler;
 import java.util.Locale;
 
 public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
+    private static final String TAG = GoogleNumberHandler.class.getSimpleName();
     private static PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
     private static PhoneNumberToCarrierMapper carrierMapper =
             PhoneNumberToCarrierMapper.getInstance();
 
     private static PhoneNumberOfflineGeocoder geoCoder = PhoneNumberOfflineGeocoder.getInstance();
+    private Context mContext;
+
+    public GoogleNumberHandler(Context context) {
+        mContext = context;
+    }
 
     public static boolean checkPhoneNumber(String phoneNumber, String countryCode) {
 
@@ -29,14 +41,14 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
         return phoneNumberUtil.isValidNumber(pn);
     }
 
-    public static String getCarrier(String phoneNumber, String countryCode) {
+    public static String getCarrier(Context context, String number) {
 
-        int cCode = Integer.parseInt(countryCode);
-        long phone = Long.parseLong(phoneNumber);
+        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number);
 
-        Phonenumber.PhoneNumber pn = new Phonenumber.PhoneNumber();
-        pn.setCountryCode(cCode);
-        pn.setNationalNumber(phone);
+        if (pn == null) {
+            return null;
+        }
+
         String carrierEn = carrierMapper.getNameForNumber(pn, Locale.ENGLISH);
         String carrierZh = "";
         switch (carrierEn) {
@@ -55,16 +67,48 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
         return carrierZh;
     }
 
-    public static String getGeo(String phoneNumber, String countryCode) {
+    public static String getGeo(Context context, String number) {
 
-        int cCode = Integer.parseInt(countryCode);
-        long phone = Long.parseLong(phoneNumber);
+        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number);
 
-        Phonenumber.PhoneNumber pn = new Phonenumber.PhoneNumber();
-        pn.setCountryCode(cCode);
-        pn.setNationalNumber(phone);
+        if (pn == null) {
+            return null;
+        }
 
-        return geoCoder.getDescriptionForNumber(pn, Locale.CHINESE);
+        Locale locale = context.getResources().getConfiguration().locale;
+        return geoCoder.getDescriptionForNumber(pn, locale);
+    }
+
+    public static Phonenumber.PhoneNumber getPhoneNumber(Context context, String number) {
+        if (TextUtils.isEmpty(number)) {
+            return null;
+        }
+
+        PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+
+        Locale locale = context.getResources().getConfiguration().locale;
+        String countryIso = getCurrentCountryIso(context, locale);
+        Phonenumber.PhoneNumber pn = null;
+        try {
+            pn = util.parse(number, countryIso);
+        } catch (NumberParseException e) {
+            Log.v(TAG, "getGeoDescription: NumberParseException for incoming number '" +
+                    number + "'");
+        }
+        return pn;
+    }
+
+    public static String getCurrentCountryIso(Context context, Locale locale) {
+        final TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String countryIso = telephonyManager.getNetworkCountryIso().toUpperCase();
+
+        if (TextUtils.isEmpty(countryIso)) {
+            countryIso = locale.getCountry();
+            Log.w(TAG, "No CountryDetector; falling back to countryIso based on locale: "
+                    + countryIso);
+        }
+        return countryIso;
     }
 
     @Override
@@ -80,11 +124,10 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
     @Override
     public GooglePhoneNumber find(String number) {
         try {
-            number = number.replaceAll("\\+", "");
-            String geo = getGeo(number, "86");
-            String carrier = getCarrier(number, "86");
+            String geo = getGeo(mContext, number);
+            String carrier = getCarrier(mContext, number);
 
-            if (!geo.isEmpty() || !carrier.isEmpty()) {
+            if (!TextUtils.isEmpty(geo) || !TextUtils.isEmpty(carrier)) {
                 return new GooglePhoneNumber(number, carrier, geo);
             }
         } catch (Exception e) {

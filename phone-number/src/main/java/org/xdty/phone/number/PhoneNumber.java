@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PhoneNumber {
+    private static final String TAG = PhoneNumber.class.getSimpleName();
 
     public final static String API_TYPE = "api_type";
 
@@ -58,7 +59,7 @@ public class PhoneNumber {
 
         addNumberHandler(new SpecialNumberHandler(context));
         addNumberHandler(new OfflineHandler(context));
-        addNumberHandler(new GoogleNumberHandler());
+        addNumberHandler(new GoogleNumberHandler(context));
         addNumberHandler(new CustomNumberHandler(context, mOkHttpClient));
         addNumberHandler(new BDNumberHandler(context, mOkHttpClient));
         addNumberHandler(new JuHeNumberHandler(context, mOkHttpClient));
