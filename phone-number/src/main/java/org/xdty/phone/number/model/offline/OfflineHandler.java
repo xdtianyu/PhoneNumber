@@ -5,12 +5,10 @@ import android.content.Context;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 public class OfflineHandler implements NumberHandler<OfflineNumber> {
@@ -43,7 +41,7 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
             OfflineNumber offlineNumber = null;
 
             int phone = Integer.parseInt(number.substring(0, 7));
-            File file = createCacheFile(mContext, "phone.dat", R.raw.phone);
+            File file = Utils.createCacheFile(mContext, "phone.dat", R.raw.phone);
             long length = file.length();
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             byte bVersion[] = new byte[4];
@@ -115,37 +113,5 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
     @Override
     public int getApiId() {
         return INumber.API_ID_OFFLINE;
-    }
-
-    private File createCacheFile(Context context, String filename, int raw) throws IOException {
-        File cacheFile = new File(context.getCacheDir(), filename);
-
-        if (cacheFile.exists()) {
-            return cacheFile;
-        }
-
-        InputStream inputStream = context.getResources().openRawResource(raw);
-        FileOutputStream fileOutputStream = new FileOutputStream(cacheFile);
-
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-        int length;
-        while ((length = inputStream.read(buffer)) > 0) {
-            fileOutputStream.write(buffer, 0, length);
-        }
-
-        try {
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return cacheFile;
     }
 }

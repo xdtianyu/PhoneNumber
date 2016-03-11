@@ -16,6 +16,7 @@ import org.xdty.phone.number.model.baidu.BDNumberHandler;
 import org.xdty.phone.number.model.custom.CustomNumberHandler;
 import org.xdty.phone.number.model.google.GoogleNumberHandler;
 import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
+import org.xdty.phone.number.model.marked.MarkedHandler;
 import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
 import org.xdty.phone.number.model.special.SpecialNumberHandler;
@@ -58,6 +59,7 @@ public class PhoneNumber {
         mHandler = new Handler(handlerThread.getLooper());
 
         addNumberHandler(new SpecialNumberHandler(context));
+        addNumberHandler(new MarkedHandler(context));
         addNumberHandler(new OfflineHandler(context));
         addNumberHandler(new GoogleNumberHandler(context));
         addNumberHandler(new CustomNumberHandler(context, mOkHttpClient));
