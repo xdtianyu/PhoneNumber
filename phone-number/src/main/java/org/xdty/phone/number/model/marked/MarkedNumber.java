@@ -11,10 +11,12 @@ public class MarkedNumber implements INumber {
             {"骚扰电话", "诈骗", "推销", "广告推销", "房产中介", "快递送餐", "诈骗电话", "外卖", "中介", "快递"};
     private String mNumber = null;
     private String mName = null;
+    private int mMarkedType;
 
     public MarkedNumber(String number, int type) {
         mNumber = number;
         mName = MARKED_NAMES[type - 1];
+        mMarkedType = type;
     }
 
     @Override
@@ -29,7 +31,11 @@ public class MarkedNumber implements INumber {
 
     @Override
     public Type getType() {
-        return null;
+        if (mMarkedType == 6 || mMarkedType == 8 || mMarkedType == 10) {
+            return Type.POI;
+        } else {
+            return Type.REPORT;
+        }
     }
 
     @Override
