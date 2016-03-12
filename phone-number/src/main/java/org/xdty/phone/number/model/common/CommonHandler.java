@@ -40,7 +40,7 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
         CommonNumber commonNumber = null;
 
         try {
-            File dbFile = Utils.createCacheFile(mContext, "common.db", R.raw.marked);
+            File dbFile = Utils.createCacheFile(mContext, "common.db", R.raw.common);
 
             SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
