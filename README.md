@@ -12,7 +12,7 @@ Grab via gradle
 
 ```
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.4.0'
+    compile 'org.xdty.phone.number:phone-number:0.5.0'
 }
 ```
 
@@ -22,7 +22,7 @@ or maven
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.4.0</version>
+  <version>0.5.0</version>
   <type>aar</type>
 </dependency>
 ```
