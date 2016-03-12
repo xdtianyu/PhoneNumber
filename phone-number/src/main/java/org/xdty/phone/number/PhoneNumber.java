@@ -13,6 +13,7 @@ import com.squareup.okhttp.OkHttpClient;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
+import org.xdty.phone.number.model.common.CommonHandler;
 import org.xdty.phone.number.model.custom.CustomNumberHandler;
 import org.xdty.phone.number.model.google.GoogleNumberHandler;
 import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
@@ -59,6 +60,7 @@ public class PhoneNumber {
         mHandler = new Handler(handlerThread.getLooper());
 
         addNumberHandler(new SpecialNumberHandler(context));
+        addNumberHandler(new CommonHandler(context));
         addNumberHandler(new MarkedHandler(context));
         addNumberHandler(new OfflineHandler(context));
         addNumberHandler(new GoogleNumberHandler(context));
