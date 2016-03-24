@@ -10,7 +10,7 @@
 
 通过 gradle 下载
 
-```
+```groovy
 dependencies {
     compile 'org.xdty.phone.number:phone-number:0.5.0'
 }
@@ -18,7 +18,7 @@ dependencies {
 
 或 maven
 
-```
+```xml
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
@@ -33,7 +33,7 @@ dependencies {
 
 1\. 添加 `meta-data` 到 `AndroidManifest`
 
-```
+```xml
 <meta-data
     android:name="org.xdty.phone.number.API_KEY"
     android:value="API_KEY"/>
@@ -48,7 +48,7 @@ dependencies {
 
 2\. 代码中添加如下内容, 更多内容请参考 [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example) 和 [CallerInfo](https://github.com/xdtianyu/CallerInfo)
 
-```
+```java
 new PhoneNumber(this, new PhoneNumber.Callback() {
     @Override
     public void onResponseOffline(INumber number) {
