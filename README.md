@@ -1,6 +1,7 @@
 # PhoneNumber
 一个获取号码归属地和其他信息（诈骗、骚扰等）的开源库。支持本地离线（含归属地、骚扰、常用号码）和网络（百度、聚合数据或自定义 API）查询。[English](https://github.com/xdtianyu/PhoneNumber/blob/master/README-EN.md)
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PhoneNumber-green.svg?style=true)](https://android-arsenal.com/details/1/3325)
 [![Build Status](https://travis-ci.org/xdtianyu/PhoneNumber.svg?branch=master)](https://travis-ci.org/xdtianyu/PhoneNumber)
 [![JAR](https://img.shields.io/maven-central/v/org.xdty.phone.number/phone-number.svg)](http://central.maven.org/maven2/org/xdty/phone/number/phone-number/)
 [![Download](https://api.bintray.com/packages/xdtianyu/maven/phone-number/images/download.svg)](https://bintray.com/xdtianyu/maven/phone-number/_latestVersion)
