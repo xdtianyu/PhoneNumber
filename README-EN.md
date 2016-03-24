@@ -9,7 +9,7 @@ A library which can get phone number geo location and other infomation from loca
 
 Grab via gradle
 
-```
+```groovy
 dependencies {
     compile 'org.xdty.phone.number:phone-number:0.5.0'
 }
@@ -17,7 +17,7 @@ dependencies {
 
 or maven
 
-```
+```xml
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
@@ -32,7 +32,7 @@ or JAR from [maven central](http://central.maven.org/maven2/org/xdty/phone/numbe
 
 1\. Add `meta-data` to `AndroidManifest`
 
-```
+```xml
 <meta-data
     android:name="org.xdty.phone.number.API_KEY"
     android:value="YOUR_API_KEY"/>
@@ -42,7 +42,7 @@ You can get `YOUR_API_KEY` from [Baidu apistore's usercenter](http://apistore.ba
 
 2\. Add these lines to `MainActivity`, For more details, see [example](https://github.com/xdtianyu/PhoneNumber/tree/master/example) and [CallerInfo](https://github.com/xdtianyu/CallerInfo)
 
-```
+```java
 new PhoneNumber(this, new PhoneNumber.Callback() {
     @Override
     public void onResponse(INumber number) {
