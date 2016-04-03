@@ -27,21 +27,20 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PhoneNumber {
-    private static final String TAG = PhoneNumber.class.getSimpleName();
-
     public final static String API_TYPE = "api_type";
-
+    private static final String TAG = PhoneNumber.class.getSimpleName();
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
-
     private Callback mCallback;
     private Handler mMainHandler;
     private Handler mHandler;
     private SharedPreferences mPref;
-
     private List<NumberHandler> mSupportHandlerList;
-
     private Context mContext;
     private boolean mOffline = false;
+
+    public PhoneNumber(Context context) {
+        this(context, false, null);
+    }
 
     public PhoneNumber(Context context, Callback callback) {
         this(context, false, callback);
@@ -81,6 +80,10 @@ public class PhoneNumber {
         }
 
         return null;
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
     }
 
     public void addNumberHandler(NumberHandler handler) {
