@@ -37,13 +37,14 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
             return null;
         }
 
+        RandomAccessFile raf = null;
         try {
             OfflineNumber offlineNumber = null;
 
             int phone = Integer.parseInt(number.substring(0, 7));
             File file = Utils.createCacheFile(mContext, "phone.dat", R.raw.phone);
             long length = file.length();
-            RandomAccessFile raf = new RandomAccessFile(file, "r");
+            raf = new RandomAccessFile(file, "r");
             byte bVersion[] = new byte[4];
             raf.read(bVersion);
             byte bFirstOffset[] = new byte[4];
@@ -100,6 +101,14 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (raf != null) {
+                    raf.close();
+                }
+            } catch (Exception e) {
+                // ignore
+            }
         }
 
         return null;

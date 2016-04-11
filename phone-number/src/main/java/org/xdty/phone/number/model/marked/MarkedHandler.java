@@ -10,7 +10,6 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MarkedHandler implements NumberHandler<MarkedNumber> {
 
@@ -38,23 +37,34 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
         }
 
         MarkedNumber markedNumber = null;
-
+        SQLiteDatabase db = null;
+        Cursor cur = null;
         try {
             File dbFile = Utils.createCacheFile(mContext, "marked.db", R.raw.marked);
 
-            SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+            db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
-            Cursor cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
+            cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
                     new String[]{number, "0" + number});
 
             if (cur.getCount() == 1 && cur.moveToFirst()) {
                 int type = cur.getInt(cur.getColumnIndex("type"));
                 markedNumber = new MarkedNumber(number, type);
             }
-            cur.close();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (db != null) {
+                    db.close();
+                }
+                if (cur != null) {
+                    cur.close();
+                }
+            } catch (Exception e) {
+                // ignore
+            }
         }
 
         return markedNumber;

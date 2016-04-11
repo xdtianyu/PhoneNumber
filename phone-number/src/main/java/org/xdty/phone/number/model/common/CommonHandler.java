@@ -10,7 +10,6 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
-import java.io.IOException;
 
 public class CommonHandler implements NumberHandler<CommonNumber> {
 
@@ -40,10 +39,11 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
         CommonNumber commonNumber = null;
 
         Cursor cur = null;
+        SQLiteDatabase db = null;
         try {
             File dbFile = Utils.createCacheFile(mContext, "common.db", R.raw.common);
 
-            SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+            db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
             cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
                     new String[]{number, "0" + number});
@@ -53,11 +53,18 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
                 commonNumber = new CommonNumber(number, name);
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (cur != null) {
-                cur.close();
+            try {
+                if (cur != null) {
+                    cur.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+            } catch (Exception e) {
+                // ignore
             }
         }
 
