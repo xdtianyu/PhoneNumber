@@ -23,6 +23,7 @@ import org.xdty.phone.number.model.special.SpecialNumber;
 import org.xdty.phone.number.model.special.SpecialNumberHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,25 +48,30 @@ public class PhoneNumber {
     }
 
     public PhoneNumber(Context context, boolean offline, Callback callback) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mOffline = offline;
-        OkHttpClient mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
-        mPref = PreferenceManager.getDefaultSharedPreferences(context);
+        mPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         mCallback = callback;
-        mMainHandler = new Handler(context.getMainLooper());
+        mMainHandler = new Handler(mContext.getMainLooper());
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
 
-        addNumberHandler(new SpecialNumberHandler(context));
-        addNumberHandler(new CommonHandler(context));
-        addNumberHandler(new MarkedHandler(context));
-        addNumberHandler(new OfflineHandler(context));
-        addNumberHandler(new GoogleNumberHandler(context));
-        addNumberHandler(new CustomNumberHandler(context, mOkHttpClient));
-        addNumberHandler(new BDNumberHandler(context, mOkHttpClient));
-        addNumberHandler(new JuHeNumberHandler(context, mOkHttpClient));
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient mOkHttpClient = new OkHttpClient();
+                mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
+                addNumberHandler(new SpecialNumberHandler(mContext));
+                addNumberHandler(new CommonHandler(mContext));
+                addNumberHandler(new MarkedHandler(mContext));
+                addNumberHandler(new OfflineHandler(mContext));
+                addNumberHandler(new GoogleNumberHandler(mContext));
+                addNumberHandler(new CustomNumberHandler(mContext, mOkHttpClient));
+                addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
+                addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
+            }
+        });
     }
 
     public static String getMetadata(Context context, String name) {
@@ -88,7 +94,7 @@ public class PhoneNumber {
 
     public void addNumberHandler(NumberHandler handler) {
         if (mSupportHandlerList == null) {
-            mSupportHandlerList = new ArrayList<>();
+            mSupportHandlerList = Collections.synchronizedList(new ArrayList<NumberHandler>());
         }
         mSupportHandlerList.add(handler);
     }

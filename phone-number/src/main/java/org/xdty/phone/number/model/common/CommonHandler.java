@@ -39,22 +39,26 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
 
         CommonNumber commonNumber = null;
 
+        Cursor cur = null;
         try {
             File dbFile = Utils.createCacheFile(mContext, "common.db", R.raw.common);
 
             SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
-            Cursor cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
+            cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
                     new String[]{number, "0" + number});
 
             if (cur.getCount() == 1 && cur.moveToFirst()) {
                 String name = cur.getString(cur.getColumnIndex("name"));
                 commonNumber = new CommonNumber(number, name);
             }
-            cur.close();
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (cur != null) {
+                cur.close();
+            }
         }
 
         return commonNumber;
