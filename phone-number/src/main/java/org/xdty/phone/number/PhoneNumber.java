@@ -13,6 +13,9 @@ import com.squareup.okhttp.OkHttpClient;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
+import org.xdty.phone.number.model.cloud.CloudNumber;
+import org.xdty.phone.number.model.cloud.CloudService;
+import org.xdty.phone.number.model.cloud.leancloud.LeanCloud;
 import org.xdty.phone.number.model.common.CommonHandler;
 import org.xdty.phone.number.model.custom.CustomNumberHandler;
 import org.xdty.phone.number.model.google.GoogleNumberHandler;
@@ -31,6 +34,7 @@ public class PhoneNumber {
     public final static String API_TYPE = "api_type";
     private static final String TAG = PhoneNumber.class.getSimpleName();
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
+    private static PhoneNumber sPhoneNumber;
     private Callback mCallback;
     private Handler mMainHandler;
     private Handler mHandler;
@@ -38,15 +42,20 @@ public class PhoneNumber {
     private List<NumberHandler> mSupportHandlerList;
     private Context mContext;
     private boolean mOffline = false;
+    private CloudService mCloudService;
+    private List<Callback> mCallbackList;
 
+    @Deprecated
     public PhoneNumber(Context context) {
         this(context, false, null);
     }
 
+    @Deprecated
     public PhoneNumber(Context context, Callback callback) {
         this(context, false, callback);
     }
 
+    @Deprecated
     public PhoneNumber(Context context, boolean offline, Callback callback) {
         mContext = context.getApplicationContext();
         mOffline = offline;
@@ -70,6 +79,8 @@ public class PhoneNumber {
                 addNumberHandler(new CustomNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
+
+                mCloudService = new LeanCloud(mOkHttpClient);
             }
         });
     }
@@ -88,6 +99,22 @@ public class PhoneNumber {
         return null;
     }
 
+    public static void init(Context context) {
+        if (sPhoneNumber == null) {
+            sPhoneNumber = new PhoneNumber(context.getApplicationContext());
+        } else {
+            throw new IllegalStateException("init(Context) has been called more than once.");
+        }
+    }
+
+    public PhoneNumber getInstance() {
+        if (sPhoneNumber == null) {
+            throw new IllegalStateException("init(Context) has not been called yet.");
+        }
+        return sPhoneNumber;
+    }
+
+    @Deprecated
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
@@ -108,12 +135,10 @@ public class PhoneNumber {
                     mMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mCallback != null) {
-                                if (offlineNumber != null && offlineNumber.isValid()) {
-                                    mCallback.onResponseOffline(offlineNumber);
-                                } else {
-                                    mCallback.onResponseFailed(offlineNumber, false);
-                                }
+                            if (offlineNumber != null && offlineNumber.isValid()) {
+                                onResponseOffline(offlineNumber);
+                            } else {
+                                onResponseFailed(offlineNumber, false);
                             }
                         }
                     });
@@ -131,12 +156,10 @@ public class PhoneNumber {
                     mMainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mCallback != null) {
-                                if (onlineNumber != null && onlineNumber.isValid()) {
-                                    mCallback.onResponse(onlineNumber);
-                                } else {
-                                    mCallback.onResponseFailed(onlineNumber, true);
-                                }
+                            if (onlineNumber != null && onlineNumber.isValid()) {
+                                onResponse(onlineNumber);
+                            } else {
+                                onResponseFailed(onlineNumber, true);
                             }
                         }
                     });
@@ -199,10 +222,77 @@ public class PhoneNumber {
         return null;
     }
 
+    void onResponseOffline(INumber number) {
+        if (mCallback != null) {
+            mCallback.onResponseOffline(number);
+        }
+
+        if (mCallbackList != null) {
+            final List<Callback> list = mCallbackList;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onResponseOffline(number);
+            }
+        }
+    }
+
+    void onResponse(INumber number) {
+        if (mCallback != null) {
+            mCallback.onResponse(number);
+        }
+
+        if (mCallbackList != null) {
+            final List<Callback> list = mCallbackList;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onResponse(number);
+            }
+        }
+    }
+
+    void onResponseFailed(INumber number, boolean isOnline) {
+        if (mCallback != null) {
+            mCallback.onResponseFailed(number, isOnline);
+        }
+
+        if (mCallbackList != null) {
+            final List<Callback> list = mCallbackList;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onResponseFailed(number, isOnline);
+            }
+        }
+    }
+
     public void clear() {
         mHandler.removeCallbacksAndMessages(null);
         mHandler.getLooper().quit();
         mCallback = null;
+    }
+
+    public void put(final CloudNumber cloudNumber) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mCloudService.put(cloudNumber);
+            }
+        });
+    }
+
+    public void addCallback(Callback callback) {
+        if (mCallbackList == null) {
+            mCallbackList = new ArrayList<>();
+        }
+        mCallbackList.add(callback);
+    }
+
+    public void removeCallback(Callback callback) {
+        if (mCallbackList != null) {
+            int i = mCallbackList.indexOf(callback);
+            if (i >= 0) {
+                mCallbackList.remove(i);
+            }
+        }
     }
 
     public interface Callback {
