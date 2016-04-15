@@ -21,7 +21,6 @@ import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
 
 public class LeanCloud implements CloudService {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public transient final static String META_DATA_APP_KEY_URI =
             "org.xdty.phone.number.LEANCLOUD_APP_KEY";
     public transient final static String META_DATA_APP_ID_URI =
@@ -30,12 +29,14 @@ public class LeanCloud implements CloudService {
     public transient final static String APP_ID = "leancloud_app_id";
     private static final String TAG = LeanCloud.class.getSimpleName();
     private final static String API_URL = "https://leancloud.cn/1.1/classes/";
+    public final MediaType JSON;
     private OkHttpClient mOkHttpClient;
     private Context mContext;
 
     public LeanCloud(Context context, OkHttpClient okHttpClient) {
         mContext = context;
         mOkHttpClient = okHttpClient;
+        JSON = MediaType.parse("application/json; charset=utf-8");
     }
 
     private String appId() {
