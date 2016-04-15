@@ -23,6 +23,12 @@
         <meta-data
             android:name="org.xdty.phone.number.JUHE_API_KEY"
             android:value="YOUR_API_KEY"/>
+        <meta-data
+            android:name="org.xdty.phone.number.LEANCLOUD_APP_ID"
+            android:value="YOUR_APP_ID"/>
+        <meta-data
+            android:name="org.xdty.phone.number.LEANCLOUD_APP_KEY"
+            android:value="YOUR_APP_KEY"/>
     </application>
 
 </manifest>
