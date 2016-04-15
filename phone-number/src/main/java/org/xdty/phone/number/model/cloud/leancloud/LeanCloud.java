@@ -8,7 +8,6 @@ package org.xdty.phone.number.model.cloud.leancloud;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.MediaType;
@@ -68,8 +67,7 @@ public class LeanCloud implements CloudService {
                 .post(body);
         try {
             Response response = mOkHttpClient.newCall(request.build()).execute();
-            String s = response.body().string();
-            Log.e(TAG, "s: " + s);
+            return response.code() == 201;
         } catch (Exception e) {
             e.printStackTrace();
         }

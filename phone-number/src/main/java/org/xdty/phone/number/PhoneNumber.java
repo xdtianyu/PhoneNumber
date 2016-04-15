@@ -109,6 +109,7 @@ public class PhoneNumber {
         return sPhoneNumber;
     }
 
+    @Deprecated
     public void setCallback(Callback callback) {
         mCallback = callback;
     }
@@ -258,6 +259,20 @@ public class PhoneNumber {
         }
     }
 
+    void onPutResult(CloudNumber number, boolean result) {
+        if (mCallback != null) {
+            mCallback.onPutResult(number, result);
+        }
+
+        if (mCallbackList != null) {
+            final List<Callback> list = mCallbackList;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onPutResult(number, result);
+            }
+        }
+    }
+
     public void clear() {
         mHandler.removeCallbacksAndMessages(null);
         mHandler.getLooper().quit();
@@ -268,7 +283,7 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mCloudService.put(cloudNumber);
+                onPutResult(cloudNumber, mCloudService.put(cloudNumber));
             }
         });
     }
@@ -295,5 +310,7 @@ public class PhoneNumber {
         void onResponse(INumber number);
 
         void onResponseFailed(INumber number, boolean isOnline);
+
+        void onPutResult(CloudNumber number, boolean result);
     }
 }
