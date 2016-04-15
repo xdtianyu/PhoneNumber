@@ -45,17 +45,14 @@ public class PhoneNumber {
     private CloudService mCloudService;
     private List<Callback> mCallbackList;
 
-    @Deprecated
     public PhoneNumber(Context context) {
         this(context, false, null);
     }
 
-    @Deprecated
     public PhoneNumber(Context context, Callback callback) {
         this(context, false, callback);
     }
 
-    @Deprecated
     public PhoneNumber(Context context, boolean offline, Callback callback) {
         mContext = context.getApplicationContext();
         mOffline = offline;
@@ -102,19 +99,16 @@ public class PhoneNumber {
     public static void init(Context context) {
         if (sPhoneNumber == null) {
             sPhoneNumber = new PhoneNumber(context.getApplicationContext());
-        } else {
-            throw new IllegalStateException("init(Context) has been called more than once.");
         }
     }
 
-    public PhoneNumber getInstance() {
+    public static PhoneNumber getInstance() {
         if (sPhoneNumber == null) {
             throw new IllegalStateException("init(Context) has not been called yet.");
         }
         return sPhoneNumber;
     }
 
-    @Deprecated
     public void setCallback(Callback callback) {
         mCallback = callback;
     }

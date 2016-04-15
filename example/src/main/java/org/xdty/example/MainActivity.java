@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.cloud.CloudNumber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,8 +21,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.text);
-
-        PhoneNumber phoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
+        PhoneNumber.init(this);
+        PhoneNumber phoneNumber = PhoneNumber.getInstance();
+        phoneNumber.setCallback(new PhoneNumber.Callback() {
 
             String result = "";
 
@@ -62,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 "551",
                 "559", "569", "4000838114", "+16505551212", "10021", "+8615829812345",
                 "+18057518222", "1050861064", "13375971846", "05923598645");
+
+        CloudNumber cloudNumber = new CloudNumber();
+        cloudNumber.setUid("dadasdasfadsfsad");
+        cloudNumber.setCount(0);
+        cloudNumber.setFrom(1);
+        cloudNumber.setType(1);
+        cloudNumber.setName("骚扰");
+        cloudNumber.setNumber("1222033");
+        phoneNumber.put(cloudNumber);
     }
 
 }
