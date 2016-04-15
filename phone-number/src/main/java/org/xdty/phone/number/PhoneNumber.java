@@ -80,7 +80,7 @@ public class PhoneNumber {
                 addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
 
-                mCloudService = new LeanCloud(mOkHttpClient);
+                mCloudService = new LeanCloud(mContext, mOkHttpClient);
             }
         });
     }

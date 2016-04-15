@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.text);
 
-        new PhoneNumber(this, new PhoneNumber.Callback() {
+        PhoneNumber phoneNumber = new PhoneNumber(this, new PhoneNumber.Callback() {
 
             String result = "";
 
@@ -57,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponseFailed(INumber number, boolean isOnline) {
             }
-        }).fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550", "551",
+        });
+        phoneNumber.fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550",
+                "551",
                 "559", "569", "4000838114", "+16505551212", "10021", "+8615829812345",
                 "+18057518222", "1050861064", "13375971846", "05923598645");
     }
