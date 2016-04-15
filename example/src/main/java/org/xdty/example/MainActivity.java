@@ -72,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
         cloudNumber.setType(1);
         cloudNumber.setName("骚扰");
         cloudNumber.setNumber("1222033");
+
+        phoneNumber.addCloudListener(new PhoneNumber.CloudListener() {
+            @Override
+            public void onPutResult(CloudNumber number, boolean result) {
+                Log.d(TAG, number.getName() + " - " + result);
+            }
+        });
+
         phoneNumber.put(cloudNumber);
     }
 

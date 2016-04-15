@@ -44,6 +44,7 @@ public class PhoneNumber {
     private boolean mOffline = false;
     private CloudService mCloudService;
     private List<Callback> mCallbackList;
+    private List<CloudListener> mCloudListeners;
 
     public PhoneNumber(Context context) {
         this(context, false, null);
@@ -260,12 +261,9 @@ public class PhoneNumber {
     }
 
     void onPutResult(CloudNumber number, boolean result) {
-        if (mCallback != null) {
-            mCallback.onPutResult(number, result);
-        }
 
-        if (mCallbackList != null) {
-            final List<Callback> list = mCallbackList;
+        if (mCloudListeners != null) {
+            final List<CloudListener> list = mCloudListeners;
             final int count = list.size();
             for (int i = 0; i < count; i++) {
                 list.get(i).onPutResult(number, result);
@@ -304,13 +302,31 @@ public class PhoneNumber {
         }
     }
 
+    public void addCloudListener(CloudListener listener) {
+        if (mCloudListeners == null) {
+            mCloudListeners = new ArrayList<>();
+        }
+        mCloudListeners.add(listener);
+    }
+
+    public void removeCloudListener(CloudListener listener) {
+        if (mCloudListeners != null) {
+            int i = mCloudListeners.indexOf(listener);
+            if (i >= 0) {
+                mCloudListeners.remove(i);
+            }
+        }
+    }
+
     public interface Callback {
         void onResponseOffline(INumber number);
 
         void onResponse(INumber number);
 
         void onResponseFailed(INumber number, boolean isOnline);
+    }
 
+    public interface CloudListener {
         void onPutResult(CloudNumber number, boolean result);
     }
 }
