@@ -11,6 +11,7 @@ import com.squareup.okhttp.Request;
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
 
@@ -56,7 +57,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
-            return GSON.fromJson(s, JuHeNumber.class);
+            return Utils.gson().fromJson(s, JuHeNumber.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,9 @@ package org.xdty.phone.number.util;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,7 +12,17 @@ import java.io.InputStream;
 
 public class Utils {
 
-    public static File createCacheFile(Context context, String filename, int raw) throws IOException {
+    private static Gson GSON;
+
+    public static synchronized Gson gson() {
+        if (GSON == null) {
+            GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+        }
+        return GSON;
+    }
+
+    public static synchronized File createCacheFile(Context context, String filename, int raw)
+            throws IOException {
         File cacheFile = new File(context.getCacheDir(), filename);
 
         if (cacheFile.exists()) {

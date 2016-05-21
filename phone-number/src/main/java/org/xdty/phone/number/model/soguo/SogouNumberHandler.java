@@ -8,6 +8,7 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 public class SogouNumberHandler implements NumberHandler<SogouNumber> {
 
@@ -40,7 +41,7 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
                         request.build()).execute();
                 String s = response.body().string();
                 s = s.replace("show(", "").replace(")", "");
-                SogouNumber sogouNumber = GSON.fromJson(s, SogouNumber.class);
+                SogouNumber sogouNumber = Utils.gson().fromJson(s, SogouNumber.class);
                 sogouNumber.number = number;
                 return sogouNumber;
             } catch (Exception e) {

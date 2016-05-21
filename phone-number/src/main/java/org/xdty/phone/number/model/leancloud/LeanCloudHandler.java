@@ -20,6 +20,7 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
+import org.xdty.phone.number.util.Utils;
 
 public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber> {
     public transient final static String META_DATA_APP_KEY_URI =
@@ -61,7 +62,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
     @Override
     public boolean put(CloudNumber number) {
         String url = API_URL + "caller";
-        RequestBody body = RequestBody.create(JSON, GSON.toJson(number));
+        RequestBody body = RequestBody.create(JSON, Utils.gson().toJson(number));
         Request.Builder request = new Request.Builder()
                 .url(url)
                 .addHeader("X-LC-Id", appId())
@@ -92,7 +93,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
                     request.build()).execute();
             String s = response.body().string();
             Log.e(TAG, "CloudNumber: " + s);
-            LCResult result = GSON.fromJson(s, LCResult.class);
+            LCResult result = Utils.gson().fromJson(s, LCResult.class);
 
             if (result != null && result.results != null && result.results.size() > 0) {
                 return result.results.get(0);

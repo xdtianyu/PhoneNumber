@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 import java.util.Random;
 
@@ -70,7 +70,7 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
-            BDNumberInfo numberInfo = GSON.fromJson(s, BDNumberInfo.class);
+            BDNumberInfo numberInfo = Utils.gson().fromJson(s, BDNumberInfo.class);
             if (numberInfo.getNumbers().size() > 0) {
                 return new BDNumber(numberInfo.getNumbers().get(0), number);
             }

@@ -10,6 +10,7 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 public class CustomNumberHandler implements NumberHandler<CustomNumber> {
 
@@ -44,7 +45,7 @@ public class CustomNumberHandler implements NumberHandler<CustomNumber> {
                 com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 String s = response.body().string();
-                return GSON.fromJson(s, CustomNumber.class);
+                return Utils.gson().fromJson(s, CustomNumber.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
