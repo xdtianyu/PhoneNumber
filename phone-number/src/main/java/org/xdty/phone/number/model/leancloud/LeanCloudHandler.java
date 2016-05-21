@@ -74,7 +74,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
