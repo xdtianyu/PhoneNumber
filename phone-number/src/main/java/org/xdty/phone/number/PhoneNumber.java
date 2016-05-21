@@ -22,6 +22,7 @@ import org.xdty.phone.number.model.google.GoogleNumberHandler;
 import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.model.marked.MarkedHandler;
 import org.xdty.phone.number.model.offline.OfflineHandler;
+import org.xdty.phone.number.model.soguo.SogouNumberHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
 import org.xdty.phone.number.model.special.SpecialNumberHandler;
 
@@ -77,6 +78,7 @@ public class PhoneNumber {
                 addNumberHandler(new CustomNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
+                addNumberHandler(new SogouNumberHandler(mContext, mOkHttpClient));
 
                 mCloudService = new LeanCloud(mContext, mOkHttpClient);
             }

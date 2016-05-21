@@ -1,8 +1,6 @@
-package org.xdty.phone.number.model.custom;
+package org.xdty.phone.number.model.soguo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -11,40 +9,40 @@ import com.squareup.okhttp.Request;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 
-public class CustomNumberHandler implements NumberHandler<CustomNumber> {
+public class SogouNumberHandler implements NumberHandler<SogouNumber> {
 
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
 
-    public CustomNumberHandler(Context context, OkHttpClient okHttpClient) {
+    public SogouNumberHandler(Context context, OkHttpClient okHttpClient) {
         mContext = context;
         mOkHttpClient = okHttpClient;
     }
 
     @Override
     public String url() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return pref.getString("custom_api_url", "");
+        return "http://data.haoma.sogou.com/vrapi/query_number.php?type=json&callback=show&number=";
     }
 
     @Override
     public String key() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return pref.getString("custom_api_key", "");
+        return null;
     }
 
     @Override
-    public CustomNumber find(String number) {
+    public SogouNumber find(String number) {
         String url = url();
-        String key = key();
         if (!TextUtils.isEmpty(url)) {
-            url = url + "?tel=" + number + "&key=" + key;
+            url = url + number;
             Request.Builder request = new Request.Builder().url(url);
             try {
                 com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 String s = response.body().string();
-                return GSON.fromJson(s, CustomNumber.class);
+                s = s.replace("show(", "").replace(")", "");
+                SogouNumber sogouNumber = GSON.fromJson(s, SogouNumber.class);
+                sogouNumber.number = number;
+                return sogouNumber;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,6 +57,6 @@ public class CustomNumberHandler implements NumberHandler<CustomNumber> {
 
     @Override
     public int getApiId() {
-        return INumber.API_ID_CUSTOM;
+        return INumber.API_ID_SG;
     }
 }

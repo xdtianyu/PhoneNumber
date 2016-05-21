@@ -1,6 +1,7 @@
 package org.xdty.example;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -21,6 +22,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.text);
+
+        // set prefer api
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putInt("api_type", INumber.API_ID_SG)
+                .apply();
+
         PhoneNumber.init(this);
         PhoneNumber phoneNumber = PhoneNumber.getInstance();
         phoneNumber.setCallback(new PhoneNumber.Callback() {
@@ -29,20 +37,28 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponseOffline(INumber number) {
-                String s = number.getNumber() +
+                String s = "onResponseOffline: " +
+                        number.getNumber() +
                         ": " +
                         number.getType().getText() +
                         ", " +
                         number.getName() +
                         " : " +
-                        number.getProvince() + " " + number.getCity() + " " + number.getProvider();
-                Log.d(TAG, s);
+                        number.getProvince() +
+                        " " +
+                        number.getCity() +
+                        " " +
+                        number.getProvider() +
+                        ", " +
+                        number.getApiId();
+                Log.e(TAG, s);
             }
 
             @Override
             public void onResponse(INumber number) {
                 // Do your jobs here
-                String s = number.getNumber() +
+                String s = "onResponse: " +
+                        number.getNumber() +
                         ": " +
                         number.getType().getText() +
                         ", " +
@@ -50,10 +66,16 @@ public class MainActivity extends AppCompatActivity {
                         ", " +
                         number.getCount() +
                         " : " +
-                        number.getProvince() + " " + number.getCity() + " " + number.getProvider();
+                        number.getProvince() +
+                        " " +
+                        number.getCity() +
+                        " " +
+                        number.getProvider() +
+                        ", " +
+                        number.getApiId();
                 result += s + "\n";
                 textView.setText(result);
-                Log.d(TAG, s);
+                Log.e(TAG, s);
             }
 
             @Override
@@ -80,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        phoneNumber.put(cloudNumber);
+        //phoneNumber.put(cloudNumber);
     }
 
 }

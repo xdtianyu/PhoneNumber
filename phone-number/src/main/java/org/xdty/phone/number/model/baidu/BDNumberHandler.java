@@ -13,6 +13,8 @@ import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 
+import java.util.Random;
+
 public class BDNumberHandler implements NumberHandler<BDNumber> {
 
     public transient final static String META_DATA_KEY_URI =
@@ -40,6 +42,13 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
         if (apiKey.isEmpty()) {
             apiKey = PhoneNumber.getMetadata(mContext, META_DATA_KEY_URI);
         }
+
+        if (apiKey != null && apiKey.contains(",")) {
+            String[] keys = TextUtils.split(apiKey, ",");
+            Random random = new Random();
+            apiKey = keys[random.nextInt(keys.length)];
+        }
+
         return apiKey;
     }
 
@@ -61,8 +70,7 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
-            Gson gson = new Gson();
-            BDNumberInfo numberInfo = gson.fromJson(s, BDNumberInfo.class);
+            BDNumberInfo numberInfo = GSON.fromJson(s, BDNumberInfo.class);
             if (numberInfo.getNumbers().size() > 0) {
                 return new BDNumber(numberInfo.getNumbers().get(0), number);
             }

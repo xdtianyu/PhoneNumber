@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
@@ -26,7 +25,6 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
         mContext = context;
         mOkHttpClient = okHttpClient;
     }
-
 
     @Override
     public String url() {
@@ -58,8 +56,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
-            Gson gson = new Gson();
-            return gson.fromJson(s, JuHeNumber.class);
+            return GSON.fromJson(s, JuHeNumber.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
