@@ -22,6 +22,8 @@ import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
 import org.xdty.phone.number.util.Utils;
 
+import java.io.IOException;
+
 public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber> {
     public transient final static String META_DATA_APP_KEY_URI =
             "org.xdty.phone.number.LEANCLOUD_APP_KEY";
@@ -88,20 +90,30 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
                 .addHeader("X-LC-Id", appId())
                 .addHeader("X-LC-Key", appKey())
                 .get();
+        com.squareup.okhttp.Response response = null;
+        CloudNumber cloudNumber = null;
         try {
-            com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+            response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
             Log.e(TAG, "CloudNumber: " + s);
             LCResult result = Utils.gson().fromJson(s, LCResult.class);
 
             if (result != null && result.results != null && result.results.size() > 0) {
-                return result.results.get(0);
+                cloudNumber = result.results.get(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (response != null && response.body() != null) {
+                try {
+                    response.body().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return null;
+        return cloudNumber;
     }
 
     @Override

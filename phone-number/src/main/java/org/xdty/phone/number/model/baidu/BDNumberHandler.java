@@ -13,6 +13,7 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class BDNumberHandler implements NumberHandler<BDNumber> {
@@ -66,18 +67,28 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
         String url = url() + number;
         Request.Builder request = new Request.Builder().url(url);
         request.header("apikey", key());
+        BDNumber bdNumber = null;
+        com.squareup.okhttp.Response response = null;
         try {
-            com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+            response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
             BDNumberInfo numberInfo = Utils.gson().fromJson(s, BDNumberInfo.class);
             if (numberInfo.getNumbers().size() > 0) {
-                return new BDNumber(numberInfo.getNumbers().get(0), number);
+                bdNumber = new BDNumber(numberInfo.getNumbers().get(0), number);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (response != null && response.body() != null) {
+                try {
+                    response.body().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return null;
+        return bdNumber;
     }
 
     @Override
