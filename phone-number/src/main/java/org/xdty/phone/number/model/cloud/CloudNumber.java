@@ -1,6 +1,9 @@
 package org.xdty.phone.number.model.cloud;
 
-public class CloudNumber {
+import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.Type;
+
+public class CloudNumber implements INumber {
     private String uid;
     private String number;
     private String name;
@@ -24,6 +27,11 @@ public class CloudNumber {
         this.number = number;
     }
 
+    @Override
+    public String getProvider() {
+        return null;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,12 +40,27 @@ public class CloudNumber {
         this.name = name;
     }
 
-    public int getType() {
-        return type;
+    @Override
+    public String getProvince() {
+        return null;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.REPORT;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int type() {
+        return type;
+    }
+
+    @Override
+    public String getCity() {
+        return null;
     }
 
     public int getFrom() {
@@ -54,5 +77,20 @@ public class CloudNumber {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    @Override
+    public boolean isValid() {
+        return name != null && type >= 0;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public int getApiId() {
+        return INumber.API_ID_CLOUD;
     }
 }

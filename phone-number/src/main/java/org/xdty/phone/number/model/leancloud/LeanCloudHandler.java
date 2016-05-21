@@ -7,6 +7,7 @@ package org.xdty.phone.number.model.leancloud;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -77,18 +78,25 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
 
     @Override
     public CloudNumber get(String number) {
-        String url = API_URL + "caller";
-        RequestBody body = RequestBody.create(JSON, GSON.toJson(number));
+        String url = API_URL
+                + "caller?limit=3&keys=-uid,-objectId,-updatedAt&where={\"number\":\""
+                + number
+                + "\"}";
         Request.Builder request = new Request.Builder()
                 .url(url)
                 .addHeader("X-LC-Id", appId())
                 .addHeader("X-LC-Key", appKey())
-                .post(body);
+                .get();
         try {
             com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                     request.build()).execute();
             String s = response.body().string();
-            return GSON.fromJson(s, CloudNumber.class);
+            Log.e(TAG, "CloudNumber: " + s);
+            LCResult result = GSON.fromJson(s, LCResult.class);
+
+            if (result != null && result.results != null && result.results.size() > 0) {
+                return result.results.get(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

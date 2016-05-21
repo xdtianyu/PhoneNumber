@@ -10,6 +10,7 @@ public interface INumber {
     int API_ID_BD = 0;
     int API_ID_JH = 1;
     int API_ID_SG = 2;
+    int API_ID_CLOUD = 8;
     int API_ID_CUSTOM = 1000;
 
     String getName();

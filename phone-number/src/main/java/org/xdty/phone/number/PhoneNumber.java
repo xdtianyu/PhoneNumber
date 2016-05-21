@@ -15,7 +15,7 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
-import org.xdty.phone.number.model.cloud.leancloud.LeanCloud;
+import org.xdty.phone.number.model.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.model.common.CommonHandler;
 import org.xdty.phone.number.model.custom.CustomNumberHandler;
 import org.xdty.phone.number.model.google.GoogleNumberHandler;
@@ -79,8 +79,8 @@ public class PhoneNumber {
                 addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
                 addNumberHandler(new SogouNumberHandler(mContext, mOkHttpClient));
-
-                mCloudService = new LeanCloud(mContext, mOkHttpClient);
+                addNumberHandler(new LeanCloudHandler(mContext, mOkHttpClient));
+                mCloudService = new LeanCloudHandler(mContext, mOkHttpClient);
             }
         });
     }
