@@ -20,6 +20,9 @@ public class JuHeNumber implements INumber {
 
     @Override
     public String getProvince() {
+        if (result.province != null && result.province.equals("暂无机构信息")) {
+            result.province = "";
+        }
         return result.province;
     }
 
@@ -30,6 +33,9 @@ public class JuHeNumber implements INumber {
 
     @Override
     public String getCity() {
+        if (result.city != null && result.city.equals("暂无机构信息")) {
+            result.city = "";
+        }
         return result.city;
     }
 
