@@ -22,6 +22,9 @@ public class SogouNumber implements INumber {
         if (name != null && name.contains("号码通用户数据：")) {
             name = name.replace("号码通用户数据：", "");
         }
+        if (name != null && name.contains("：0")) {
+            name = name.replace("：0", "");
+        }
         if (name != null && name.equals("该号码暂无标记")) {
             name = null;
         }
