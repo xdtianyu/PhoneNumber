@@ -16,7 +16,7 @@ import java.io.File;
 public class CommonHandler implements NumberHandler<CommonNumber> {
 
     public final static String COMMON_VERSION_CODE_KEY = "common_db_version_code_key";
-    public final static int COMMON_VERSION_CODE = 1;
+    public final static int COMMON_VERSION_CODE = 2;
     public final static String DB_NAME = "common.db";
 
     private Context mContext;
