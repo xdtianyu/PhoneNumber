@@ -54,4 +54,15 @@ public class Utils {
         return cacheFile;
     }
 
+    public static synchronized boolean removeCacheFile(Context context, String filename) {
+        File cacheFile = new File(context.getCacheDir(), filename);
+        try {
+            if (cacheFile.exists()) {
+                return cacheFile.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
