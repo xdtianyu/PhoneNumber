@@ -88,7 +88,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     @Override
     public boolean isOnline() {
-        return false;
+        return true;
     }
 
     @Override

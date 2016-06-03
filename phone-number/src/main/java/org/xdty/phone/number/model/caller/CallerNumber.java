@@ -28,11 +28,15 @@ public class CallerNumber implements INumber {
 
     @Override
     public Type getType() {
-        if (type == 6 || type == 8 || type == 10) {
+        if (type == 3 || type == 4 || type == 64) {
             return Type.POI;
         } else {
             return Type.REPORT;
         }
+    }
+
+    public int getCallerType() {
+        return type;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class CallerNumber implements INumber {
 
     @Override
     public boolean isOnline() {
-        return false;
+        return true;
     }
 
     @Override

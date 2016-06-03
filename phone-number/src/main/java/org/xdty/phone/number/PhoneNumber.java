@@ -13,13 +13,14 @@ import com.squareup.okhttp.OkHttpClient;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
+import org.xdty.phone.number.model.caller.CallerHandler;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
-import org.xdty.phone.number.model.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.model.common.CommonHandler;
 import org.xdty.phone.number.model.custom.CustomNumberHandler;
 import org.xdty.phone.number.model.google.GoogleNumberHandler;
 import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
+import org.xdty.phone.number.model.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.model.marked.MarkedHandler;
 import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.soguo.SogouNumberHandler;
@@ -35,17 +36,20 @@ public class PhoneNumber {
     public final static String API_TYPE = "api_type";
     private static final String TAG = PhoneNumber.class.getSimpleName();
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
-    private static PhoneNumber sPhoneNumber;
+    private static Context sContext;
     private Callback mCallback;
     private Handler mMainHandler;
     private Handler mHandler;
     private SharedPreferences mPref;
     private List<NumberHandler> mSupportHandlerList;
-    private Context mContext;
     private boolean mOffline = false;
     private CloudService mCloudService;
     private List<Callback> mCallbackList;
     private List<CloudListener> mCloudListeners;
+
+    private PhoneNumber() {
+        this(sContext);
+    }
 
     public PhoneNumber(Context context) {
         this(context, false, null);
@@ -56,11 +60,14 @@ public class PhoneNumber {
     }
 
     public PhoneNumber(Context context, boolean offline, Callback callback) {
-        mContext = context.getApplicationContext();
+        if (sContext == null) {
+            sContext = context.getApplicationContext();
+        }
+
         mOffline = offline;
-        mPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mPref = PreferenceManager.getDefaultSharedPreferences(sContext);
         mCallback = callback;
-        mMainHandler = new Handler(mContext.getMainLooper());
+        mMainHandler = new Handler(sContext.getMainLooper());
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
@@ -70,17 +77,18 @@ public class PhoneNumber {
             public void run() {
                 OkHttpClient mOkHttpClient = new OkHttpClient();
                 mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
-                addNumberHandler(new SpecialNumberHandler(mContext));
-                addNumberHandler(new CommonHandler(mContext));
-                addNumberHandler(new MarkedHandler(mContext));
-                addNumberHandler(new OfflineHandler(mContext));
-                addNumberHandler(new GoogleNumberHandler(mContext));
-                addNumberHandler(new CustomNumberHandler(mContext, mOkHttpClient));
-                addNumberHandler(new BDNumberHandler(mContext, mOkHttpClient));
-                addNumberHandler(new JuHeNumberHandler(mContext, mOkHttpClient));
-                addNumberHandler(new SogouNumberHandler(mContext, mOkHttpClient));
-                addNumberHandler(new LeanCloudHandler(mContext, mOkHttpClient));
-                mCloudService = new LeanCloudHandler(mContext, mOkHttpClient);
+                addNumberHandler(new SpecialNumberHandler(sContext));
+                addNumberHandler(new CommonHandler(sContext));
+                addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
+                addNumberHandler(new MarkedHandler(sContext));
+                addNumberHandler(new OfflineHandler(sContext));
+                addNumberHandler(new GoogleNumberHandler(sContext));
+                addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
+                addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
+                addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
+                addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
+                addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
+                mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
             }
         });
     }
@@ -100,16 +108,14 @@ public class PhoneNumber {
     }
 
     public static void init(Context context) {
-        if (sPhoneNumber == null) {
-            sPhoneNumber = new PhoneNumber(context.getApplicationContext());
-        }
+        sContext = context.getApplicationContext();
     }
 
     public static PhoneNumber getInstance() {
-        if (sPhoneNumber == null) {
+        if (sContext == null) {
             throw new IllegalStateException("init(Context) has not been called yet.");
         }
-        return sPhoneNumber;
+        return SingletonHelper.INSTANCE;
     }
 
     @Deprecated
@@ -145,7 +151,7 @@ public class PhoneNumber {
                         return;
                     }
 
-                    if (mPref.getBoolean(mContext.getString(R.string.only_offline_key),
+                    if (mPref.getBoolean(sContext.getString(R.string.only_offline_key),
                             false) || mOffline) {
                         return;
                     }
@@ -330,5 +336,9 @@ public class PhoneNumber {
 
     public interface CloudListener {
         void onPutResult(CloudNumber number, boolean result);
+    }
+
+    private static class SingletonHelper {
+        private final static PhoneNumber INSTANCE = new PhoneNumber();
     }
 }
