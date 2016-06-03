@@ -1,15 +1,23 @@
 package org.xdty.phone.number.model.caller;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
+
+import okio.BufferedSink;
+import okio.Okio;
 
 public class CallerHandler implements NumberHandler<CallerNumber> {
 
@@ -17,6 +25,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
+    private transient Status mStatus = null;
 
     public CallerHandler(Context context, OkHttpClient okHttpClient) {
         mContext = context;
@@ -25,7 +34,8 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     @Override
     public String url() {
-        return null;
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return pref.getString("qiniu_download_url", "https://o68uxqr1x.qnssl.com/");
     }
 
     @Override
@@ -94,5 +104,102 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
     @Override
     public int getApiId() {
         return INumber.API_ID_CALLER;
+    }
+
+    public boolean upgradeData() {
+
+        if (mStatus == null) {
+            return false;
+        }
+
+        String url = url();
+        if (!TextUtils.isEmpty(url)) {
+            String filename = "caller_" + mStatus.version + ".db.zip";
+            url = url + filename + "?timestamp=" + System.currentTimeMillis();
+            Request.Builder request = new Request.Builder().url(url);
+            try {
+                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                        request.build()).execute();
+                File downloadedFile = new File(mContext.getCacheDir(), filename);
+                BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
+                sink.writeAll(response.body().source());
+                sink.close();
+                response.body().close();
+                Utils.unzip(downloadedFile.getAbsolutePath(),
+                        mContext.getCacheDir().getAbsolutePath());
+                File db_new = new File(mContext.getCacheDir(), "caller_" + mStatus.version + ".db");
+                File db = new File(mContext.getCacheDir(), DB_NAME);
+                if (db_new.exists() && db_new.renameTo(db)) {
+                    return true;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public Status checkUpdate() {
+        String url = url();
+        Status status = null;
+        if (!TextUtils.isEmpty(url)) {
+            url = url + "status.json?timestamp=" + System.currentTimeMillis();
+            Request.Builder request = new Request.Builder().url(url);
+            try {
+                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                        request.build()).execute();
+                String s = response.body().string();
+                status = Utils.gson().fromJson(s, Status.class);
+                Status dbStatus = getDBStatus();
+                if (dbStatus != null && status != null && dbStatus.version >= status.version) {
+                    status = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        mStatus = status;
+        return status;
+    }
+
+    private Status getDBStatus() {
+        Status status = null;
+        SQLiteDatabase db = null;
+        Cursor cur = null;
+        try {
+            File dbFile = new File(mContext.getCacheDir(), DB_NAME);
+
+            if (!dbFile.exists()) {
+                return null;
+            }
+
+            db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+
+            cur = db.rawQuery("SELECT * FROM status where id = ?", new String[] { "1" });
+
+            if (cur.getCount() >= 1 && cur.moveToFirst()) {
+                status = new Status();
+                status.count = cur.getInt(cur.getColumnIndex("count"));
+                status.new_count = cur.getInt(cur.getColumnIndex("new_count"));
+                status.timestamp = cur.getLong(cur.getColumnIndex("time"));
+                status.version = cur.getInt(cur.getColumnIndex("version"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (db != null) {
+                    db.close();
+                }
+                if (cur != null) {
+                    cur.close();
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+        return status;
     }
 }

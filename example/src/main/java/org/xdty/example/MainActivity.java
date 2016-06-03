@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
+import org.xdty.phone.number.model.caller.Status;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .apply();
 
         PhoneNumber.init(this);
-        PhoneNumber phoneNumber = PhoneNumber.getInstance();
+        final PhoneNumber phoneNumber = PhoneNumber.getInstance();
         phoneNumber.setCallback(new PhoneNumber.Callback() {
 
             String result = "";
@@ -82,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponseFailed(INumber number, boolean isOnline) {
             }
         });
-        phoneNumber.fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550",
-                "551",
-                "559", "569", "4000838114", "+16505551212", "10021", "+8615829812345",
-                "+18057518222", "1050861064", "13375971846", "05923598645");
+        //phoneNumber.fetch("10086", "10000", "10001", "02151860253", "4001001673", "-1", "-2", "550",
+        //        "551",
+        //        "559", "569", "4000838114", "+16505551212", "10021", "+8615829812345",
+        //        "+18057518222", "1050861064", "13375971846", "05923598645");
 
         CloudNumber cloudNumber = new CloudNumber();
         cloudNumber.setUid("dadasdasfadsfsad");
@@ -103,6 +104,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //phoneNumber.put(cloudNumber);
+
+        phoneNumber.addCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
+            @Override
+            public void onCheckResult(Status status) {
+                if (status != null) {
+                    Log.e(TAG, "new update available: " + status.toString());
+                    phoneNumber.upgradeData();
+                } else {
+                    Log.e(TAG, "already latest.");
+                }
+            }
+
+            @Override
+            public void onUpgradeData(boolean result) {
+                Log.e(TAG, "onUpgradeData: " + result);
+            }
+        });
+        phoneNumber.checkUpdate();
     }
 
 }

@@ -1,6 +1,7 @@
 package org.xdty.phone.number.model.soguo;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -38,14 +39,16 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
         Request.Builder request = new Request.Builder().url(url);
         com.squareup.okhttp.Response response = null;
         SogouNumber sogouNumber = null;
+        String s = null;
         try {
             response = mOkHttpClient.newCall(request.build()).execute();
-            String s = response.body().string();
+            s = response.body().string();
             s = s.replace("show(", "").replace(")", "");
             sogouNumber = Utils.gson().fromJson(s, SogouNumber.class);
             sogouNumber.number = number;
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("SogouNumberHandler", "error: " + number + ":" + s);
         } finally {
             if (response != null && response.body() != null) {
                 try {

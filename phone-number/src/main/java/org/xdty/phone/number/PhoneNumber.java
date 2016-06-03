@@ -14,6 +14,7 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
 import org.xdty.phone.number.model.caller.CallerHandler;
+import org.xdty.phone.number.model.caller.Status;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
 import org.xdty.phone.number.model.common.CommonHandler;
@@ -46,6 +47,7 @@ public class PhoneNumber {
     private CloudService mCloudService;
     private List<Callback> mCallbackList;
     private List<CloudListener> mCloudListeners;
+    private List<CheckUpdateCallback> mCheckUpdateCallbacks;
 
     private PhoneNumber() {
         this(sContext);
@@ -289,9 +291,75 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                onPutResult(cloudNumber, mCloudService.put(cloudNumber));
+                final boolean result = mCloudService.put(cloudNumber);
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onPutResult(cloudNumber, result);
+                    }
+                });
             }
         });
+    }
+
+    public void checkUpdate() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (NumberHandler handler : mSupportHandlerList) {
+                    if (handler.isOnline() && handler.getApiId() == INumber.API_ID_CALLER) {
+                        CallerHandler callerHandler = (CallerHandler) handler;
+                        final Status status = callerHandler.checkUpdate();
+                        mMainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onCheckResult(status);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    void onCheckResult(Status status) {
+        if (mCheckUpdateCallbacks != null) {
+            final List<CheckUpdateCallback> list = mCheckUpdateCallbacks;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onCheckResult(status);
+            }
+        }
+    }
+
+    public void upgradeData() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (NumberHandler handler : mSupportHandlerList) {
+                    if (handler.isOnline() && handler.getApiId() == INumber.API_ID_CALLER) {
+                        CallerHandler callerHandler = (CallerHandler) handler;
+                        final boolean result = callerHandler.upgradeData();
+                        mMainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onUpgradeData(result);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    void onUpgradeData(boolean result) {
+        if (mCheckUpdateCallbacks != null) {
+            final List<CheckUpdateCallback> list = mCheckUpdateCallbacks;
+            final int count = list.size();
+            for (int i = 0; i < count; i++) {
+                list.get(i).onUpgradeData(result);
+            }
+        }
     }
 
     public void addCallback(Callback callback) {
@@ -326,6 +394,22 @@ public class PhoneNumber {
         }
     }
 
+    public void addCheckUpdateCallback(CheckUpdateCallback callback) {
+        if (mCheckUpdateCallbacks == null) {
+            mCheckUpdateCallbacks = new ArrayList<>();
+        }
+        mCheckUpdateCallbacks.add(callback);
+    }
+
+    public void removeUpdateCallback(CheckUpdateCallback callback) {
+        if (mCheckUpdateCallbacks != null) {
+            int i = mCheckUpdateCallbacks.indexOf(callback);
+            if (i >= 0) {
+                mCheckUpdateCallbacks.remove(i);
+            }
+        }
+    }
+
     public interface Callback {
         void onResponseOffline(INumber number);
 
@@ -336,6 +420,12 @@ public class PhoneNumber {
 
     public interface CloudListener {
         void onPutResult(CloudNumber number, boolean result);
+    }
+
+    public interface CheckUpdateCallback {
+        void onCheckResult(Status status);
+
+        void onUpgradeData(boolean result);
     }
 
     private static class SingletonHelper {
