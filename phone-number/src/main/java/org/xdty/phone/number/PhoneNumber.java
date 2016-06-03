@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+// TODO: reconstruction
+
 public class PhoneNumber {
     public final static String API_TYPE = "api_type";
     private static final String TAG = PhoneNumber.class.getSimpleName();
