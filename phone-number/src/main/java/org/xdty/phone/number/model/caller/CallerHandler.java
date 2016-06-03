@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -22,7 +23,7 @@ import okio.Okio;
 public class CallerHandler implements NumberHandler<CallerNumber> {
 
     public final static String DB_NAME = "caller.db";
-
+    private static final String TAG = CallerHandler.class.getSimpleName();
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
     private transient Status mStatus = null;
@@ -143,13 +144,14 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
     public Status checkUpdate() {
         String url = url();
         Status status = null;
+        String s = null;
         if (!TextUtils.isEmpty(url)) {
             url = url + "status.json?timestamp=" + System.currentTimeMillis();
             Request.Builder request = new Request.Builder().url(url);
             try {
                 com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
-                String s = response.body().string();
+                s = response.body().string();
                 status = Utils.gson().fromJson(s, Status.class);
                 Status dbStatus = getDBStatus();
                 if (dbStatus != null && status != null && dbStatus.version >= status.version) {
@@ -157,6 +159,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(TAG, "checkUpdate: " + s);
             }
         }
         mStatus = status;

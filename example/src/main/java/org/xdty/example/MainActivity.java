@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         phoneNumber.checkUpdate();
+
+        phoneNumber.fetch("6683350368");
     }
 
 }

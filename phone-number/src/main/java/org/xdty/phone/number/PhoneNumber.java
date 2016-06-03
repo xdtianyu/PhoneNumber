@@ -14,6 +14,7 @@ import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.baidu.BDNumberHandler;
 import org.xdty.phone.number.model.caller.CallerHandler;
+import org.xdty.phone.number.model.caller.CallerNumber;
 import org.xdty.phone.number.model.caller.Status;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
@@ -149,7 +150,8 @@ public class PhoneNumber {
                         }
                     });
 
-                    if (offlineNumber instanceof SpecialNumber) {
+                    if (offlineNumber instanceof SpecialNumber
+                            || offlineNumber instanceof CallerNumber) {
                         return;
                     }
 
@@ -218,7 +220,7 @@ public class PhoneNumber {
     private INumber getOfflineNumber(String number) {
 
         for (NumberHandler handler : mSupportHandlerList) {
-            if (!handler.isOnline()) {
+            if (!handler.isOnline() || handler.getApiId() == INumber.API_ID_CALLER) {
                 INumber i = handler.find(number);
                 if (i != null && i.isValid()) {
                     return i;
