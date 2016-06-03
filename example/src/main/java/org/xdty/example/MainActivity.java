@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         //phoneNumber.put(cloudNumber);
 
-        phoneNumber.addCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
+        phoneNumber.setCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
             @Override
             public void onCheckResult(Status status) {
                 if (status != null) {

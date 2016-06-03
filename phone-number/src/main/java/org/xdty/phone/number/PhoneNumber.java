@@ -48,7 +48,7 @@ public class PhoneNumber {
     private CloudService mCloudService;
     private List<Callback> mCallbackList;
     private List<CloudListener> mCloudListeners;
-    private List<CheckUpdateCallback> mCheckUpdateCallbacks;
+    private CheckUpdateCallback mCheckUpdateCallback;
 
     private PhoneNumber() {
         this(sContext);
@@ -325,12 +325,8 @@ public class PhoneNumber {
     }
 
     void onCheckResult(Status status) {
-        if (mCheckUpdateCallbacks != null) {
-            final List<CheckUpdateCallback> list = mCheckUpdateCallbacks;
-            final int count = list.size();
-            for (int i = 0; i < count; i++) {
-                list.get(i).onCheckResult(status);
-            }
+        if (mCheckUpdateCallback != null) {
+            mCheckUpdateCallback.onCheckResult(status);
         }
     }
 
@@ -355,12 +351,8 @@ public class PhoneNumber {
     }
 
     void onUpgradeData(boolean result) {
-        if (mCheckUpdateCallbacks != null) {
-            final List<CheckUpdateCallback> list = mCheckUpdateCallbacks;
-            final int count = list.size();
-            for (int i = 0; i < count; i++) {
-                list.get(i).onUpgradeData(result);
-            }
+        if (mCheckUpdateCallback != null) {
+            mCheckUpdateCallback.onUpgradeData(result);
         }
     }
 
@@ -396,20 +388,8 @@ public class PhoneNumber {
         }
     }
 
-    public void addCheckUpdateCallback(CheckUpdateCallback callback) {
-        if (mCheckUpdateCallbacks == null) {
-            mCheckUpdateCallbacks = new ArrayList<>();
-        }
-        mCheckUpdateCallbacks.add(callback);
-    }
-
-    public void removeUpdateCallback(CheckUpdateCallback callback) {
-        if (mCheckUpdateCallbacks != null) {
-            int i = mCheckUpdateCallbacks.indexOf(callback);
-            if (i >= 0) {
-                mCheckUpdateCallbacks.remove(i);
-            }
-        }
+    public void setCheckUpdateCallback(CheckUpdateCallback callback) {
+        mCheckUpdateCallback = callback;
     }
 
     public interface Callback {
