@@ -36,7 +36,9 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
     public SogouNumber find(String number) {
         String url = url() + number;
 
-        Request.Builder request = new Request.Builder().url(url);
+        Request.Builder request = new Request.Builder().url(url)
+                .header("User-Agent",
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36");
         com.squareup.okhttp.Response response = null;
         SogouNumber sogouNumber = null;
         String s = null;
