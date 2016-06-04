@@ -60,9 +60,14 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
             cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
-                    new String[] { number, "0" + number });
+                    new String[] { number });
 
-            if (cur.getCount() == 1 && cur.moveToFirst()) {
+            if (cur.getCount() == 0 && !number.startsWith("+") && !number.startsWith("0")) {
+                cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
+                        new String[] { "0" + number });
+            }
+
+            if (cur.getCount() >= 1 && cur.moveToFirst()) {
                 int type = cur.getInt(cur.getColumnIndex("type"));
                 markedNumber = new MarkedNumber(number, type);
             }
