@@ -12,7 +12,7 @@
 
 ```groovy
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.6.5'
+    compile 'org.xdty.phone.number:phone-number:0.6.6'
 }
 ```
 
@@ -22,7 +22,7 @@ dependencies {
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.6.5</version>
+  <version>0.6.6</version>
   <type>aar</type>
 </dependency>
 ```
