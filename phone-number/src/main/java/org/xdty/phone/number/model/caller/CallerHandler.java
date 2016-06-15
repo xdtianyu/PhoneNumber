@@ -16,6 +16,7 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
+import java.util.Random;
 
 import okio.BufferedSink;
 import okio.Okio;
@@ -24,6 +25,8 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     public final static String DB_NAME = "caller.db";
     private static final String TAG = CallerHandler.class.getSimpleName();
+    private final static String DEFAULT_DOWNLOAD_URL = "https://o68uxqr1x.qnssl.com/,"
+            + "https://coding.net/u/tianyu/p/static/git/raw/master/";
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
     private transient Status mStatus = null;
@@ -36,7 +39,18 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
     @Override
     public String url() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return pref.getString("qiniu_download_url", "https://o68uxqr1x.qnssl.com/");
+
+        String url = pref.getString("offline_db_download_url", DEFAULT_DOWNLOAD_URL);
+        if (url.isEmpty()) {
+            url = DEFAULT_DOWNLOAD_URL;
+        }
+
+        if (url.contains(",")) {
+            String[] urlList = TextUtils.split(url, ",");
+            Random random = new Random();
+            url = urlList[random.nextInt(urlList.length)];
+        }
+        return url;
     }
 
     @Override
