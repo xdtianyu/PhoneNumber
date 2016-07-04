@@ -26,7 +26,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
     public final static String DB_NAME = "caller.db";
     private static final String TAG = CallerHandler.class.getSimpleName();
     private final static String DEFAULT_DOWNLOAD_URL = "https://o68uxqr1x.qnssl.com/,"
-            + "http://callerinfo-10049225.file.myqcloud.com/";
+            + "https://callerinfo-10049225.file.myqcloud.com/";
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
     private transient Status mStatus = null;
