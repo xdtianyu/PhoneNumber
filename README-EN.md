@@ -11,7 +11,7 @@ Grab via gradle
 
 ```groovy
 dependencies {
-    compile 'org.xdty.phone.number:phone-number:0.6.9'
+    compile 'org.xdty.phone.number:phone-number:0.6.10'
 }
 ```
 
@@ -21,7 +21,7 @@ or maven
 <dependency>
   <groupId>org.xdty.phone.number</groupId>
   <artifactId>phone-number</artifactId>
-  <version>0.6.9</version>
+  <version>0.6.10</version>
   <type>aar</type>
 </dependency>
 ```
