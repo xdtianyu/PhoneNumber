@@ -63,6 +63,7 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
                     new String[] { number });
 
             if (cur.getCount() == 0 && !number.startsWith("+") && !number.startsWith("0")) {
+                cur.close();
                 cur = db.rawQuery("SELECT * FROM phone_number WHERE number = ? OR number = ? ",
                         new String[] { "0" + number });
             }
