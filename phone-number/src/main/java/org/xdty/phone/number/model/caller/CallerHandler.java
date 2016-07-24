@@ -80,6 +80,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             cur = db.rawQuery("SELECT * FROM caller WHERE number = ? OR number = ? ",
                     new String[] { number });
             if (cur.getCount() == 0 && !number.startsWith("+") && !number.startsWith("0")) {
+                cur.close();
                 cur = db.rawQuery("SELECT * FROM caller WHERE number = ? OR number = ? ",
                         new String[] { "0" + number });
             }
