@@ -41,6 +41,7 @@ public class PhoneNumber {
     private static final String TAG = PhoneNumber.class.getSimpleName();
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
     private static Context sContext;
+    private final Object lockObject = new Object();
     private Callback mCallback;
     private Handler mMainHandler;
     private Handler mHandler;
@@ -80,20 +81,22 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient mOkHttpClient = new OkHttpClient();
-                mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
-                addNumberHandler(new SpecialNumberHandler(sContext));
-                addNumberHandler(new CommonHandler(sContext));
-                addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
-                addNumberHandler(new MarkedHandler(sContext));
-                addNumberHandler(new OfflineHandler(sContext));
-                addNumberHandler(new GoogleNumberHandler(sContext));
-                addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
-                addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
-                addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
-                addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
-                addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
-                mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
+                synchronized (lockObject) {
+                    OkHttpClient mOkHttpClient = new OkHttpClient();
+                    mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
+                    addNumberHandler(new SpecialNumberHandler(sContext));
+                    addNumberHandler(new CommonHandler(sContext));
+                    addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
+                    addNumberHandler(new MarkedHandler(sContext));
+                    addNumberHandler(new OfflineHandler(sContext));
+                    addNumberHandler(new GoogleNumberHandler(sContext));
+                    addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
+                    addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
+                    addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
+                    addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
+                    addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
+                    mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
+                }
             }
         });
     }
@@ -178,58 +181,60 @@ public class PhoneNumber {
         }
     }
 
-    public synchronized INumber getNumber(String number) {
+    public INumber getNumber(String number) {
+        synchronized (lockObject) {
+            int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
 
-        int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
+            INumber result = null;
 
-        INumber result = null;
-
-        for (NumberHandler handler : mSupportHandlerList) {
-            if (handler.isOnline() && handler.getApiId() == INumber.API_ID_CUSTOM) {
-                INumber i = handler.find(number);
-                if (i != null && i.isValid()) {
-                    result = i;
-                }
-            }
-        }
-
-        if (result == null || !result.isValid()) {
             for (NumberHandler handler : mSupportHandlerList) {
-                if (handler.isOnline() && handler.getApiId() == apiType) {
+                if (handler.isOnline() && handler.getApiId() == INumber.API_ID_CUSTOM) {
                     INumber i = handler.find(number);
                     if (i != null && i.isValid()) {
                         result = i;
                     }
                 }
             }
-        }
 
-        if (result == null || !result.isValid()) {
-            for (NumberHandler handler : mSupportHandlerList) {
-                if (handler.isOnline() && handler.getApiId() != apiType) {
-                    INumber i = handler.find(number);
-                    if (i != null && i.isValid()) {
-                        result = i;
-                        break;
+            if (result == null || !result.isValid()) {
+                for (NumberHandler handler : mSupportHandlerList) {
+                    if (handler.isOnline() && handler.getApiId() == apiType) {
+                        INumber i = handler.find(number);
+                        if (i != null && i.isValid()) {
+                            result = i;
+                        }
                     }
                 }
             }
-        }
 
-        return result;
+            if (result == null || !result.isValid()) {
+                for (NumberHandler handler : mSupportHandlerList) {
+                    if (handler.isOnline() && handler.getApiId() != apiType) {
+                        INumber i = handler.find(number);
+                        if (i != null && i.isValid()) {
+                            result = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 
-    public synchronized INumber getOfflineNumber(String number) {
-
-        for (NumberHandler handler : mSupportHandlerList) {
-            if (!handler.isOnline() || handler.getApiId() == INumber.API_ID_CALLER) {
-                INumber i = handler.find(number);
-                if (i != null && i.isValid()) {
-                    return i;
+    public INumber getOfflineNumber(String number) {
+        synchronized (lockObject) {
+            for (NumberHandler handler : mSupportHandlerList) {
+                if (!handler.isOnline() || handler.getApiId() == INumber.API_ID_CALLER) {
+                    INumber i = handler.find(number);
+                    if (i != null && i.isValid()) {
+                        return i;
+                    }
                 }
             }
+            return null;
         }
-        return null;
     }
 
     void onResponseOffline(INumber number) {
