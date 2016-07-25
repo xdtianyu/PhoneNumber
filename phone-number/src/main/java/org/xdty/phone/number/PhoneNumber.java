@@ -178,7 +178,7 @@ public class PhoneNumber {
         }
     }
 
-    public INumber getNumber(String number) {
+    public synchronized INumber getNumber(String number) {
 
         int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
 
@@ -219,7 +219,7 @@ public class PhoneNumber {
         return result;
     }
 
-    public INumber getOfflineNumber(String number) {
+    public synchronized INumber getOfflineNumber(String number) {
 
         for (NumberHandler handler : mSupportHandlerList) {
             if (!handler.isOnline() || handler.getApiId() == INumber.API_ID_CALLER) {
