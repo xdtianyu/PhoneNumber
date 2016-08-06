@@ -98,6 +98,6 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
 
     @Override
     public int getApiId() {
-        return INumber.API_ID_BD;
+        return INumber.API_ID_BD_DEAD;
     }
 }

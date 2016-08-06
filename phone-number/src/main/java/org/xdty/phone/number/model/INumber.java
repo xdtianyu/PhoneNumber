@@ -8,7 +8,9 @@ public interface INumber {
     int API_ID_MARKED = -100;
     int API_ID_OFFLINE = -2;
     int API_ID_GOOGLE = -1;
-    int API_ID_BD = 0;
+    // baidu api is gone.
+    //int API_ID_BD = 0;
+    int API_ID_BD_DEAD = 0;
     int API_ID_JH = 1;
     int API_ID_SG = 2;
     int API_ID_CLOUD = 8;

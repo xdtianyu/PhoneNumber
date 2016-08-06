@@ -67,7 +67,7 @@ public class BDNumber implements INumber {
 
     @Override
     public int getApiId() {
-        return INumber.API_ID_BD;
+        return INumber.API_ID_BD_DEAD;
     }
 
 }

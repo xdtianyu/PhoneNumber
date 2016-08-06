@@ -12,7 +12,6 @@ import com.squareup.okhttp.OkHttpClient;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
-import org.xdty.phone.number.model.baidu.BDNumberHandler;
 import org.xdty.phone.number.model.caller.CallerHandler;
 import org.xdty.phone.number.model.caller.CallerNumber;
 import org.xdty.phone.number.model.caller.Status;
@@ -91,7 +90,8 @@ public class PhoneNumber {
                     addNumberHandler(new OfflineHandler(sContext));
                     addNumberHandler(new GoogleNumberHandler(sContext));
                     addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
-                    addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
+                    // remove Baidu api because it's dead.
+                    //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
                     addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
                     addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
                     addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
@@ -183,7 +183,7 @@ public class PhoneNumber {
 
     public INumber getNumber(String number) {
         synchronized (lockObject) {
-            int apiType = mPref.getInt(API_TYPE, INumber.API_ID_BD);
+            int apiType = mPref.getInt(API_TYPE, INumber.API_ID_JH);
 
             INumber result = null;
 
