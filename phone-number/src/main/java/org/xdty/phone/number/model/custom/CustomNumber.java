@@ -58,8 +58,18 @@ public class CustomNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return getCity() != null || getProvince() != null;
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_CUSTOM;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 
     class Result {

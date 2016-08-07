@@ -2,6 +2,7 @@ package org.xdty.phone.number.model.juhe;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.util.Utils;
 
 public class JuHeNumber implements INumber {
 
@@ -65,8 +66,18 @@ public class JuHeNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return !Utils.isEmpty(getProvince()) || !Utils.isEmpty(getCity());
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_JH;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 
     class Result {

@@ -2,6 +2,7 @@ package org.xdty.phone.number.model.caller;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.util.Utils;
 
 public class CallerNumber implements INumber {
 
@@ -12,6 +13,10 @@ public class CallerNumber implements INumber {
     int count;
     long time;
 
+    String province;
+    String provider;
+    String city;
+
     public CallerNumber(String number) {
         this.number = number;
     }
@@ -21,9 +26,13 @@ public class CallerNumber implements INumber {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String getProvince() {
-        return null;
+        return province;
     }
 
     @Override
@@ -35,13 +44,17 @@ public class CallerNumber implements INumber {
         }
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getCallerType() {
         return type;
     }
 
     @Override
     public String getCity() {
-        return null;
+        return city;
     }
 
     @Override
@@ -49,14 +62,22 @@ public class CallerNumber implements INumber {
         return number;
     }
 
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     @Override
     public String getProvider() {
-        return null;
+        return provider;
     }
 
     @Override
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
@@ -70,20 +91,20 @@ public class CallerNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return !Utils.isEmpty(getCity()) || !Utils.isEmpty(getProvince());
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_CALLER;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    @Override
+    public void patch(INumber i) {
+        city = i.getCity();
+        provider = i.getProvider();
+        province = i.getProvince();
     }
 
     public int getSource() {
@@ -92,10 +113,6 @@ public class CallerNumber implements INumber {
 
     public void setSource(int source) {
         this.source = source;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public long getTime() {

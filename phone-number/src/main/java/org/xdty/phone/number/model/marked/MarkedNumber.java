@@ -1,14 +1,16 @@
 package org.xdty.phone.number.model.marked;
 
-import android.text.TextUtils;
-
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.util.Utils;
 
 public class MarkedNumber implements INumber {
 
     private static String[] MARKED_NAMES =
-            {"骚扰电话", "诈骗", "推销", "广告推销", "房产中介", "快递送餐", "诈骗电话", "外卖", "中介", "快递"};
+            { "骚扰电话", "诈骗", "推销", "广告推销", "房产中介", "快递送餐", "诈骗电话", "外卖", "中介", "快递" };
+    private String mProvince;
+    private String mProvider;
+    private String mCity;
     private String mNumber = null;
     private String mName = null;
     private int mMarkedType;
@@ -26,7 +28,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public String getProvince() {
-        return null;
+        return mProvince;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public String getCity() {
-        return null;
+        return mCity;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public String getProvider() {
-        return null;
+        return mProvider;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public boolean isValid() {
-        return !TextUtils.isEmpty(mNumber) && !TextUtils.isEmpty(mName);
+        return !Utils.isEmpty(mNumber) && !Utils.isEmpty(mName);
     }
 
     @Override
@@ -69,7 +71,19 @@ public class MarkedNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return !Utils.isEmpty(getCity()) || !Utils.isEmpty(getProvince());
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_MARKED;
+    }
+
+    @Override
+    public void patch(INumber i) {
+        mCity = i.getCity();
+        mProvider = i.getProvider();
+        mProvince = i.getProvince();
     }
 }

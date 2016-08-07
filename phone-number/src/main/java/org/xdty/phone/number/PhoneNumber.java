@@ -225,15 +225,25 @@ public class PhoneNumber {
 
     public INumber getOfflineNumber(String number) {
         synchronized (lockObject) {
+            INumber iNumber = null;
             for (NumberHandler handler : mSupportHandlerList) {
                 if (!handler.isOnline() || handler.getApiId() == INumber.API_ID_CALLER) {
                     INumber i = handler.find(number);
                     if (i != null && i.isValid()) {
-                        return i;
+                        if (i.hasGeo()) {
+                            if (iNumber == null) { // return result
+                                return i;
+                            } else { // patch geo info to previous result
+                                iNumber.patch(i);
+                                return iNumber;
+                            }
+                        } else { // continue for geo info
+                            iNumber = i;
+                        }
                     }
                 }
             }
-            return null;
+            return iNumber;
         }
     }
 

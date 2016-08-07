@@ -90,7 +90,17 @@ public class CloudNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return false;
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_CLOUD;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 }

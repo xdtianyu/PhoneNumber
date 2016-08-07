@@ -66,8 +66,18 @@ public class BDNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return getCity() != null || getProvince() != null;
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_BD_DEAD;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 
 }

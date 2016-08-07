@@ -72,7 +72,17 @@ public class SogouNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return false;
+    }
+
+    @Override
     public int getApiId() {
         return API_ID_SG;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 }

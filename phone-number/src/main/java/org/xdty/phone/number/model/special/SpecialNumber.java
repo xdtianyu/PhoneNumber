@@ -62,8 +62,18 @@ public class SpecialNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return false;
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_SPECIAL;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 
 }

@@ -67,7 +67,17 @@ public class GooglePhoneNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return getProvince() != null;
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_GOOGLE;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.util.Utils;
 
 public class OfflineNumber implements INumber {
     String province;
@@ -92,7 +93,18 @@ public class OfflineNumber implements INumber {
     }
 
     @Override
+    public boolean hasGeo() {
+        return !Utils.isEmpty(getProvince()) || !Utils.isEmpty(getCity()) || !Utils.isEmpty(
+                getProvider());
+    }
+
+    @Override
     public int getApiId() {
         return INumber.API_ID_OFFLINE;
+    }
+
+    @Override
+    public void patch(INumber i) {
+
     }
 }

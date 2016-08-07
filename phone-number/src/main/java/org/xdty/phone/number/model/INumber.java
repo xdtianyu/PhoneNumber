@@ -34,5 +34,9 @@ public interface INumber {
 
     boolean isOnline();
 
+    boolean hasGeo();
+
     int getApiId();
+
+    void patch(INumber i);
 }
