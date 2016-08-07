@@ -77,7 +77,11 @@ public class JuHeNumber implements INumber {
 
     @Override
     public void patch(INumber i) {
-
+        if (result != null) {
+            result.province = i.getProvince();
+            result.city = i.getCity();
+            result.sp = i.getProvider();
+        }
     }
 
     class Result {

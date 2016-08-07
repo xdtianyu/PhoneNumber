@@ -7,6 +7,9 @@ public class CloudNumber implements INumber {
     private String uid;
     private String number;
     private String name;
+    private String city;
+    private String provider;
+    private String province;
     private int type;
     private int from;
     private int count;
@@ -29,7 +32,7 @@ public class CloudNumber implements INumber {
 
     @Override
     public String getProvider() {
-        return null;
+        return provider;
     }
 
     public String getName() {
@@ -42,7 +45,7 @@ public class CloudNumber implements INumber {
 
     @Override
     public String getProvince() {
-        return null;
+        return province;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class CloudNumber implements INumber {
 
     @Override
     public String getCity() {
-        return null;
+        return city;
     }
 
     public int getFrom() {
@@ -101,6 +104,8 @@ public class CloudNumber implements INumber {
 
     @Override
     public void patch(INumber i) {
-
+        city = i.getCity();
+        provider = i.getProvider();
+        province = i.getProvince();
     }
 }

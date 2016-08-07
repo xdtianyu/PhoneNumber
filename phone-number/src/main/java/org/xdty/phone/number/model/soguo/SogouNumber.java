@@ -17,6 +17,10 @@ public class SogouNumber implements INumber {
     @SerializedName(value = "Amount")
     int count;
 
+    String city;
+    String provider;
+    String province;
+
     @Override
     public String getName() {
         if (name != null && name.contains("号码通用户数据：")) {
@@ -33,7 +37,7 @@ public class SogouNumber implements INumber {
 
     @Override
     public String getProvince() {
-        return null;
+        return province;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class SogouNumber implements INumber {
 
     @Override
     public String getCity() {
-        return null;
+        return city;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SogouNumber implements INumber {
 
     @Override
     public String getProvider() {
-        return null;
+        return provider;
     }
 
     @Override
@@ -83,6 +87,8 @@ public class SogouNumber implements INumber {
 
     @Override
     public void patch(INumber i) {
-
+        city = i.getCity();
+        provider = i.getProvider();
+        province = i.getProvince();
     }
 }
