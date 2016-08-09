@@ -193,6 +193,7 @@ public class PhoneNumber {
                     if (i != null && i.isValid()) {
                         result = i;
                     }
+                    break;
                 }
             }
 
@@ -203,6 +204,7 @@ public class PhoneNumber {
                         if (i != null && i.isValid()) {
                             result = i;
                         }
+                        break;
                     }
                 }
             }
