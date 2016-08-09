@@ -57,7 +57,7 @@ public class JuHeNumber implements INumber {
 
     @Override
     public boolean isValid() {
-        return result != null && error_code == 0 && getName() != null;
+        return result != null && error_code == 0 && getName() != null && !getName().isEmpty();
     }
 
     @Override
