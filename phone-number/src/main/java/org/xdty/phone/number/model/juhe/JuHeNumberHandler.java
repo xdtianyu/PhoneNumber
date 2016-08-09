@@ -58,7 +58,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
         Request.Builder request = new Request.Builder().url(url);
         try {
             response = mOkHttpClient.newCall(request.build()).execute();
-            String s = response.body().string();
+            String s = response.body().string().replace("rpt_cnt\":\"\"", "rpt_cnt\":0");
             return Utils.gson().fromJson(s, JuHeNumber.class);
         } catch (Exception e) {
             e.printStackTrace();
