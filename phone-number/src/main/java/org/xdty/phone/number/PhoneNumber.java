@@ -41,6 +41,7 @@ public class PhoneNumber {
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
     private static Context sContext;
     private final Object lockObject = new Object();
+    private final Object networkLockObject = new Object();
     private Callback mCallback;
     private Handler mMainHandler;
     private Handler mHandler;
@@ -80,15 +81,19 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                OkHttpClient mOkHttpClient = new OkHttpClient();
+                mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
+
                 synchronized (lockObject) {
-                    OkHttpClient mOkHttpClient = new OkHttpClient();
-                    mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
                     addNumberHandler(new SpecialNumberHandler(sContext));
                     addNumberHandler(new CommonHandler(sContext));
                     addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
                     addNumberHandler(new MarkedHandler(sContext));
                     addNumberHandler(new OfflineHandler(sContext));
                     addNumberHandler(new GoogleNumberHandler(sContext));
+                }
+
+                synchronized (networkLockObject) {
                     addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
                     // remove Baidu api because it's dead.
                     //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
@@ -182,7 +187,7 @@ public class PhoneNumber {
     }
 
     public INumber getNumber(String number) {
-        synchronized (lockObject) {
+        synchronized (networkLockObject) {
             int apiType = mPref.getInt(API_TYPE, INumber.API_ID_JH);
 
             INumber result = null;
