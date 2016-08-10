@@ -85,22 +85,22 @@ public class PhoneNumber {
                 mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
 
                 synchronized (lockObject) {
-                    addNumberHandler(new SpecialNumberHandler(sContext));
-                    addNumberHandler(new CommonHandler(sContext));
-                    addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
-                    addNumberHandler(new MarkedHandler(sContext));
-                    addNumberHandler(new OfflineHandler(sContext));
-                    addNumberHandler(new GoogleNumberHandler(sContext));
-                }
+                    synchronized (networkLockObject) {
+                        addNumberHandler(new SpecialNumberHandler(sContext));
+                        addNumberHandler(new CommonHandler(sContext));
+                        addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
+                        addNumberHandler(new MarkedHandler(sContext));
+                        addNumberHandler(new OfflineHandler(sContext));
+                        addNumberHandler(new GoogleNumberHandler(sContext));
 
-                synchronized (networkLockObject) {
-                    addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
-                    // remove Baidu api because it's dead.
-                    //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
-                    addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
-                    addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
-                    addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
-                    mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
+                        addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
+                        // remove Baidu api because it's dead.
+                        //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
+                        addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
+                        addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
+                        addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
+                        mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
+                    }
                 }
             }
         });
