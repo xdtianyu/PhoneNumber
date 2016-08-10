@@ -21,6 +21,10 @@ public class GooglePhoneNumber implements INumber {
         mProvince = province;
     }
 
+    public void setNumber(String number) {
+        mNumber = number;
+    }
+
     @Override
     public String getName() {
         return "";

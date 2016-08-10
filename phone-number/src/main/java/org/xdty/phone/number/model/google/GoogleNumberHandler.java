@@ -41,9 +41,9 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
         return phoneNumberUtil.isValidNumber(pn);
     }
 
-    public static String getCarrier(Context context, String number) {
+    public static String getCarrier(Context context, String number, Locale locale) {
 
-        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number);
+        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number, locale);
 
         if (pn == null) {
             return null;
@@ -68,26 +68,23 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
         return carrierZh;
     }
 
-    public static String getGeo(Context context, String number) {
+    public static String getGeo(Context context, String number, Locale locale) {
 
-        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number);
+        Phonenumber.PhoneNumber pn = getPhoneNumber(context, number, locale);
 
         if (pn == null) {
             return null;
         }
-
-        Locale locale = context.getResources().getConfiguration().locale;
         return geoCoder.getDescriptionForNumber(pn, locale);
     }
 
-    public static Phonenumber.PhoneNumber getPhoneNumber(Context context, String number) {
+    public static Phonenumber.PhoneNumber getPhoneNumber(Context context, String number,
+            Locale locale) {
         if (TextUtils.isEmpty(number)) {
             return null;
         }
 
         PhoneNumberUtil util = PhoneNumberUtil.getInstance();
-
-        Locale locale = context.getResources().getConfiguration().locale;
         String countryIso = getCurrentCountryIso(context, locale);
         Phonenumber.PhoneNumber pn = null;
         try {
@@ -124,9 +121,23 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
 
     @Override
     public GooglePhoneNumber find(String number) {
+        GooglePhoneNumber i = find(number, mContext.getResources().getConfiguration().locale);
+        if (i == null) {
+            i = find(number, Locale.CHINA);
+        }
+        if (i == null && !number.startsWith("+86")) {
+            i = find("+86" + number, Locale.CHINA);
+            if (i != null) {
+                i.setNumber(number);
+            }
+        }
+        return i;
+    }
+
+    private GooglePhoneNumber find(String number, Locale locale) {
         try {
-            String geo = getGeo(mContext, number);
-            String carrier = getCarrier(mContext, number);
+            String geo = getGeo(mContext, number, locale);
+            String carrier = getCarrier(mContext, number, locale);
 
             if (!TextUtils.isEmpty(geo) || !TextUtils.isEmpty(carrier)) {
                 return new GooglePhoneNumber(number, carrier, geo);
