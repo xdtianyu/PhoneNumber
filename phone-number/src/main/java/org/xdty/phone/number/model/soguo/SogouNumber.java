@@ -42,7 +42,17 @@ public class SogouNumber implements INumber {
 
     @Override
     public Type getType() {
-        return Type.REPORT;
+        String name = getName();
+
+        if (name == null) {
+            return Type.NORMAL;
+        }
+
+        if (count > 0) {
+            return Type.REPORT;
+        }
+
+        return Type.POI;
     }
 
     @Override
