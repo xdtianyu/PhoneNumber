@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onUpgradeData: " + result);
             }
         });
-        phoneNumber.checkUpdate();
+        //phoneNumber.checkUpdate();
 
         phoneNumber.fetch("6683350368");
     }

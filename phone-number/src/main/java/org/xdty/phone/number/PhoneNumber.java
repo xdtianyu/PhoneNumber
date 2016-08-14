@@ -348,7 +348,7 @@ public class PhoneNumber {
         });
     }
 
-    void onCheckResult(Status status) {
+    private void onCheckResult(Status status) {
         if (mCheckUpdateCallback != null) {
             mCheckUpdateCallback.onCheckResult(status);
         }

@@ -13,8 +13,8 @@ ext {
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 69
-    libraryVersion = '0.7.10'
+    libraryVersionCode = 70
+    libraryVersion = '0.7.11'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
@@ -46,11 +46,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp:okhttp:2.7.0'
-    compile 'com.google.code.gson:gson:2.5'
-    compile 'com.googlecode.libphonenumber:libphonenumber:7.2.2'
-    compile 'com.googlecode.libphonenumber:geocoder:2.32'
-    compile 'com.googlecode.libphonenumber:carrier:1.22'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
+    compile 'com.googlecode.libphonenumber:geocoder:2.50'
+    compile 'com.googlecode.libphonenumber:carrier:1.40'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
