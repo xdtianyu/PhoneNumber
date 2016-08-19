@@ -32,7 +32,7 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
 
     @Override
     public OfflineNumber find(String number) {
-        number = number.replaceAll("\\+86", "");
+        number = Utils.fixNumberPlus(number);
         if (number.length() < 7 || number.length() > 11 || number.contains("+")) {
             return null;
         }

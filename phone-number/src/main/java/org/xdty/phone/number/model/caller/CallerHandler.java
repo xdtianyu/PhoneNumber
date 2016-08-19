@@ -23,7 +23,7 @@ import okio.Okio;
 
 public class CallerHandler implements NumberHandler<CallerNumber> {
 
-    public final static String DB_NAME = "caller.db";
+    private final static String DB_NAME = "caller.db";
     private static final String TAG = CallerHandler.class.getSimpleName();
     private final static String DEFAULT_DOWNLOAD_URL = "http://7xtf5u.com1.z0.glb.clouddn.com/,"
             + "https://callerinfo-10049225.file.myqcloud.com/";
@@ -154,6 +154,9 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
                 Utils.unzip(downloadedFile.getAbsolutePath(),
                         mContext.getCacheDir().getAbsolutePath());
+                if (!downloadedFile.delete()) {
+                    Log.e(TAG, "downloaded file delete failed.");
+                }
                 File db_new = new File(mContext.getCacheDir(), "caller_" + mStatus.version + ".db");
                 File db = new File(mContext.getCacheDir(), DB_NAME);
                 if (db_new.exists() && db_new.renameTo(db)) {

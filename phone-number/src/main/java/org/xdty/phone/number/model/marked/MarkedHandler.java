@@ -46,10 +46,7 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
 
     @Override
     public MarkedNumber find(String number) {
-        number = number.replaceAll("\\+86", "");
-        if (number.contains("+")) {
-            return null;
-        }
+        number = Utils.fixNumberPlus(number);
 
         MarkedNumber markedNumber = null;
         SQLiteDatabase db = null;

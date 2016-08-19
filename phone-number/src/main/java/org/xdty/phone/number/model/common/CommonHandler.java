@@ -46,10 +46,7 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
 
     @Override
     public CommonNumber find(String number) {
-        number = number.replaceAll("\\+86", "");
-        if (number.contains("+")) {
-            return null;
-        }
+        number = Utils.fixNumberPlus(number);
 
         CommonNumber commonNumber = null;
 

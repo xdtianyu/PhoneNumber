@@ -203,4 +203,58 @@ public class Utils {
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
+
+    public static String fixNumber(String number) {
+        String fixedNumber = number;
+        if (number.startsWith("+86")) {
+            fixedNumber = number.replace("+86", "");
+        }
+
+        if (number.startsWith("86") && number.length() > 9) {
+            fixedNumber = number.replaceFirst("^86", "");
+        }
+
+        if (number.startsWith("+400")) {
+            fixedNumber = number.replace("+", "");
+        }
+
+        if (fixedNumber.startsWith("12583")) {
+            fixedNumber = fixedNumber.replaceFirst("^12583.", "");
+        }
+
+        if (fixedNumber.startsWith("1259023")) {
+            fixedNumber = number.replaceFirst("^1259023", "");
+        }
+
+        return fixedNumber;
+    }
+
+    public static String fixNumberPlus(String number) {
+        String fixedNumber = number;
+        if (number.startsWith("+86")) {
+            fixedNumber = number.replace("+86", "");
+        }
+
+        if (number.startsWith("+400")) {
+            fixedNumber = number.replace("+", "");
+        }
+
+        if (fixedNumber.startsWith("+")) {
+            fixedNumber = number.replace("+", "");
+        }
+
+        if (number.startsWith("86") && number.length() > 9) {
+            fixedNumber = number.replaceFirst("^86", "");
+        }
+
+        if (fixedNumber.startsWith("12583")) {
+            fixedNumber = fixedNumber.replaceFirst("^12583.", "");
+        }
+
+        if (fixedNumber.startsWith("1259023")) {
+            fixedNumber = number.replaceFirst("^1259023", "");
+        }
+
+        return fixedNumber;
+    }
 }
