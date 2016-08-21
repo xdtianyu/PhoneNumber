@@ -23,6 +23,7 @@ import org.xdty.phone.number.model.google.GoogleNumberHandler;
 import org.xdty.phone.number.model.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.model.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.model.marked.MarkedHandler;
+import org.xdty.phone.number.model.mvno.MvnoHandler;
 import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.soguo.SogouNumberHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
@@ -91,6 +92,7 @@ public class PhoneNumber {
                         addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
                         addNumberHandler(new MarkedHandler(sContext));
                         addNumberHandler(new OfflineHandler(sContext));
+                        addNumberHandler(new MvnoHandler(sContext));
                         addNumberHandler(new GoogleNumberHandler(sContext));
 
                         addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));

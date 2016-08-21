@@ -6,6 +6,7 @@ public interface INumber {
     int API_ID_COMMON = -200;
     int API_ID_CALLER = -150;
     int API_ID_MARKED = -100;
+    int API_ID_MVNP = -50;
     int API_ID_OFFLINE = -2;
     int API_ID_GOOGLE = -1;
     // baidu api is gone.
