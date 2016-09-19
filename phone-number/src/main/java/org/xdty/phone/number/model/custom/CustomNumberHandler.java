@@ -45,7 +45,9 @@ public class CustomNumberHandler implements NumberHandler<CustomNumber> {
                 com.squareup.okhttp.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 String s = response.body().string();
-                return Utils.gson().fromJson(s, CustomNumber.class);
+                CustomNumber n = Utils.gson().fromJson(s, CustomNumber.class);
+                n.setNumber(number);
+                return n;
             } catch (Exception e) {
                 e.printStackTrace();
             }

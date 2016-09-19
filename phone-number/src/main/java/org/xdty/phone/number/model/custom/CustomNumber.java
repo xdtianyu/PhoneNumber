@@ -2,6 +2,7 @@ package org.xdty.phone.number.model.custom;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
+import org.xdty.phone.number.util.Utils;
 
 public class CustomNumber implements INumber {
     String reason;
@@ -37,6 +38,12 @@ public class CustomNumber implements INumber {
         return result.phone;
     }
 
+    public void setNumber(String number) {
+        if (result != null) {
+            result.phone = number;
+        }
+    }
+
     @Override
     public String getProvider() {
         return result.provider;
@@ -59,7 +66,7 @@ public class CustomNumber implements INumber {
 
     @Override
     public boolean hasGeo() {
-        return getCity() != null || getProvince() != null;
+        return !Utils.isEmpty(getCity()) || !Utils.isEmpty(getProvince());
     }
 
     @Override
@@ -69,7 +76,11 @@ public class CustomNumber implements INumber {
 
     @Override
     public void patch(INumber i) {
-
+        if (result != null && i != null) {
+            result.city = i.getCity();
+            result.provider = i.getProvider();
+            result.province = i.getProvince();
+        }
     }
 
     class Result {
