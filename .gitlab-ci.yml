@@ -1,0 +1,12 @@
+image: xdtianyu/docker:openjdk8
+before_script:
+  - source /opt/setup-android-sdk.sh
+stages:
+  - build
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - "**/build/outputs/**/*.aar"
