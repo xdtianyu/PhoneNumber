@@ -3,6 +3,7 @@
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PhoneNumber-green.svg?style=true)](https://android-arsenal.com/details/1/3325)
 [![Build Status](https://travis-ci.org/xdtianyu/PhoneNumber.svg?branch=master)](https://travis-ci.org/xdtianyu/PhoneNumber)
+[![build status](https://git.xdty.org/tianyu/PhoneNumber/badges/master/build.svg)](https://git.xdty.org/tianyu/PhoneNumber/commits/master)
 [![JAR](https://img.shields.io/maven-central/v/org.xdty.phone.number/phone-number.svg)](http://central.maven.org/maven2/org/xdty/phone/number/phone-number/)
 [![Download](https://api.bintray.com/packages/xdtianyu/maven/phone-number/images/download.svg)](https://bintray.com/xdtianyu/maven/phone-number/_latestVersion)
 
