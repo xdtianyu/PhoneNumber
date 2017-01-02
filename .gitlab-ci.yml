@@ -1,5 +1,6 @@
 image: xdtianyu/docker:openjdk8
 before_script:
+  - touch local.properties
   - source /opt/setup-android-sdk.sh
 stages:
   - build
