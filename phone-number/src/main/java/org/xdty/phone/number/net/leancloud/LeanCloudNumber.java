@@ -1,0 +1,15 @@
+package org.xdty.phone.number.net.leancloud;
+
+import org.xdty.phone.number.net.cloud.CloudNumber;
+
+public class LeanCloudNumber extends CloudNumber {
+    private String createdAt;
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+}

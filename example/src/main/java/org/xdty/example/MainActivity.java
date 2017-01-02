@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
-import org.xdty.phone.number.model.caller.Status;
-import org.xdty.phone.number.model.cloud.CloudNumber;
+import org.xdty.phone.number.net.caller.Status;
+import org.xdty.phone.number.net.cloud.CloudNumber;
 
 public class MainActivity extends AppCompatActivity {
 
