@@ -13,8 +13,8 @@ ext {
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 73
-    libraryVersion = '0.7.14'
+    libraryVersionCode = 80
+    libraryVersion = '0.8.0'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
@@ -26,12 +26,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode = libraryVersionCode
         versionName = libraryVersion
     }
