@@ -66,8 +66,8 @@ public class MvnoNumber implements INumber {
 
     @Override
     public boolean hasGeo() {
-        return !Utils.isEmpty(getProvince()) || !Utils.isEmpty(getCity()) || !Utils.isEmpty(
-                getProvider());
+        return !Utils.get().isEmpty(getProvince()) || !Utils.get().isEmpty(getCity())
+                || !Utils.get().isEmpty(getProvider());
     }
 
     @Override

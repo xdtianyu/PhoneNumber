@@ -67,7 +67,7 @@ public class JuHeNumber implements INumber {
 
     @Override
     public boolean hasGeo() {
-        return !Utils.isEmpty(getProvince()) || !Utils.isEmpty(getCity());
+        return !Utils.get().isEmpty(getProvince()) || !Utils.get().isEmpty(getCity());
     }
 
     @Override

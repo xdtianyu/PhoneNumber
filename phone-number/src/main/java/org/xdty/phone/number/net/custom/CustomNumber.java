@@ -66,7 +66,7 @@ public class CustomNumber implements INumber {
 
     @Override
     public boolean hasGeo() {
-        return !Utils.isEmpty(getCity()) || !Utils.isEmpty(getProvince());
+        return !Utils.get().isEmpty(getCity()) || !Utils.get().isEmpty(getProvince());
     }
 
     @Override

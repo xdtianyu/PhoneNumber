@@ -62,7 +62,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public boolean isValid() {
-        return !Utils.isEmpty(mNumber) && !Utils.isEmpty(mName);
+        return !Utils.get().isEmpty(mNumber) && !Utils.get().isEmpty(mName);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MarkedNumber implements INumber {
 
     @Override
     public boolean hasGeo() {
-        return !Utils.isEmpty(getCity()) || !Utils.isEmpty(getProvince());
+        return !Utils.get().isEmpty(getCity()) || !Utils.get().isEmpty(getProvince());
     }
 
     @Override

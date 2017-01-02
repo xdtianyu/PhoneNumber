@@ -29,7 +29,7 @@ public class MvnoHandler implements NumberHandler<MvnoNumber> {
     private void checkVersion() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         if (prefs.getInt(MVNP_VERSION_CODE_KEY, 0) < MVNP_VERSION_CODE) {
-            Utils.removeCacheFile(mContext, DB_NAME);
+            Utils.get().removeCacheFile(mContext, DB_NAME);
         }
         prefs.edit().putInt(MVNP_VERSION_CODE_KEY, MVNP_VERSION_CODE).apply();
     }
@@ -46,7 +46,7 @@ public class MvnoHandler implements NumberHandler<MvnoNumber> {
 
     @Override
     public MvnoNumber find(String number) {
-        number = Utils.fixNumberPlus(number);
+        number = Utils.get().fixNumberPlus(number);
 
         if (number.length() != 11 || (!number.startsWith("170") && !number.startsWith("171"))) {
             return null;
@@ -57,7 +57,7 @@ public class MvnoHandler implements NumberHandler<MvnoNumber> {
         Cursor cur = null;
         SQLiteDatabase db = null;
         try {
-            File dbFile = Utils.createCacheFile(mContext, DB_NAME, R.raw.mvno);
+            File dbFile = Utils.get().createCacheFile(mContext, DB_NAME, R.raw.mvno);
 
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 

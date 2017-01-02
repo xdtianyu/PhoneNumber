@@ -32,7 +32,7 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
 
     @Override
     public OfflineNumber find(String number) {
-        number = Utils.fixNumberPlus(number);
+        number = Utils.get().fixNumberPlus(number);
         if (number.length() < 7 || number.length() > 11 || number.contains("+")) {
             return null;
         }
@@ -42,7 +42,7 @@ public class OfflineHandler implements NumberHandler<OfflineNumber> {
             OfflineNumber offlineNumber = null;
 
             int phone = Integer.parseInt(number.substring(0, 7));
-            File file = Utils.createCacheFile(mContext, "phone.dat", R.raw.phone);
+            File file = Utils.get().createCacheFile(mContext, "phone.dat", R.raw.phone);
             long length = file.length();
             raf = new RandomAccessFile(file, "r");
             byte bVersion[] = new byte[4];

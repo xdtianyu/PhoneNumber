@@ -147,12 +147,12 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
                 response.body().close();
 
                 // check md5
-                if (!Utils.checkMD5(mStatus.md5, downloadedFile)) {
+                if (!Utils.get().checkMD5(mStatus.md5, downloadedFile)) {
                     Log.e(TAG, "Offline file md5 not match!");
                     return false;
                 }
 
-                Utils.unzip(downloadedFile.getAbsolutePath(),
+                Utils.get().unzip(downloadedFile.getAbsolutePath(),
                         mContext.getCacheDir().getAbsolutePath());
                 if (!downloadedFile.delete()) {
                     Log.e(TAG, "downloaded file delete failed.");

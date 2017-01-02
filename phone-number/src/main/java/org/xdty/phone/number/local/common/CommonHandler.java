@@ -29,7 +29,7 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
     private void checkVersion() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         if (prefs.getInt(COMMON_VERSION_CODE_KEY, 0) < COMMON_VERSION_CODE) {
-            Utils.removeCacheFile(mContext, DB_NAME);
+            Utils.get().removeCacheFile(mContext, DB_NAME);
         }
         prefs.edit().putInt(COMMON_VERSION_CODE_KEY, COMMON_VERSION_CODE).apply();
     }
@@ -46,14 +46,14 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
 
     @Override
     public CommonNumber find(String number) {
-        number = Utils.fixNumberPlus(number);
+        number = Utils.get().fixNumberPlus(number);
 
         CommonNumber commonNumber = null;
 
         Cursor cur = null;
         SQLiteDatabase db = null;
         try {
-            File dbFile = Utils.createCacheFile(mContext, DB_NAME, R.raw.common);
+            File dbFile = Utils.get().createCacheFile(mContext, DB_NAME, R.raw.common);
 
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 

@@ -21,18 +21,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Utils {
+public final class Utils {
     private static final String TAG = Utils.class.getSimpleName();
-    private static Gson GSON;
 
-    public static synchronized Gson gson() {
-        if (GSON == null) {
-            GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-        }
-        return GSON;
+    public static Gson gson() {
+        return SingletonHelper.GSON;
     }
 
-    public static synchronized File createCacheFile(Context context, String filename, int raw)
+    public static Utils get() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    public synchronized File createCacheFile(Context context, String filename, int raw)
             throws IOException {
         File cacheFile = new File(context.getCacheDir(), filename);
 
@@ -65,7 +65,7 @@ public class Utils {
         return cacheFile;
     }
 
-    public static synchronized boolean removeCacheFile(Context context, String filename) {
+    public synchronized boolean removeCacheFile(Context context, String filename) {
         File cacheFile = new File(context.getCacheDir(), filename);
         try {
             if (cacheFile.exists()) {
@@ -85,7 +85,7 @@ public class Utils {
      * doesn't exist).
      * @throws IOException
      */
-    public static void unzip(String zipFile, String location) throws IOException {
+    public void unzip(String zipFile, String location) throws IOException {
         final int BUFFER_SIZE = 10240;
         int size;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -142,7 +142,7 @@ public class Utils {
         }
     }
 
-    public static boolean checkMD5(String md5, File updateFile) {
+    public boolean checkMD5(String md5, File updateFile) {
         if (TextUtils.isEmpty(md5) || updateFile == null) {
             Log.e(TAG, "MD5 string empty or updateFile null");
             return false;
@@ -160,7 +160,7 @@ public class Utils {
         return calculatedDigest.equalsIgnoreCase(md5);
     }
 
-    public static String calculateMD5(File updateFile) {
+    public String calculateMD5(File updateFile) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("MD5");
@@ -200,11 +200,11 @@ public class Utils {
         }
     }
 
-    public static boolean isEmpty(CharSequence str) {
+    public boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
 
-    public static String fixNumber(String number) {
+    public String fixNumber(String number) {
         String fixedNumber = number;
         if (number.startsWith("+86")) {
             fixedNumber = number.replace("+86", "");
@@ -229,7 +229,7 @@ public class Utils {
         return fixedNumber;
     }
 
-    public static String fixNumberPlus(String number) {
+    public String fixNumberPlus(String number) {
         String fixedNumber = number;
         if (number.startsWith("+86")) {
             fixedNumber = number.replace("+86", "");
@@ -257,4 +257,12 @@ public class Utils {
 
         return fixedNumber;
     }
+
+    private final static class SingletonHelper {
+        private final static Utils INSTANCE = new Utils();
+        private final static Gson GSON = new GsonBuilder().setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
+    }
+
 }

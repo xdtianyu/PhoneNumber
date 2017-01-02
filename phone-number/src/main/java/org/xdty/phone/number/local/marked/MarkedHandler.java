@@ -29,7 +29,7 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
     private void checkVersion() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         if (prefs.getInt(MARKED_VERSION_CODE_KEY, 0) < MARKED_VERSION_CODE) {
-            Utils.removeCacheFile(mContext, DB_NAME);
+            Utils.get().removeCacheFile(mContext, DB_NAME);
         }
         prefs.edit().putInt(MARKED_VERSION_CODE_KEY, MARKED_VERSION_CODE).apply();
     }
@@ -46,13 +46,13 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
 
     @Override
     public MarkedNumber find(String number) {
-        number = Utils.fixNumberPlus(number);
+        number = Utils.get().fixNumberPlus(number);
 
         MarkedNumber markedNumber = null;
         SQLiteDatabase db = null;
         Cursor cur = null;
         try {
-            File dbFile = Utils.createCacheFile(mContext, DB_NAME, R.raw.marked);
+            File dbFile = Utils.get().createCacheFile(mContext, DB_NAME, R.raw.marked);
 
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
 
