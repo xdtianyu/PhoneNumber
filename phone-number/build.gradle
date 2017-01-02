@@ -51,6 +51,10 @@ dependencies {
     compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
     compile 'com.googlecode.libphonenumber:geocoder:2.50'
     compile 'com.googlecode.libphonenumber:carrier:1.40'
+
+    compile 'io.requery:requery:1.1.0'
+    compile 'io.requery:requery-android:1.1.0'
+    annotationProcessor 'io.requery:requery-processor:1.1.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
