@@ -13,8 +13,11 @@ import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
     private static final String TAG = GoogleNumberHandler.class.getSimpleName();
@@ -23,10 +26,10 @@ public class GoogleNumberHandler implements NumberHandler<GooglePhoneNumber> {
             PhoneNumberToCarrierMapper.getInstance();
 
     private static PhoneNumberOfflineGeocoder geoCoder = PhoneNumberOfflineGeocoder.getInstance();
-    private Context mContext;
+    @Inject Context mContext;
 
-    public GoogleNumberHandler(Context context) {
-        mContext = context;
+    public GoogleNumberHandler() {
+        App.getAppComponent().inject(this);
     }
 
     public static boolean checkPhoneNumber(String phoneNumber, String countryCode) {

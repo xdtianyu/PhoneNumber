@@ -9,9 +9,12 @@ import android.preference.PreferenceManager;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 public class MvnoHandler implements NumberHandler<MvnoNumber> {
 
@@ -19,10 +22,10 @@ public class MvnoHandler implements NumberHandler<MvnoNumber> {
     public final static int MVNP_VERSION_CODE = 1;
     public final static String DB_NAME = "mvnp.db";
 
-    private Context mContext;
+    @Inject Context mContext;
 
-    public MvnoHandler(Context context) {
-        mContext = context.getApplicationContext();
+    public MvnoHandler() {
+        App.getAppComponent().inject(this);
         checkVersion();
     }
 

@@ -9,9 +9,12 @@ import android.preference.PreferenceManager;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 public class CommonHandler implements NumberHandler<CommonNumber> {
 
@@ -19,10 +22,11 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
     public final static int COMMON_VERSION_CODE = 2;
     public final static String DB_NAME = "common.db";
 
-    private Context mContext;
+    @Inject
+    Context mContext;
 
-    public CommonHandler(Context context) {
-        mContext = context.getApplicationContext();
+    public CommonHandler() {
+        App.getAppComponent().inject(this);
         checkVersion();
     }
 

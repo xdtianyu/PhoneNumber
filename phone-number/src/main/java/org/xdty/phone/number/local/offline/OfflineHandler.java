@@ -5,19 +5,22 @@ import android.content.Context;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
 
+import javax.inject.Inject;
+
 public class OfflineHandler implements NumberHandler<OfflineNumber> {
 
     private final static int PHONE_FMT_LENGTH = 9;
-    private Context mContext;
+    @Inject Context mContext;
 
-    public OfflineHandler(Context context) {
-        mContext = context;
+    public OfflineHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override

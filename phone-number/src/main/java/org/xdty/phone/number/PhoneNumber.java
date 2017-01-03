@@ -2,14 +2,18 @@ package org.xdty.phone.number;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import com.squareup.okhttp.OkHttpClient;
-
+import org.xdty.phone.number.local.common.CommonHandler;
+import org.xdty.phone.number.local.google.GoogleNumberHandler;
+import org.xdty.phone.number.local.marked.MarkedHandler;
+import org.xdty.phone.number.local.mvno.MvnoHandler;
+import org.xdty.phone.number.local.offline.OfflineHandler;
+import org.xdty.phone.number.local.special.SpecialNumber;
+import org.xdty.phone.number.local.special.SpecialNumberHandler;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.net.caller.CallerHandler;
@@ -17,22 +21,15 @@ import org.xdty.phone.number.net.caller.CallerNumber;
 import org.xdty.phone.number.net.caller.Status;
 import org.xdty.phone.number.net.cloud.CloudNumber;
 import org.xdty.phone.number.net.cloud.CloudService;
-import org.xdty.phone.number.local.common.CommonHandler;
 import org.xdty.phone.number.net.custom.CustomNumberHandler;
-import org.xdty.phone.number.local.google.GoogleNumberHandler;
 import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
-import org.xdty.phone.number.local.marked.MarkedHandler;
-import org.xdty.phone.number.local.mvno.MvnoHandler;
-import org.xdty.phone.number.local.offline.OfflineHandler;
 import org.xdty.phone.number.net.soguo.SogouNumberHandler;
-import org.xdty.phone.number.local.special.SpecialNumber;
-import org.xdty.phone.number.local.special.SpecialNumberHandler;
+import org.xdty.phone.number.util.App;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 // TODO: reconstruction
 
@@ -40,7 +37,6 @@ public class PhoneNumber {
     public final static String API_TYPE = "api_type";
     private static final String TAG = PhoneNumber.class.getSimpleName();
     private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
-    private static Context sContext;
     private final Object lockObject = new Object();
     private final Object networkLockObject = new Object();
     private Callback mCallback;
@@ -54,27 +50,20 @@ public class PhoneNumber {
     private List<CloudListener> mCloudListeners;
     private CheckUpdateCallback mCheckUpdateCallback;
 
-    private PhoneNumber() {
-        this(sContext);
+    public PhoneNumber() {
+        this(false, null);
     }
 
-    public PhoneNumber(Context context) {
-        this(context, false, null);
+    public PhoneNumber(Callback callback) {
+        this(false, callback);
     }
 
-    public PhoneNumber(Context context, Callback callback) {
-        this(context, false, callback);
-    }
-
-    public PhoneNumber(Context context, boolean offline, Callback callback) {
-        if (sContext == null) {
-            sContext = context.getApplicationContext();
-        }
+    public PhoneNumber(boolean offline, Callback callback) {
 
         mOffline = offline;
-        mPref = PreferenceManager.getDefaultSharedPreferences(sContext);
+        mPref = PreferenceManager.getDefaultSharedPreferences(App.get().app());
         mCallback = callback;
-        mMainHandler = new Handler(sContext.getMainLooper());
+        mMainHandler = new Handler(Looper.getMainLooper());
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
@@ -82,55 +71,35 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient mOkHttpClient = new OkHttpClient();
-                mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
 
                 synchronized (lockObject) {
                     synchronized (networkLockObject) {
-                        addNumberHandler(new SpecialNumberHandler(sContext));
-                        addNumberHandler(new CommonHandler(sContext));
-                        addNumberHandler(new CallerHandler(sContext, mOkHttpClient));
-                        addNumberHandler(new MarkedHandler(sContext));
-                        addNumberHandler(new OfflineHandler(sContext));
-                        addNumberHandler(new MvnoHandler(sContext));
-                        addNumberHandler(new GoogleNumberHandler(sContext));
 
-                        addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
-                        // remove Baidu api because it's dead.
-                        //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
-                        addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));
-                        addNumberHandler(new SogouNumberHandler(sContext, mOkHttpClient));
-                        addNumberHandler(new LeanCloudHandler(sContext, mOkHttpClient));
-                        mCloudService = new LeanCloudHandler(sContext, mOkHttpClient);
+                        addNumberHandler(new SpecialNumberHandler());
+                        addNumberHandler(new CommonHandler());
+                        addNumberHandler(new CallerHandler());
+                        addNumberHandler(new MarkedHandler());
+                        addNumberHandler(new OfflineHandler());
+                        addNumberHandler(new MvnoHandler());
+                        addNumberHandler(new GoogleNumberHandler());
+
+                        addNumberHandler(new CustomNumberHandler());
+                        addNumberHandler(new JuHeNumberHandler());
+                        addNumberHandler(new SogouNumberHandler());
+                        addNumberHandler(new LeanCloudHandler());
+                        mCloudService = new LeanCloudHandler();
                     }
                 }
             }
         });
     }
 
-    public static String getMetadata(Context context, String name) {
-        try {
-            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
-                    context.getPackageName(), PackageManager.GET_META_DATA);
-            if (appInfo.metaData != null) {
-                return appInfo.metaData.getString(name);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static void init(Context context) {
-        sContext = context.getApplicationContext();
-    }
-
     public static PhoneNumber getInstance() {
-        if (sContext == null) {
-            throw new IllegalStateException("init(Context) has not been called yet.");
-        }
         return SingletonHelper.INSTANCE;
+    }
+
+    public void app(Context context) {
+        App.get().app(context.getApplicationContext());
     }
 
     @Deprecated
@@ -167,7 +136,7 @@ public class PhoneNumber {
                         return;
                     }
 
-                    if (mPref.getBoolean(sContext.getString(R.string.only_offline_key),
+                    if (mPref.getBoolean(App.get().app().getString(R.string.only_offline_key),
                             false) || mOffline) {
                         return;
                     }

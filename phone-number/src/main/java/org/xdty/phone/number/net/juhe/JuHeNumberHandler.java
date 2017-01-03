@@ -8,12 +8,14 @@ import android.text.TextUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
 
@@ -21,12 +23,11 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
             "org.xdty.phone.number.JUHE_API_KEY";
     public transient final static String API_KEY = "juhe_api_key";
 
-    private transient Context mContext;
-    private transient OkHttpClient mOkHttpClient;
+    @Inject Context mContext;
+    @Inject OkHttpClient mOkHttpClient;
 
-    public JuHeNumberHandler(Context context, OkHttpClient okHttpClient) {
-        mContext = context;
-        mOkHttpClient = okHttpClient;
+    public JuHeNumberHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(API_KEY, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_KEY_URI);
+            apiKey = Utils.get().getMetadata(mContext, META_DATA_KEY_URI);
         }
         return apiKey;
     }

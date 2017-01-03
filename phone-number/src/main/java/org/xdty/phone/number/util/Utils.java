@@ -1,6 +1,8 @@
 package org.xdty.phone.number.util;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -256,6 +258,20 @@ public final class Utils {
         }
 
         return fixedNumber;
+    }
+
+    public String getMetadata(Context context, String name) {
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
+                    context.getPackageName(), PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                return appInfo.metaData.getString(name);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private final static class SingletonHelper {

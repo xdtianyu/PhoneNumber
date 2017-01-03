@@ -5,9 +5,12 @@ import android.content.Context;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SpecialNumberHandler implements NumberHandler<SpecialNumber> {
 
@@ -20,10 +23,11 @@ public class SpecialNumberHandler implements NumberHandler<SpecialNumber> {
         }
     };
 
-    private Context mContext;
+    @Inject
+    Context mContext;
 
-    public SpecialNumberHandler(Context context) {
-        mContext = context;
+    public SpecialNumberHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override

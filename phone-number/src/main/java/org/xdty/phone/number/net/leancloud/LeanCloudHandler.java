@@ -15,16 +15,18 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.net.cloud.CloudNumber;
 import org.xdty.phone.number.net.cloud.CloudService;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.IOException;
 
-public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber> {
+import javax.inject.Inject;
+
+public class LeanCloudHandler implements NumberHandler<CloudNumber>, CloudService {
     public transient final static String META_DATA_APP_KEY_URI =
             "org.xdty.phone.number.LEANCLOUD_APP_KEY";
     public transient final static String META_DATA_APP_ID_URI =
@@ -34,12 +36,12 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
     private static final String TAG = LeanCloudHandler.class.getSimpleName();
     private final static String API_URL = "https://leancloud.cn/1.1/classes/";
     public final MediaType JSON;
-    private OkHttpClient mOkHttpClient;
-    private Context mContext;
 
-    public LeanCloudHandler(Context context, OkHttpClient okHttpClient) {
-        mContext = context;
-        mOkHttpClient = okHttpClient;
+    @Inject OkHttpClient mOkHttpClient;
+    @Inject Context mContext;
+
+    public LeanCloudHandler() {
+        App.getAppComponent().inject(this);
         JSON = MediaType.parse("application/json; charset=utf-8");
     }
 
@@ -47,7 +49,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(APP_ID, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_APP_ID_URI);
+            apiKey = Utils.get().getMetadata(mContext, META_DATA_APP_ID_URI);
         }
         return apiKey;
     }
@@ -56,7 +58,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(APP_KEY, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_APP_KEY_URI);
+            apiKey = Utils.get().getMetadata(mContext, META_DATA_APP_KEY_URI);
         }
         return apiKey;
     }

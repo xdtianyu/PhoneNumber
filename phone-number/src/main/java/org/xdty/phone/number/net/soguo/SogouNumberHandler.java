@@ -1,6 +1,5 @@
 package org.xdty.phone.number.net.soguo;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -8,18 +7,19 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 public class SogouNumberHandler implements NumberHandler<SogouNumber> {
 
-    private transient Context mContext;
-    private transient OkHttpClient mOkHttpClient;
+    @Inject OkHttpClient mOkHttpClient;
 
-    public SogouNumberHandler(Context context, OkHttpClient okHttpClient) {
-        mContext = context;
-        mOkHttpClient = okHttpClient;
+    public SogouNumberHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override

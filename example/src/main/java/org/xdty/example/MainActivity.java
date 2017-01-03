@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 .putInt("api_type", INumber.API_ID_SG)
                 .apply();
 
-        PhoneNumber.init(this);
+        PhoneNumber.getInstance().app(this);
         final PhoneNumber phoneNumber = PhoneNumber.getInstance();
         phoneNumber.setCallback(new PhoneNumber.Callback() {
 

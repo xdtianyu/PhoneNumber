@@ -13,10 +13,13 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 import okio.BufferedSink;
 import okio.Okio;
@@ -27,13 +30,14 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
     private static final String TAG = CallerHandler.class.getSimpleName();
     private final static String DEFAULT_DOWNLOAD_URL = "http://7xtf5u.com1.z0.glb.clouddn.com/,"
             + "https://callerinfo-10049225.file.myqcloud.com/";
-    private transient Context mContext;
-    private transient OkHttpClient mOkHttpClient;
+
+    @Inject Context mContext;
+    @Inject OkHttpClient mOkHttpClient;
+
     private transient Status mStatus = null;
 
-    public CallerHandler(Context context, OkHttpClient okHttpClient) {
-        mContext = context;
-        mOkHttpClient = okHttpClient;
+    public CallerHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override

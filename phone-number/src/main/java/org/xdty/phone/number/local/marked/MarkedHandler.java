@@ -9,9 +9,12 @@ import android.preference.PreferenceManager;
 import org.xdty.phone.number.R;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 public class MarkedHandler implements NumberHandler<MarkedNumber> {
 
@@ -19,10 +22,10 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
     public final static int MARKED_VERSION_CODE = 1;
     public final static String DB_NAME = "marked.db";
 
-    private Context mContext;
+    @Inject Context mContext;
 
-    public MarkedHandler(Context context) {
-        mContext = context.getApplicationContext();
+    public MarkedHandler() {
+        App.getAppComponent().inject(this);
         checkVersion();
     }
 

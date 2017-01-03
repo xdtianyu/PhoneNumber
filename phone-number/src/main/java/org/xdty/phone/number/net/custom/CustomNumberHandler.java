@@ -10,16 +10,18 @@ import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
+import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
+
+import javax.inject.Inject;
 
 public class CustomNumberHandler implements NumberHandler<CustomNumber> {
 
-    private transient Context mContext;
-    private transient OkHttpClient mOkHttpClient;
+    @Inject Context mContext;
+    @Inject OkHttpClient mOkHttpClient;
 
-    public CustomNumberHandler(Context context, OkHttpClient okHttpClient) {
-        mContext = context;
-        mOkHttpClient = okHttpClient;
+    public CustomNumberHandler() {
+        App.getAppComponent().inject(this);
     }
 
     @Override
