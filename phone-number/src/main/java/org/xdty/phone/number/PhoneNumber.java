@@ -67,6 +67,14 @@ public class PhoneNumber {
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
+    }
+
+    public static PhoneNumber getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    public void init(Context context) {
+        App.get().app(context.getApplicationContext());
 
         mHandler.post(new Runnable() {
             @Override
@@ -92,14 +100,6 @@ public class PhoneNumber {
                 }
             }
         });
-    }
-
-    public static PhoneNumber getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-
-    public void app(Context context) {
-        App.get().app(context.getApplicationContext());
     }
 
     @Deprecated
