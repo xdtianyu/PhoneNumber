@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
 @Module
 public class AppModule {
@@ -27,7 +26,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    OkHttpClient provideHttpClient() {
-        return OkHttp.get().client();
+    OkHttp provideOKHttp() {
+        return OkHttp.get();
     }
 }

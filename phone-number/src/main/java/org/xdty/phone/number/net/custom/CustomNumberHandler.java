@@ -8,17 +8,14 @@ import android.text.TextUtils;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.App;
-import org.xdty.phone.number.util.Utils;
+import org.xdty.phone.number.util.OkHttp;
 
 import javax.inject.Inject;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 public class CustomNumberHandler implements NumberHandler<CustomNumber> {
 
     @Inject Context mContext;
-    @Inject OkHttpClient mOkHttpClient;
+    @Inject OkHttp mOkHttp;
 
     public CustomNumberHandler() {
         App.getAppComponent().inject(this);
@@ -40,21 +37,13 @@ public class CustomNumberHandler implements NumberHandler<CustomNumber> {
     public CustomNumber find(String number) {
         String url = url();
         String key = key();
+        CustomNumber n = null;
         if (!TextUtils.isEmpty(url)) {
             url = url + "?tel=" + number + "&key=" + key;
-            Request.Builder request = new Request.Builder().url(url);
-            try {
-                okhttp3.Response response = mOkHttpClient.newCall(
-                        request.build()).execute();
-                String s = response.body().string();
-                CustomNumber n = Utils.gson().fromJson(s, CustomNumber.class);
-                n.setNumber(number);
-                return n;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            n = mOkHttp.get(url, CustomNumber.class);
+            n.setNumber(number);
         }
-        return null;
+        return n;
     }
 
     @Override
