@@ -7,10 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.App;
@@ -21,6 +17,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okio.BufferedSink;
 import okio.Okio;
 
@@ -142,7 +140,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             url = url + filename + "?timestamp=" + System.currentTimeMillis();
             Request.Builder request = new Request.Builder().url(url);
             try {
-                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                okhttp3.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 File downloadedFile = new File(mContext.getCacheDir(), filename);
                 BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
@@ -182,7 +180,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             url = url + "status.json?timestamp=" + System.currentTimeMillis();
             Request.Builder request = new Request.Builder().url(url);
             try {
-                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                okhttp3.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 s = response.body().string();
                 status = Utils.gson().fromJson(s, Status.class);

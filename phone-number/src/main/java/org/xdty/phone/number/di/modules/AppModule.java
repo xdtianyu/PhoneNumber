@@ -2,14 +2,13 @@ package org.xdty.phone.number.di.modules;
 
 import android.content.Context;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import org.xdty.phone.number.util.OkHttp;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 
 @Module
 public class AppModule {

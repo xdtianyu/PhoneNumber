@@ -5,15 +5,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
 import javax.inject.Inject;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class CustomNumberHandler implements NumberHandler<CustomNumber> {
 
@@ -44,7 +44,7 @@ public class CustomNumberHandler implements NumberHandler<CustomNumber> {
             url = url + "?tel=" + number + "&key=" + key;
             Request.Builder request = new Request.Builder().url(url);
             try {
-                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                okhttp3.Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 String s = response.body().string();
                 CustomNumber n = Utils.gson().fromJson(s, CustomNumber.class);

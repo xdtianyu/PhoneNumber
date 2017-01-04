@@ -1,8 +1,8 @@
 package org.xdty.phone.number.util;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 public final class OkHttp {
 
@@ -14,8 +14,9 @@ public final class OkHttp {
 
     public OkHttpClient client() {
         if (mOkHttpClient == null) {
-            mOkHttpClient = new OkHttpClient();
-            mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(5, TimeUnit.SECONDS);
+            mOkHttpClient = builder.build();
         }
         return mOkHttpClient;
     }
