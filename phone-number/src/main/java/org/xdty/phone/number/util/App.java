@@ -20,7 +20,7 @@ public final class App {
         return sAppComponent;
     }
 
-    public void app(Context context) {
+    public void install(Context context) {
         mContext = context;
         sAppComponent = DaggerAppComponent.builder().appModule(new AppModule(context)).build();
     }

@@ -1,11 +1,7 @@
 package org.xdty.phone.number;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 
 import org.xdty.phone.number.local.common.CommonHandler;
 import org.xdty.phone.number.local.google.GoogleNumberHandler;
@@ -26,23 +22,37 @@ import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.net.soguo.SogouNumberHandler;
 import org.xdty.phone.number.util.App;
+import org.xdty.phone.number.util.Settings;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 // TODO: reconstruction
 
 public class PhoneNumber {
-    public final static String API_TYPE = "api_type";
+
     private static final String TAG = PhoneNumber.class.getSimpleName();
-    private final static String HANDLER_THREAD_NAME = "org.xdty.phone.number";
+
     private final Object lockObject = new Object();
     private final Object networkLockObject = new Object();
+
+    @Inject
+    Settings mSettings;
+
+    @Inject
+    @Named("cached")
+    Handler mMainHandler;
+
+    @Inject
+    @Named("worker")
+    Handler mHandler;
+
     private Callback mCallback;
-    private Handler mMainHandler;
-    private Handler mHandler;
-    private SharedPreferences mPref;
+
     private List<NumberHandler> mSupportHandlerList;
     private boolean mOffline = false;
     private CloudService mCloudService;
@@ -59,14 +69,8 @@ public class PhoneNumber {
     }
 
     public PhoneNumber(boolean offline, Callback callback) {
-
         mOffline = offline;
-        mPref = PreferenceManager.getDefaultSharedPreferences(App.get().app());
         mCallback = callback;
-        mMainHandler = new Handler(Looper.getMainLooper());
-        HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
-        handlerThread.start();
-        mHandler = new Handler(handlerThread.getLooper());
     }
 
     public static PhoneNumber getInstance() {
@@ -74,7 +78,9 @@ public class PhoneNumber {
     }
 
     public void init(Context context) {
-        App.get().app(context.getApplicationContext());
+        App.get().install(context.getApplicationContext());
+
+        App.getAppComponent().inject(this);
 
         mHandler.post(new Runnable() {
             @Override
@@ -116,50 +122,53 @@ public class PhoneNumber {
 
     public void fetch(String... numbers) {
         for (final String number : numbers) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    final INumber offlineNumber = getOfflineNumber(number);
-                    mMainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (offlineNumber != null && offlineNumber.isValid()) {
-                                onResponseOffline(offlineNumber);
-                            } else {
-                                onResponseFailed(offlineNumber, false);
-                            }
-                        }
-                    });
-
-                    if (offlineNumber instanceof SpecialNumber
-                            || offlineNumber instanceof CallerNumber) {
-                        return;
-                    }
-
-                    if (mPref.getBoolean(App.get().app().getString(R.string.only_offline_key),
-                            false) || mOffline) {
-                        return;
-                    }
-
-                    final INumber onlineNumber = getNumber(number);
-                    mMainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (onlineNumber != null && onlineNumber.isValid()) {
-                                onResponse(onlineNumber);
-                            } else {
-                                onResponseFailed(onlineNumber, true);
-                            }
-                        }
-                    });
-                }
-            });
+            fetch(number);
         }
+    }
+
+    public void fetch(final String number) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                final INumber offlineNumber = getOfflineNumber(number);
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (offlineNumber != null && offlineNumber.isValid()) {
+                            onResponseOffline(offlineNumber);
+                        } else {
+                            onResponseFailed(offlineNumber, false);
+                        }
+                    }
+                });
+
+                if (offlineNumber instanceof SpecialNumber
+                        || offlineNumber instanceof CallerNumber) {
+                    return;
+                }
+
+                if (mSettings.isOnlyOffline() || mOffline) {
+                    return;
+                }
+
+                final INumber onlineNumber = getNumber(number);
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onlineNumber != null && onlineNumber.isValid()) {
+                            onResponse(onlineNumber);
+                        } else {
+                            onResponseFailed(onlineNumber, true);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     public INumber getNumber(String number) {
         synchronized (networkLockObject) {
-            int apiType = mPref.getInt(API_TYPE, INumber.API_ID_JH);
+            int apiType = mSettings.getApiType();
 
             INumber result = null;
 

@@ -1,5 +1,6 @@
 package org.xdty.phone.number.di;
 
+import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.di.modules.AppModule;
 import org.xdty.phone.number.local.common.CommonHandler;
 import org.xdty.phone.number.local.google.GoogleNumberHandler;
@@ -12,6 +13,7 @@ import org.xdty.phone.number.net.custom.CustomNumberHandler;
 import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.net.soguo.SogouNumberHandler;
+import org.xdty.phone.number.util.Settings;
 
 import javax.inject.Singleton;
 
@@ -41,4 +43,8 @@ public interface AppComponent {
     void inject(LeanCloudHandler leanCloudHandler);
 
     void inject(SogouNumberHandler sogouNumberHandler);
+
+    void inject(PhoneNumber phoneNumber);
+
+    void inject(Settings settings);
 }
