@@ -44,7 +44,7 @@ public class PhoneNumber {
     Settings mSettings;
 
     @Inject
-    @Named("cached")
+    @Named("main")
     Handler mMainHandler;
 
     @Inject
