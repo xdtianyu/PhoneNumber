@@ -22,6 +22,7 @@ import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
 import org.xdty.phone.number.net.soguo.SogouNumberHandler;
 import org.xdty.phone.number.util.App;
+import org.xdty.phone.number.util.Database;
 import org.xdty.phone.number.util.Settings;
 
 import java.util.ArrayList;
@@ -43,13 +44,14 @@ public class PhoneNumber {
     @Inject
     Settings mSettings;
 
-    @Inject
-    @Named("main")
+    @Inject @Named("main")
     Handler mMainHandler;
 
-    @Inject
-    @Named("worker")
+    @Inject @Named("worker")
     Handler mHandler;
+
+    @Inject
+    Database mDatabase;
 
     private Callback mCallback;
 

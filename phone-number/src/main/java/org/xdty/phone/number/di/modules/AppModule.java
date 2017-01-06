@@ -7,6 +7,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import org.xdty.phone.number.util.Database;
 import org.xdty.phone.number.util.OkHttp;
 import org.xdty.phone.number.util.Settings;
 
@@ -72,5 +73,11 @@ public class AppModule {
         HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME);
         handlerThread.start();
         return new Handler(handlerThread.getLooper());
+    }
+
+    @Singleton
+    @Provides
+    Database provideDatabase() {
+        return Database.getInstance();
     }
 }
