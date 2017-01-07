@@ -9,6 +9,7 @@ import org.xdty.phone.number.local.mvno.MvnoHandler;
 import org.xdty.phone.number.local.offline.OfflineHandler;
 import org.xdty.phone.number.local.special.SpecialNumberHandler;
 import org.xdty.phone.number.net.caller.CallerHandler;
+import org.xdty.phone.number.net.cloud.CloudHandler;
 import org.xdty.phone.number.net.custom.CustomNumberHandler;
 import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
@@ -47,4 +48,6 @@ public interface AppComponent {
     void inject(PhoneNumber phoneNumber);
 
     void inject(Settings settings);
+
+    void inject(CloudHandler cloudHandler);
 }

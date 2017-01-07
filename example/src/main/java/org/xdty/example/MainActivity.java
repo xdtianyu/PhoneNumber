@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //phoneNumber.put(cloudNumber);
+        phoneNumber.put(cloudNumber);
 
         phoneNumber.setCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
             @Override
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
         });
         //phoneNumber.checkUpdate();
 
-        phoneNumber.fetch("6683350368");
-        phoneNumber.fetch("17191090000");
+        //phoneNumber.fetch("6683350368");
+        //phoneNumber.fetch("17191090000");
     }
 
 }

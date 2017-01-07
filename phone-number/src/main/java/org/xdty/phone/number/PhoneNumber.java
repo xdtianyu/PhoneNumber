@@ -15,6 +15,7 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.net.caller.CallerHandler;
 import org.xdty.phone.number.net.caller.CallerNumber;
 import org.xdty.phone.number.net.caller.Status;
+import org.xdty.phone.number.net.cloud.CloudHandler;
 import org.xdty.phone.number.net.cloud.CloudNumber;
 import org.xdty.phone.number.net.cloud.CloudService;
 import org.xdty.phone.number.net.custom.CustomNumberHandler;
@@ -103,7 +104,7 @@ public class PhoneNumber {
                         addNumberHandler(new JuHeNumberHandler());
                         addNumberHandler(new SogouNumberHandler());
                         addNumberHandler(new LeanCloudHandler());
-                        mCloudService = new LeanCloudHandler();
+                        mCloudService = new CloudHandler();
                     }
                 }
             }

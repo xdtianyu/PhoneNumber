@@ -48,6 +48,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
     compile 'com.googlecode.libphonenumber:geocoder:2.50'
@@ -55,10 +56,6 @@ dependencies {
     compile 'io.requery:requery:1.1.0'
     compile 'io.requery:requery-android:1.1.0'
     annotationProcessor 'io.requery:requery-processor:1.1.0'
-    compile('com.rethinkdb:rethinkdb-driver:2.3.3') {
-        exclude group: 'junit', module: 'junit'
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
     compile 'com.google.dagger:dagger:2.6'
     apt 'com.google.dagger:dagger-compiler:2.6'
 }

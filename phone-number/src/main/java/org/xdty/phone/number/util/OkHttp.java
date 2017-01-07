@@ -2,10 +2,15 @@ package org.xdty.phone.number.util;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public final class OkHttp {
 
@@ -19,9 +24,28 @@ public final class OkHttp {
 
     public OkHttpClient client() {
         if (mOkHttpClient == null) {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.connectTimeout(5, TimeUnit.SECONDS);
-            mOkHttpClient = builder.build();
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            Interceptor interceptor = new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request();
+                    HttpUrl url = request.url()
+                            .newBuilder()
+                            //.addQueryParameter("timestamp",
+                            //        Long.toString(System.currentTimeMillis() / 1000 / 60))
+                            .build();
+                    request = request.newBuilder().url(url).build();
+                    return chain.proceed(request);
+                }
+            };
+
+            OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .addInterceptor(interceptor);
+            okHttpBuilder.connectTimeout(5, TimeUnit.SECONDS);
+            mOkHttpClient = okHttpBuilder.build();
         }
         return mOkHttpClient;
     }
