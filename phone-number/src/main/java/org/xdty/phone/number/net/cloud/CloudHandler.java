@@ -7,6 +7,12 @@ import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import okhttp3.MediaType;
@@ -18,15 +24,36 @@ import okhttp3.Response;
 public final class CloudHandler implements NumberHandler<CloudNumber>, CloudService {
 
     private final static String API_URL = "https://backend.xdty.org/api/v1/";
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
     public final MediaType JSON;
-
     @Inject OkHttpClient mOkHttpClient;
-
     @Inject Context mContext;
 
     public CloudHandler() {
         App.getAppComponent().inject(this);
         JSON = MediaType.parse("application/json; charset=utf-8");
+    }
+
+    private static String toHexString(byte[] bytes) {
+        Formatter formatter = new Formatter();
+
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+
+        return formatter.toString();
+    }
+
+    private static String hmac(String data, String key) {
+        SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+        try {
+            Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+            return toHexString(mac.doFinal(data.getBytes()));
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
@@ -61,11 +88,11 @@ public final class CloudHandler implements NumberHandler<CloudNumber>, CloudServ
     @Override
     public boolean put(CloudNumber number) {
         String url = API_URL + "caller";
-        RequestBody body = RequestBody.create(JSON, Utils.gson().toJson(number));
+        String data = Utils.gson().toJson(number);
+        RequestBody body = RequestBody.create(JSON, data);
         Request.Builder request = new Request.Builder()
                 .url(url)
-                .addHeader("X-LC-Id", userId())
-                .addHeader("X-LC-Key", key())
+                .addHeader("Authorization", userId() + ":" + hmac(data, key()))
                 .post(body);
         try {
             Response response = mOkHttpClient.newCall(request.build()).execute();
