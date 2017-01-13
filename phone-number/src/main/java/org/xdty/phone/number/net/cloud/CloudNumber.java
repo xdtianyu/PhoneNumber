@@ -1,5 +1,7 @@
 package org.xdty.phone.number.net.cloud;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.Type;
 
@@ -13,6 +15,12 @@ public class CloudNumber implements INumber {
     private int type;
     private int from;
     private int count;
+
+    @SerializedName("_id")
+    private String id;
+
+    @SerializedName("_etag")
+    private String etag;
 
     public String getUid() {
         return uid;
@@ -107,5 +115,21 @@ public class CloudNumber implements INumber {
         city = i.getCity();
         provider = i.getProvider();
         province = i.getProvince();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEtag() {
+        return etag;
+    }
+
+    public void setEtag(String etag) {
+        this.etag = etag;
     }
 }

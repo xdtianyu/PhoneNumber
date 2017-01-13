@@ -12,9 +12,11 @@ import android.util.Log;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.net.cloud.CloudNumber;
-import org.xdty.phone.number.net.cloud.CloudService;
+import org.xdty.phone.number.net.cloud.ICloudService;
 import org.xdty.phone.number.util.App;
 import org.xdty.phone.number.util.Utils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +26,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LeanCloudHandler implements NumberHandler<CloudNumber>, CloudService {
+public class LeanCloudHandler implements NumberHandler<CloudNumber>, ICloudService {
     public transient final static String META_DATA_APP_KEY_URI =
             "org.xdty.phone.number.LEANCLOUD_APP_KEY";
     public transient final static String META_DATA_APP_ID_URI =
@@ -110,6 +112,21 @@ public class LeanCloudHandler implements NumberHandler<CloudNumber>, CloudServic
             }
         }
         return cloudNumber;
+    }
+
+    @Override
+    public boolean patch(CloudNumber cloudNumber) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(CloudNumber cloudNumber) {
+        return false;
+    }
+
+    @Override
+    public List<CloudNumber> getAll(String deviceId) {
+        return null;
     }
 
     @Override

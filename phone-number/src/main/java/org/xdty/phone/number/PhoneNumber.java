@@ -17,7 +17,7 @@ import org.xdty.phone.number.net.caller.CallerNumber;
 import org.xdty.phone.number.net.caller.Status;
 import org.xdty.phone.number.net.cloud.CloudHandler;
 import org.xdty.phone.number.net.cloud.CloudNumber;
-import org.xdty.phone.number.net.cloud.CloudService;
+import org.xdty.phone.number.net.cloud.ICloudService;
 import org.xdty.phone.number.net.custom.CustomNumberHandler;
 import org.xdty.phone.number.net.juhe.JuHeNumberHandler;
 import org.xdty.phone.number.net.leancloud.LeanCloudHandler;
@@ -58,7 +58,7 @@ public class PhoneNumber {
 
     private List<NumberHandler> mSupportHandlerList;
     private boolean mOffline = false;
-    private CloudService mCloudService;
+    private ICloudService mCloudService;
     private List<Callback> mCallbackList;
     private List<CloudListener> mCloudListeners;
     private CheckUpdateCallback mCheckUpdateCallback;
@@ -296,6 +296,24 @@ public class PhoneNumber {
         mCallback = null;
     }
 
+    public void get(final String number) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                CloudNumber cloudNumber = mCloudService.get(number);
+            }
+        });
+    }
+
+    public void getAll(final String uid) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                List<CloudNumber> cloudNumbers = mCloudService.getAll(uid);
+            }
+        });
+    }
+
     public void put(final CloudNumber cloudNumber) {
         mHandler.post(new Runnable() {
             @Override
@@ -307,6 +325,24 @@ public class PhoneNumber {
                         onPutResult(cloudNumber, result);
                     }
                 });
+            }
+        });
+    }
+
+    public void patch(final CloudNumber cloudNumber) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mCloudService.patch(cloudNumber);
+            }
+        });
+    }
+
+    public void delete(final CloudNumber cloudNumber) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mCloudService.delete(cloudNumber);
             }
         });
     }

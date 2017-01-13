@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         cloudNumber.setType(1);
         cloudNumber.setName("骚扰");
         cloudNumber.setNumber("1222033");
+        cloudNumber.setId("5878ac68b43fdd10840b71b3");
+        cloudNumber.setEtag("8b839cd9c30d08c5e54cc2be82c8df912482171a");
 
         phoneNumber.addCloudListener(new PhoneNumber.CloudListener() {
             @Override
@@ -103,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        phoneNumber.put(cloudNumber);
+        //phoneNumber.get("1222033");
+        //phoneNumber.getAll("dadasdasfadsfsad");
+        //phoneNumber.put(cloudNumber);
+        //phoneNumber.patch(cloudNumber);
+        phoneNumber.delete(cloudNumber);
 
         phoneNumber.setCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
             @Override

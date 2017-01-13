@@ -7,9 +7,13 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+
+import org.xdty.phone.number.net.cloud.CloudService;
 import org.xdty.phone.number.util.Database;
 import org.xdty.phone.number.util.OkHttp;
 import org.xdty.phone.number.util.Settings;
+import org.xdty.phone.number.util.Utils;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -17,6 +21,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class AppModule {
@@ -79,5 +85,22 @@ public class AppModule {
     @Provides
     Database provideDatabase() {
         return Database.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    Gson provideGson() {
+        return Utils.gson();
+    }
+
+    @Singleton
+    @Provides
+    CloudService provideCallerService(Gson gson, OkHttpClient client) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://backend.xdty.org/api/v1/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+        return retrofit.create(CloudService.class);
     }
 }

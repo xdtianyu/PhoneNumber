@@ -10,28 +10,23 @@ import org.xdty.phone.number.util.Utils;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.List;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-public final class CloudHandler implements NumberHandler<CloudNumber>, CloudService {
+public final class CloudHandler implements NumberHandler<CloudNumber>, ICloudService {
 
     private final static String API_URL = "https://backend.xdty.org/api/v1/";
-    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-    public final MediaType JSON;
-    @Inject OkHttpClient mOkHttpClient;
+    //private final static String API_URL = "http://192.168.9.65/api/v1/";
+    private final static String HMAC_SHA1 = "HmacSHA1";
+
+    @Inject CloudService mCloudService;
     @Inject Context mContext;
 
     public CloudHandler() {
         App.getAppComponent().inject(this);
-        JSON = MediaType.parse("application/json; charset=utf-8");
     }
 
     private static String toHexString(byte[] bytes) {
@@ -45,9 +40,9 @@ public final class CloudHandler implements NumberHandler<CloudNumber>, CloudServ
     }
 
     private static String hmac(String data, String key) {
-        SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+        SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1);
         try {
-            Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            Mac mac = Mac.getInstance(HMAC_SHA1);
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
@@ -61,13 +56,13 @@ public final class CloudHandler implements NumberHandler<CloudNumber>, CloudServ
         return API_URL;
     }
 
-    public String userId() {
-        return "hPMOqSPMu4";
+    private String token() {
+        return "vHc7RS5f66uIeUu5z95B";
     }
 
     @Override
     public String key() {
-        return "vHc7RS5f66uIeUu5z95B";
+        return "hPMOqSPMu4";
     }
 
     @Override
@@ -87,16 +82,11 @@ public final class CloudHandler implements NumberHandler<CloudNumber>, CloudServ
 
     @Override
     public boolean put(CloudNumber number) {
-        String url = API_URL + "caller";
         String data = Utils.gson().toJson(number);
-        RequestBody body = RequestBody.create(JSON, data);
-        Request.Builder request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", userId() + ":" + hmac(data, key()))
-                .post(body);
+        String auth = key() + ":" + hmac(data, token());
         try {
-            Response response = mOkHttpClient.newCall(request.build()).execute();
-            return response.code() == 201;
+            CloudStatus status = mCloudService.put(number, auth).execute().body();
+            return status.getStatus().equals("OK");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,6 +95,57 @@ public final class CloudHandler implements NumberHandler<CloudNumber>, CloudServ
 
     @Override
     public CloudNumber get(String number) {
+        String auth = key() + ":" + hmac("", token());
+
+        try {
+            return mCloudService.get(number, auth).execute().body();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean patch(CloudNumber cloudNumber) {
+        String eTag = cloudNumber.getEtag();
+        cloudNumber.setEtag(null);
+        String data = Utils.gson().toJson(cloudNumber);
+        String auth = key() + ":" + hmac(data, token());
+        try {
+            CloudStatus status = mCloudService.patch(cloudNumber.getId(), cloudNumber, auth, eTag)
+                    .execute()
+                    .body();
+            return status.getStatus().equals("OK");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(CloudNumber number) {
+        String auth = key() + ":" + hmac("", token());
+        try {
+            int code = mCloudService.delete(number.getId(), auth, number.getEtag())
+                    .execute()
+                    .code();
+            return code == 204;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public List<CloudNumber> getAll(String uid) {
+        try {
+            return mCloudService.getAll(uid, key() + ":" + hmac("", token()))
+                    .execute()
+                    .body()
+                    .getItems();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
