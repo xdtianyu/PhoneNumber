@@ -3,11 +3,8 @@ package org.xdty.phone.number;
 import android.content.Context;
 import android.os.Handler;
 
-import org.xdty.phone.number.local.common.CommonHandler;
 import org.xdty.phone.number.local.google.GoogleNumberHandler;
-import org.xdty.phone.number.local.marked.MarkedHandler;
 import org.xdty.phone.number.local.mvno.MvnoHandler;
-import org.xdty.phone.number.local.offline.OfflineHandler;
 import org.xdty.phone.number.local.special.SpecialNumber;
 import org.xdty.phone.number.local.special.SpecialNumberHandler;
 import org.xdty.phone.number.model.INumber;
@@ -93,10 +90,7 @@ public class PhoneNumber {
                     synchronized (networkLockObject) {
 
                         addNumberHandler(new SpecialNumberHandler());
-                        addNumberHandler(new CommonHandler());
                         addNumberHandler(new CallerHandler());
-                        addNumberHandler(new MarkedHandler());
-                        addNumberHandler(new OfflineHandler());
                         addNumberHandler(new MvnoHandler());
                         addNumberHandler(new GoogleNumberHandler());
 
