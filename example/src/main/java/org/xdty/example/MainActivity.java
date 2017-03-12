@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         final PhoneNumber phoneNumber = PhoneNumber.getInstance();
         phoneNumber.init(this);
+        //noinspection deprecation
         phoneNumber.setCallback(new PhoneNumber.Callback() {
 
             String result = "";

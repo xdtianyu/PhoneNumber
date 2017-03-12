@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-apt'
 
 ext {
     bintrayRepo = 'maven'
@@ -59,7 +58,7 @@ dependencies {
     compile 'io.requery:requery-android:1.1.0'
     annotationProcessor 'io.requery:requery-processor:1.1.0'
     compile 'com.google.dagger:dagger:2.6'
-    apt 'com.google.dagger:dagger-compiler:2.6'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.6'
     compile 'io.reactivex:rxjava:1.2.1'
 }
 

@@ -2,11 +2,8 @@ package org.xdty.phone.number.di;
 
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.di.modules.AppModule;
-import org.xdty.phone.number.local.common.CommonHandler;
 import org.xdty.phone.number.local.google.GoogleNumberHandler;
-import org.xdty.phone.number.local.marked.MarkedHandler;
 import org.xdty.phone.number.local.mvno.MvnoHandler;
-import org.xdty.phone.number.local.offline.OfflineHandler;
 import org.xdty.phone.number.local.special.SpecialNumberHandler;
 import org.xdty.phone.number.net.caller.CallerHandler;
 import org.xdty.phone.number.net.cloud.CloudHandler;
@@ -25,13 +22,7 @@ import dagger.Component;
 public interface AppComponent {
     void inject(SpecialNumberHandler specialNumberHandler);
 
-    void inject(CommonHandler commonHandler);
-
     void inject(CallerHandler callerHandler);
-
-    void inject(MarkedHandler markedHandler);
-
-    void inject(OfflineHandler offlineHandler);
 
     void inject(MvnoHandler mvnoHandler);
 
