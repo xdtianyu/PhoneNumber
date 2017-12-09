@@ -13,8 +13,8 @@ ext {
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 80
-    libraryVersion = '0.8.0'
+    libraryVersionCode = 81
+    libraryVersion = '0.8.1'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
@@ -26,12 +26,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
         versionCode = libraryVersionCode
         versionName = libraryVersion
     }
@@ -46,19 +46,19 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
     compile 'com.googlecode.libphonenumber:geocoder:2.50'
     compile 'com.googlecode.libphonenumber:carrier:1.40'
-    compile 'io.requery:requery:1.1.0'
-    compile 'io.requery:requery-android:1.1.0'
-    annotationProcessor 'io.requery:requery-processor:1.1.0'
-    compile 'com.google.dagger:dagger:2.6'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.6'
+    compile 'io.requery:requery:1.4.0'
+    compile 'io.requery:requery-android:1.4.0'
+    annotationProcessor 'io.requery:requery-processor:1.4.0'
+    compile 'com.google.dagger:dagger:2.7'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
     compile 'io.reactivex:rxjava:1.2.1'
 }
 

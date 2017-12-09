@@ -6,9 +6,19 @@ public class Status {
     public long timestamp;
     public int version;
     public String md5;
+    public String url;
+    public int code;
 
+    @Override
     public String toString() {
-        return "count: " + count + ", new_count: " + new_count + ", timestamp: " + timestamp
-                + ", version: " + version + ", md5: " + md5;
+        return "Status{" +
+                "count=" + count +
+                ", new_count=" + new_count +
+                ", timestamp=" + timestamp +
+                ", version=" + version +
+                ", md5='" + md5 + '\'' +
+                ", url='" + url + '\'' +
+                ", code=" + code +
+                '}';
     }
 }

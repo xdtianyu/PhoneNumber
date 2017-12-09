@@ -108,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
         //phoneNumber.get("1222033");
         //phoneNumber.getAll("dadasdasfadsfsad");
-        //phoneNumber.put(cloudNumber);
+        phoneNumber.put(cloudNumber);
         //phoneNumber.patch(cloudNumber);
-        phoneNumber.delete(cloudNumber);
+        //phoneNumber.delete(cloudNumber);
 
         phoneNumber.setCheckUpdateCallback(new PhoneNumber.CheckUpdateCallback() {
             @Override

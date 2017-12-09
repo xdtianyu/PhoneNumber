@@ -177,7 +177,7 @@ public class PhoneNumber {
                     }
                     break;
                 }
-            }
+        }
 
             if (result == null || !result.isValid()) {
                 for (NumberHandler handler : mSupportHandlerList) {

@@ -26,8 +26,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     private final static String DB_NAME = "caller.db";
     private static final String TAG = CallerHandler.class.getSimpleName();
-    private final static String DEFAULT_DOWNLOAD_URL = "http://7xtf5u.com1.z0.glb.clouddn.com/,"
-            + "https://callerinfo-10049225.file.myqcloud.com/";
+    private final static String DEFAULT_DOWNLOAD_URL = "http://7xtf5u.com1.z0.glb.clouddn.com/";
 
     @Inject Context mContext;
     @Inject OkHttpClient mOkHttpClient;
@@ -40,19 +39,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     @Override
     public String url() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-        String url = pref.getString("offline_db_download_url", DEFAULT_DOWNLOAD_URL);
-        if (url.isEmpty()) {
-            url = DEFAULT_DOWNLOAD_URL;
-        }
-
-        if (url.contains(",")) {
-            String[] urlList = TextUtils.split(url, ",");
-            Random random = new Random();
-            url = urlList[random.nextInt(urlList.length)];
-        }
-        return url;
+        return DEFAULT_DOWNLOAD_URL;
     }
 
     @Override
@@ -134,10 +121,10 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             return false;
         }
 
-        String url = url();
+        String url = mStatus.url;
         if (!TextUtils.isEmpty(url)) {
             String filename = "caller_" + mStatus.version + ".db.zip";
-            url = url + filename + "?timestamp=" + System.currentTimeMillis();
+            url = url + filename;
             Request.Builder request = new Request.Builder().url(url);
             try {
                 okhttp3.Response response = mOkHttpClient.newCall(
