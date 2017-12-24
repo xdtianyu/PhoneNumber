@@ -6,6 +6,7 @@ public class Status {
     public long timestamp;
     public int version;
     public String md5;
+    public String url;
 
     public String toString() {
         return "count: " + count + ", new_count: " + new_count + ", timestamp: " + timestamp
