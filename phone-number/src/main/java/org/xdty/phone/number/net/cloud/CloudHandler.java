@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public final class CloudHandler implements NumberHandler<CloudNumber>, ICloudService {
 
-    private final static String API_URL = "https://backend.xdty.org/api/v1/";
+    private final static String API_URL = "https://cn.xdty.org:2443/api/v1/";
     //private final static String API_URL = "http://192.168.9.65/api/v1/";
     private final static String HMAC_SHA1 = "HmacSHA1";
 
