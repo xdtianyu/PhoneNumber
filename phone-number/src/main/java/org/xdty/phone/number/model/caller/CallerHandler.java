@@ -162,7 +162,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
         Status status = null;
         String s = null;
         if (!TextUtils.isEmpty(url)) {
-            url = url + "status.json?timestamp=" + System.currentTimeMillis();
+            url = url + "status_2.json?timestamp=" + System.currentTimeMillis();
             Request.Builder request = new Request.Builder().url(url);
             try {
                 com.squareup.okhttp.Response response = mOkHttpClient.newCall(
