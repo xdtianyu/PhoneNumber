@@ -3,14 +3,13 @@ package org.xdty.phone.number.model.soguo;
 import android.content.Context;
 import android.util.Log;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
-import java.io.IOException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class SogouNumberHandler implements NumberHandler<SogouNumber> {
 
@@ -39,7 +38,7 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
         Request.Builder request = new Request.Builder().url(url)
                 .header("User-Agent",
                         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36");
-        com.squareup.okhttp.Response response = null;
+        Response response = null;
         SogouNumber sogouNumber = null;
         String s = null;
         try {
@@ -55,7 +54,7 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
             if (response != null && response.body() != null) {
                 try {
                     response.body().close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

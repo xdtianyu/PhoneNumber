@@ -9,12 +9,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
@@ -23,6 +17,12 @@ import org.xdty.phone.number.model.cloud.CloudService;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber> {
     public transient final static String META_DATA_APP_KEY_URI =
@@ -90,7 +90,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
                 .addHeader("X-LC-Id", appId())
                 .addHeader("X-LC-Key", appKey())
                 .get();
-        com.squareup.okhttp.Response response = null;
+        Response response = null;
         CloudNumber cloudNumber = null;
         try {
             response = mOkHttpClient.newCall(
@@ -108,7 +108,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
             if (response != null && response.body() != null) {
                 try {
                     response.body().close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

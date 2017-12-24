@@ -1,23 +1,20 @@
 package org.xdty.phone.number.model.caller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
 import java.io.File;
-import java.util.Random;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 
@@ -122,10 +119,10 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
         String url = mStatus.url;
         if (!TextUtils.isEmpty(url)) {
             String filename = "caller_" + mStatus.version + ".db.zip";
-            url = url + filename + "?timestamp=" + System.currentTimeMillis();
+            url = url + filename;
             Request.Builder request = new Request.Builder().url(url);
             try {
-                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 File downloadedFile = new File(mContext.getCacheDir(), filename);
                 BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
@@ -165,7 +162,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             url = url + "status_2.json?timestamp=" + System.currentTimeMillis();
             Request.Builder request = new Request.Builder().url(url);
             try {
-                com.squareup.okhttp.Response response = mOkHttpClient.newCall(
+                Response response = mOkHttpClient.newCall(
                         request.build()).execute();
                 s = response.body().string();
                 status = Utils.gson().fromJson(s, Status.class);
@@ -176,6 +173,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "checkUpdate: " + s);
+                status = null;
             }
         }
         mStatus = status;

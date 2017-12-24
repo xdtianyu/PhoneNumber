@@ -13,8 +13,8 @@ ext {
     siteUrl = 'https://github.com/xdtianyu/PhoneNumber'
     gitUrl = 'https://github.com/xdtianyu/PhoneNumber'
 
-    libraryVersionCode = 76
-    libraryVersion = '0.7.16'
+    libraryVersionCode = 77
+    libraryVersion = '0.7.17'
 
     developerId = 'xdtianyu'
     developerName = 'xdtianyu'
@@ -46,8 +46,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
     compile 'com.googlecode.libphonenumber:geocoder:2.50'
     compile 'com.googlecode.libphonenumber:carrier:1.40'

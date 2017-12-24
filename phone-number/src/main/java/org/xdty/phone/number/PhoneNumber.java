@@ -8,8 +8,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.caller.CallerHandler;
@@ -28,11 +26,13 @@ import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.soguo.SogouNumberHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
 import org.xdty.phone.number.model.special.SpecialNumberHandler;
+import org.xdty.phone.number.util.OkHttp;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 // TODO: reconstruction
 
@@ -82,8 +82,7 @@ public class PhoneNumber {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient mOkHttpClient = new OkHttpClient();
-                mOkHttpClient.setConnectTimeout(3, TimeUnit.SECONDS);
+                OkHttpClient mOkHttpClient = OkHttp.get().client();
 
                 synchronized (lockObject) {
                     synchronized (networkLockObject) {

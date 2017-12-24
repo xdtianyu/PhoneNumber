@@ -5,15 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
-import java.io.IOException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
 
@@ -54,7 +53,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
             return null;
         }
         String url = url() + number + "&key=" + key();
-        com.squareup.okhttp.Response response = null;
+        Response response = null;
         Request.Builder request = new Request.Builder().url(url);
         try {
             response = mOkHttpClient.newCall(request.build()).execute();
@@ -66,7 +65,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
             if (response != null && response.body() != null) {
                 try {
                     response.body().close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

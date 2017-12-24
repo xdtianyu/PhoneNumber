@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
 import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
@@ -15,6 +12,10 @@ import org.xdty.phone.number.util.Utils;
 
 import java.io.IOException;
 import java.util.Random;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class BDNumberHandler implements NumberHandler<BDNumber> {
 
@@ -68,7 +69,7 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
         Request.Builder request = new Request.Builder().url(url);
         request.header("apikey", key());
         BDNumber bdNumber = null;
-        com.squareup.okhttp.Response response = null;
+        Response response = null;
         try {
             response = mOkHttpClient.newCall(
                     request.build()).execute();
@@ -83,7 +84,7 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
             if (response != null && response.body() != null) {
                 try {
                     response.body().close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
