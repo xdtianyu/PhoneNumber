@@ -22,7 +22,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
 
     private final static String DB_NAME = "caller.db";
     private static final String TAG = CallerHandler.class.getSimpleName();
-    private final static String DEFAULT_DOWNLOAD_URL = "http://7xtf5u.com1.z0.glb.clouddn.com/";
+    private final static String DEFAULT_DOWNLOAD_URL = "https://cn.xdty.org/";
     private transient Context mContext;
     private transient OkHttpClient mOkHttpClient;
     private transient Status mStatus = null;
