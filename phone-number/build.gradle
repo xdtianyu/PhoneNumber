@@ -26,12 +26,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 28
         versionCode = libraryVersionCode
         versionName = libraryVersion
     }
@@ -44,14 +43,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
-    compile 'com.googlecode.libphonenumber:geocoder:2.50'
-    compile 'com.googlecode.libphonenumber:carrier:1.40'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
+    implementation 'com.googlecode.libphonenumber:geocoder:2.50'
+    implementation 'com.googlecode.libphonenumber:carrier:1.40'
+
+    implementation 'org.jsoup:jsoup:1.12.1'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
