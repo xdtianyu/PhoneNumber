@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
         phoneNumber.fetch("6683350368");
         phoneNumber.fetch("17191090000");
+        phoneNumber.fetch("02795522");
+        phoneNumber.fetch("029965318");
     }
 
 }

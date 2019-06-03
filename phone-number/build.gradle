@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 ext {
     bintrayRepo = 'maven'
@@ -53,6 +55,8 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:carrier:1.40'
 
     implementation 'org.jsoup:jsoup:1.12.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

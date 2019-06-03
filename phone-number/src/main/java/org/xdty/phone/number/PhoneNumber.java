@@ -26,6 +26,8 @@ import org.xdty.phone.number.model.offline.OfflineHandler;
 import org.xdty.phone.number.model.soguo.SogouNumberHandler;
 import org.xdty.phone.number.model.special.SpecialNumber;
 import org.xdty.phone.number.model.special.SpecialNumberHandler;
+import org.xdty.phone.number.model.web.WebFactory;
+import org.xdty.phone.number.model.web.WebNumberHandler;
 import org.xdty.phone.number.util.OkHttp;
 
 import java.util.ArrayList;
@@ -95,6 +97,8 @@ public class PhoneNumber {
                         addNumberHandler(new GoogleNumberHandler(sContext));
 
                         addNumberHandler(new CustomNumberHandler(sContext, mOkHttpClient));
+                        addNumberHandler(new WebNumberHandler(WebFactory.SEARCH_360));
+                        addNumberHandler(new WebNumberHandler(WebFactory.SEARCH_BAIDU));
                         // remove Baidu api because it's dead.
                         //addNumberHandler(new BDNumberHandler(sContext, mOkHttpClient));
                         addNumberHandler(new JuHeNumberHandler(sContext, mOkHttpClient));

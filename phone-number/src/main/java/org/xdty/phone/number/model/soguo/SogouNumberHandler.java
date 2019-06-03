@@ -23,7 +23,7 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
 
     @Override
     public String url() {
-        return "http://data.haoma.sogou.com/vrapi/query_number.php?type=json&callback=show&number=";
+        return "https://data.haoma.sogou.com/vrapi/query_number.php?type=json&callback=show&number=";
     }
 
     @Override
@@ -44,7 +44,8 @@ public class SogouNumberHandler implements NumberHandler<SogouNumber> {
         try {
             response = mOkHttpClient.newCall(request.build()).execute();
             s = response.body().string();
-            s = s.replace("show(", "").replace(")", "");
+            s = s.replace("show(", "").replace(")", "")
+                    .replaceAll("&quot;", "\"");
             sogouNumber = Utils.gson().fromJson(s, SogouNumber.class);
             sogouNumber.number = number;
         } catch (Exception e) {
