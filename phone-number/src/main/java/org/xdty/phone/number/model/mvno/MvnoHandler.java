@@ -23,7 +23,7 @@ public class MvnoHandler implements NumberHandler<MvnoNumber> {
 
     public MvnoHandler(Context context) {
         mContext = context.getApplicationContext();
-        checkVersion();
+        //checkVersion();
     }
 
     private void checkVersion() {

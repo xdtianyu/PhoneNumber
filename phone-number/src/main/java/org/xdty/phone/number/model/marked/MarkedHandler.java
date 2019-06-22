@@ -23,7 +23,7 @@ public class MarkedHandler implements NumberHandler<MarkedNumber> {
 
     public MarkedHandler(Context context) {
         mContext = context.getApplicationContext();
-        checkVersion();
+        //checkVersion();
     }
 
     private void checkVersion() {

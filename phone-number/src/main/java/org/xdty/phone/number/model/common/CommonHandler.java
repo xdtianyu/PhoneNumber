@@ -23,7 +23,7 @@ public class CommonHandler implements NumberHandler<CommonNumber> {
 
     public CommonHandler(Context context) {
         mContext = context.getApplicationContext();
-        checkVersion();
+        //checkVersion();
     }
 
     private void checkVersion() {
