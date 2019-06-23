@@ -8,5 +8,6 @@ data class WebConfig(
         var name: String,
         var mark: String,
         var count: String,
-        var address: String
+        var address: String,
+        var index: Int
 )

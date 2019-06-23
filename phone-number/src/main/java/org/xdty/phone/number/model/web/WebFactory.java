@@ -9,7 +9,8 @@ public interface WebFactory {
             "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-header > div > div.mh-tel-adr > a",
             "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-footer > div.mh-tel-mark",
             "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-footer > div.g-flex-item.mh-tel-desc > b",
-            "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-header > div > div.mh-tel-adr > p"
+            "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-header > div > div.mh-tel-adr > p",
+            0
     );
 
     WebConfig SEARCH_BAIDU = new WebConfig("https://m.baidu.com/s?word=",
@@ -20,5 +21,6 @@ public interface WebFactory {
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > p.wa-fraudphone-font > span",
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > p.c-color-gray",
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > span"
+            ,1
     );
 }

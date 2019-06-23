@@ -27,7 +27,7 @@ class WebNumberHandler(private val mWebConfig: WebConfig) : NumberHandler<WebNum
     }
 
     override fun getApiId(): Int {
-        return INumber.API_ID_WEB
+        return INumber.API_ID_WEB + mWebConfig.index
     }
 
     private fun fetchDAta(config: WebConfig, num: String): WebNumber? {
