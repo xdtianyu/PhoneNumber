@@ -32,21 +32,15 @@ public class RxPhoneNumber {
     private static final String TAG = RxPhoneNumber.class.getSimpleName();
     private Context mContext;
     private SharedPreferences mPref;
-    private boolean mOffline = false;
     private CloudService mCloudService;
 
     public RxPhoneNumber() {
     }
 
     public RxPhoneNumber(Context context) {
-        this(context, false);
-    }
-
-    public RxPhoneNumber(Context context, boolean offline) {
 
         init(context);
 
-        mOffline = offline;
         mPref = provideSharedPreferences();
     }
 
