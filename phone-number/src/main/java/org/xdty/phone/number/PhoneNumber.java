@@ -111,20 +111,6 @@ public class PhoneNumber {
         });
     }
 
-    public static String getMetadata(Context context, String name) {
-        try {
-            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
-                    context.getPackageName(), PackageManager.GET_META_DATA);
-            if (appInfo.metaData != null) {
-                return appInfo.metaData.getString(name);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public static void init(Context context) {
         sContext = context.getApplicationContext();
     }

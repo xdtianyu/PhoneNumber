@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
@@ -38,7 +37,7 @@ public class JuHeNumberHandler implements NumberHandler<JuHeNumber> {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(API_KEY, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_KEY_URI);
+            apiKey = Utils.getMetadata(mContext, META_DATA_KEY_URI);
         }
         return apiKey;
     }

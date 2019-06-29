@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.util.Utils;
 
-import java.io.IOException;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -42,7 +40,7 @@ public class BDNumberHandler implements NumberHandler<BDNumber> {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(API_KEY, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_KEY_URI);
+            apiKey = Utils.getMetadata(mContext, META_DATA_KEY_URI);
         }
 
         if (apiKey != null && apiKey.contains(",")) {

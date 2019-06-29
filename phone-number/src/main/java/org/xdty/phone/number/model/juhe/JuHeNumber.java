@@ -84,6 +84,18 @@ public class JuHeNumber implements INumber {
         }
     }
 
+    @Override
+    public String toString() {
+        String value = getClass().getSimpleName();
+        try {
+            value += getClass().getSimpleName() + "{" + getNumber() + ", " + getName() + ", " + getCount() + '}';
+        } catch (Exception e) {
+            e.printStackTrace();
+            value += "{ null }";
+        }
+        return value;
+    }
+
     class Result {
         int iszhapian;
         String province;

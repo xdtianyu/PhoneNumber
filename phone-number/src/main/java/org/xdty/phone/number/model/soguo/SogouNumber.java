@@ -101,4 +101,9 @@ public class SogouNumber implements INumber {
         provider = i.getProvider();
         province = i.getProvince();
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" + getNumber() + ", " + getName() + ", " + getCount() + '}';
+    }
 }

@@ -9,14 +9,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.xdty.phone.number.PhoneNumber;
 import org.xdty.phone.number.model.INumber;
 import org.xdty.phone.number.model.NumberHandler;
 import org.xdty.phone.number.model.cloud.CloudNumber;
 import org.xdty.phone.number.model.cloud.CloudService;
 import org.xdty.phone.number.util.Utils;
-
-import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -47,7 +44,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(APP_ID, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_APP_ID_URI);
+            apiKey = Utils.getMetadata(mContext, META_DATA_APP_ID_URI);
         }
         return apiKey;
     }
@@ -56,7 +53,7 @@ public class LeanCloudHandler implements CloudService, NumberHandler<CloudNumber
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
         String apiKey = pref.getString(APP_KEY, "");
         if (apiKey.isEmpty()) {
-            apiKey = PhoneNumber.getMetadata(mContext, META_DATA_APP_KEY_URI);
+            apiKey = Utils.getMetadata(mContext, META_DATA_APP_KEY_URI);
         }
         return apiKey;
     }

@@ -38,10 +38,7 @@ public class RxPhoneNumber {
     }
 
     public RxPhoneNumber(Context context) {
-
         init(context);
-
-        mPref = provideSharedPreferences();
     }
 
     public void init(Context context) {
@@ -62,22 +59,12 @@ public class RxPhoneNumber {
         return PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
-    public static String getMetadata(Context context, String name) {
-        try {
-            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
-                    context.getPackageName(), PackageManager.GET_META_DATA);
-            if (appInfo.metaData != null) {
-                return appInfo.metaData.getString(name);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public Flowable<INumber> getNumber(final String number) {
         return getNumber(number, NumberProvider.providers());
+    }
+
+    public Flowable<INumber> getOnlineNumber(final String number) {
+        return getNumber(number, NumberProvider.providers(true));
     }
 
     public Flowable<INumber> getOfflineNumber(final String number) {

@@ -18,7 +18,7 @@ public interface WebFactory {
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle",
             "#results > div:nth-child(1) > div.c-container > h3 > em",
             "#mohe-m-mobilecheck > div.mohe-cont > div.g-flex.mh-tel-header > div > div.mh-tel-adr > a",
-            "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > p.wa-fraudphone-font > span",
+            "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > p:nth-child(1)",
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > p.c-color-gray",
             "#results > div:nth-child(1) > div.c-container > div.c-row.wa-fraudphone-topbtmsmall > div.c-span10.wa-fraudphone-middle > span"
             ,1

@@ -64,4 +64,8 @@ class WebNumber(private var number: String = "") : INumber {
     fun setCount(count: Int) {
         this.count = count
     }
+
+    override fun toString(): String {
+        return javaClass.simpleName + "{" + getNumber() + ", " + getName() + ", " + getCount() + '}'.toString()
+    }
 }
