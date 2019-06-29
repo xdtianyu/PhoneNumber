@@ -52,6 +52,9 @@ public class JuHeNumber implements INumber {
 
     @Override
     public int getCount() {
+        if (result == null) {
+            return 0;
+        }
         return result.rpt_cnt;
     }
 

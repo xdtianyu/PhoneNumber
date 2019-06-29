@@ -9,6 +9,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.xdty.phone.number.model.INumber;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -20,6 +22,9 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -82,9 +87,9 @@ public class Utils {
     /**
      * Unzip a zip file.  Will overwrite existing files.
      *
-     * @param zipFile Full path of the zip file you'd like to unzip.
+     * @param zipFile  Full path of the zip file you'd like to unzip.
      * @param location Full path of the directory you'd like to unzip to (will be created if it
-     * doesn't exist).
+     *                 doesn't exist).
      * @throws IOException
      */
     public static void unzip(String zipFile, String location) throws IOException {
@@ -272,5 +277,51 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static INumber pathGeo(List<INumber> numberList) {
+        INumber iNumber = null;
+
+        Collections.sort(numberList, new Comparator<INumber>() {
+            @Override
+            public int compare(INumber o1, INumber o2) {
+                return o1.getApiId() - o2.getApiId();
+            }
+        });
+
+        for (INumber i : numberList) {
+            if (i != null && i.isValid()) {
+                if (i.hasGeo()) {
+                    if (iNumber == null) { // return result
+                        return i;
+                    } else { // patch geo info to previous result
+                        iNumber.patch(i);
+                        return iNumber;
+                    }
+                } else { // continue for geo info
+                    iNumber = i;
+                }
+            }
+        }
+        return iNumber;
+    }
+
+    public static INumber mostCount(List<INumber> numberList) {
+        INumber iNumber = null;
+
+        Collections.sort(numberList, new Comparator<INumber>() {
+            @Override
+            public int compare(INumber o1, INumber o2) {
+                return (o2 == null ? 0 : o2.getCount()) - (o1 == null ? 0 : o1.getCount());
+            }
+        });
+
+        for (INumber i : numberList) {
+            if (i != null && i.isValid()) {
+                iNumber = i;
+                break;
+            }
+        }
+        return iNumber;
     }
 }
