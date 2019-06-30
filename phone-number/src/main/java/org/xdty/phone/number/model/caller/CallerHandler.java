@@ -168,7 +168,7 @@ public class CallerHandler implements NumberHandler<CallerNumber> {
                 status = Utils.gson().fromJson(s, Status.class);
                 Status dbStatus = getDBStatus();
                 if (dbStatus != null && status != null && dbStatus.version >= status.version) {
-                    status = null;
+                    status = new Status();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
