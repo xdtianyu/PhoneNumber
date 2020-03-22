@@ -51,20 +51,18 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
-    implementation 'com.googlecode.libphonenumber:geocoder:2.50'
-    implementation 'com.googlecode.libphonenumber:carrier:1.40'
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'org.jsoup:jsoup:1.12.1'
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'com.squareup.okhttp3:okhttp:3.10.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.12.6'
+    api 'com.google.code.gson:gson:2.8.6'
+    api 'com.googlecode.libphonenumber:libphonenumber:7.5.2'
+    api 'com.googlecode.libphonenumber:geocoder:2.50'
+    api 'com.googlecode.libphonenumber:carrier:1.40'
+    api "org.jsoup:jsoup:1.12.1"
+    api "io.reactivex.rxjava2:rxjava:2.2.11"
+    api "io.reactivex.rxjava2:rxandroid:2.2.11"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.28.2'
@@ -82,8 +80,8 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: 'https://raw.lib64.net/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.lib64.net/nuuneoi/JCenter/master/bintrayv1.gradle'
 
 tasks.withType(Javadoc) {
     enabled = false
