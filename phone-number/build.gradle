@@ -62,7 +62,7 @@ dependencies {
     api 'com.googlecode.libphonenumber:carrier:1.40'
     api "org.jsoup:jsoup:1.12.1"
     api "io.reactivex.rxjava2:rxjava:2.2.11"
-    api "io.reactivex.rxjava2:rxandroid:2.2.11"
+    api "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.28.2'
